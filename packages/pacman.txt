@@ -1,0 +1,61 @@
+# Official repo packages, one per line. Installed by install.sh with pacman --needed.
+
+# Graphics (Intel HD 520)
+mesa
+vulkan-intel
+intel-media-driver
+
+# Compositor + portals
+hyprland
+xdg-desktop-portal-hyprland
+xdg-desktop-portal-gtk
+qt6-wayland
+polkit
+# temporary polkit agent until the Quickshell one is in place (DESIGN.md §7)
+hyprpolkitagent
+
+# Shell
+quickshell
+
+# Audio
+pipewire
+pipewire-pulse
+pipewire-alsa
+wireplumber
+
+# Network, Bluetooth, power, display
+networkmanager
+bluez
+bluez-utils
+upower
+power-profiles-daemon
+# needed by the powerprofilesctl CLI (Quickshell itself uses D-Bus)
+python-gobject
+brightnessctl
+hyprsunset
+
+# Theming
+matugen
+
+# Apps and tools
+kitty
+zsh
+neovim
+git
+stow
+grim
+slurp
+wl-clipboard
+cliphist
+hyprpicker
+gpu-screen-recorder
+libqalculate
+fd
+lazygit
+
+# Login (enabled in Phase 9)
+greetd
+
+# Fallback fonts
+noto-fonts
+noto-fonts-emoji

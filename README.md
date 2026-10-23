@@ -24,3 +24,11 @@ A keyboard-first Hyprland + Quickshell desktop (Liquid Glass look), built from s
    ```
 6. `claude`, sign in (on a TTY it shows a link; open it on your phone or another computer and paste the code back),
    then follow `design/PHASES.md`, starting with Phase 0.
+
+## Install the desktop (Phase 0)
+
+```sh
+cd ~/glass-shell
+./install.sh   # packages (pacman + paru/AUR), system/ files, services, stow home/*; asks before every sudo step
+Hyprland       # start it from the TTY; Super+Return = kitty
+```

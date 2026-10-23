@@ -1,0 +1,4 @@
+# AUR packages, installed with paru (bootstrapped by install.sh).
+ttf-geist
+ttf-geist-mono
+ttf-outfit
