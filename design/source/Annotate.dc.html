@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Screenshot annotation editor</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.nokeys .kbd,.nokeys .hint,.nokeys .k{display:none !important}
+.glass{background:rgba(22,14,30,.52);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(255,255,255,.04),0 14px 40px rgba(0,0,0,.45)}
+.ic{width:18px;height:18px;flex:none}
+.kbd{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:#E4DAEA}
+.tool{position:relative;width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#D9CEE0}
+.on{background:#E6B6FF;color:#3a1a4d}
+.k{position:absolute;bottom:2px;right:4px;font-family:'Geist Mono',ui-monospace,monospace;font-size:9px;opacity:.75}
+.sw{width:22px;height:22px;border-radius:11px;box-sizing:border-box}
+.sep{width:1px;height:28px;background:rgba(255,255,255,.14);margin:0 4px}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+</style>
+</helmet>
+<div class="{{keysCls}}" onClick="{{toggle}}" style="position: relative; width: 1600px; height: 900px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #EEE6F2; background: #140b1a">
+<img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="" style="position: absolute; inset: -40px; width: 1680px; height: 980px; object-fit: cover; filter: blur(30px) brightness(.4) saturate(1.2)">
+
+<!-- top bar -->
+<div class="glass" style="position: absolute; left: 24px; top: 20px; height: 40px; border-radius: 20px; padding: 0 16px; display: flex; align-items: center; gap: 10px; font-size: 13px">
+  <span style="font-weight: 600">Screenshot 06:41</span><span class="mono" style="color: #B9AEC2; font-size: 12px">624 × 389 · 2×</span>
+</div>
+<div style="position: absolute; right: 24px; top: 20px; display: flex; gap: 8px">
+  <div class="glass" style="height: 40px; border-radius: 20px; padding: 0 16px; display: flex; align-items: center; gap: 8px; font-size: 13px">Copy <span class="kbd">Ctrl C</span></div>
+  <div class="glass" style="height: 40px; border-radius: 20px; padding: 0 16px; display: flex; align-items: center; gap: 8px; font-size: 13px">Save as… <span class="kbd">Ctrl S</span></div>
+  <div style="height: 40px; border-radius: 20px; padding: 0 18px; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; background: #E6B6FF; color: #3a1a4d">Done <span class="kbd" style="background: rgba(58,26,77,.15); border-color: rgba(58,26,77,.25); color: #3a1a4d">Enter</span></div>
+</div>
+
+<!-- the image being edited -->
+<div style="position: absolute; left: 300px; top: 96px; width: 1000px; height: 624px; border-radius: 12px; overflow: hidden; background: #f3eff6; color: #22192a; box-shadow: 0 30px 80px rgba(0,0,0,.6)">
+  <div style="height: 120px; background: #261d2d"></div>
+  <div style="padding: 40px 48px">
+    <div style="font-size: 42px; font-weight: 600; margin-bottom: 22px">Hyprland</div>
+    <div style="font-size: 20px; line-height: 33px; color: #3b3045; width: 820px">A dynamic tiling Wayland compositor with smooth animations, rounded corners and per-window rules. Configuration is reloaded live whenever the file changes.</div>
+    <div class="mono" style="margin-top: 26px; padding: 20px 22px; border-radius: 12px; background: #e7e0ec; font-size: 18px; color: #2d2336; width: 820px; box-sizing: border-box">bind("SUPER SHIFT", "S", exec("qs ipc call capture open"))</div>
+  </div>
+  <!-- annotations -->
+  <div style="position: absolute; left: 40px; top: 446px; width: 858px; height: 84px; border-radius: 14px; box-sizing: border-box; border: 4px solid #FF6B6B"></div>
+  <svg style="position: absolute; left: 640px; top: 560px; width: 120px; height: 50px; overflow: visible" viewBox="0 0 120 50" aria-hidden="true"><path d="M110 40 C 80 40, 40 30, 14 -18" fill="none" stroke="#FF6B6B" stroke-width="6" stroke-linecap="round"></path><path d="M2 2 L 12 -22 L 32 -6" fill="none" stroke="#FF6B6B" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+  <div style="position: absolute; left: 760px; top: 572px; padding: 8px 14px; border-radius: 10px; background: #FF6B6B; color: #fff; font-size: 20px; font-weight: 600">my capture bind</div>
+  <div style="position: absolute; left: 48px; top: 228px; width: 360px; height: 34px; background: rgba(255,224,102,.55); mix-blend-mode: multiply; border-radius: 4px"></div>
+  <div style="position: absolute; left: 0; top: 0; width: 1000px; height: 120px; background-image: repeating-linear-gradient(0deg, rgba(60,44,70,.9) 0 12px, rgba(80,62,92,.9) 12px 24px), repeating-linear-gradient(90deg, rgba(0,0,0,.15) 0 12px, transparent 12px 24px)"></div>
+  <!-- selected object handles -->
+  <div style="position: absolute; left: 754px; top: 566px; width: 196px; height: 52px; box-sizing: border-box; border: 1.5px dashed #E6B6FF"></div>
+  <div style="position: absolute; left: 749px; top: 561px; width: 10px; height: 10px; border-radius: 5px; background: #fff; border: 2px solid #E6B6FF; box-sizing: border-box"></div>
+  <div style="position: absolute; left: 945px; top: 613px; width: 10px; height: 10px; border-radius: 5px; background: #fff; border: 2px solid #E6B6FF; box-sizing: border-box"></div>
+</div>
+<div style="position: absolute; left: 300px; top: 728px; width: 1000px; display: flex; justify-content: space-between; font-size: 12px; color: #B9AEC2"><span>Blurred: browser tab bar (B)</span><span>Highlight · rectangle · arrow · text label selected</span></div>
+
+<!-- toolbar -->
+<div class="glass" style="position: absolute; left: 50%; transform: translateX(-50%); top: 776px; height: 64px; border-radius: 32px; padding: 0 10px; display: flex; align-items: center; gap: 4px">
+  <div class="tool"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Select" role="img"><path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z"></path></svg><span class="k">V</span></div>
+  <div class="tool"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Arrow" role="img"><path d="M5 19 19 5M9 5h10v10"></path></svg><span class="k">A</span></div>
+  <div class="tool"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Rectangle" role="img"><rect x="3" y="5" width="18" height="14" rx="3"></rect></svg><span class="k">R</span></div>
+  <div class="tool"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Pen" role="img"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg><span class="k">P</span></div>
+  <div class="tool on"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-label="Text" role="img"><path d="M4 7V4h16v3M9 20h6M12 4v16"></path></svg><span class="k">T</span></div>
+  <div class="tool"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Highlight" role="img"><path d="m9 11-6 6v3h9l3-3"></path><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"></path></svg><span class="k">H</span></div>
+  <div class="tool"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Blur" role="img"><rect x="3" y="3" width="6" height="6"></rect><rect x="15" y="3" width="6" height="6"></rect><rect x="9" y="9" width="6" height="6"></rect><rect x="3" y="15" width="6" height="6"></rect><rect x="15" y="15" width="6" height="6"></rect></svg><span class="k">B</span></div>
+  <div class="tool"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Crop" role="img"><path d="M6 2v14a2 2 0 0 0 2 2h14"></path><path d="M18 22V8a2 2 0 0 0-2-2H2"></path></svg><span class="k">C</span></div>
+  <div class="sep"></div>
+  <div style="display: flex; gap: 8px; padding: 0 6px; align-items: center">
+    <div class="sw" style="background: #FF6B6B; box-shadow: 0 0 0 2px rgba(20,11,26,1), 0 0 0 4px #fff"></div>
+    <div class="sw" style="background: #FFD866"></div>
+    <div class="sw" style="background: #E6B6FF"></div>
+    <div class="sw" style="background: #FFFFFF"></div>
+    <div class="sw" style="background: #1d1424; border: 1.5px solid rgba(255,255,255,.4)"></div>
+  </div>
+  <div class="sep"></div>
+  <div style="display: flex; gap: 6px; align-items: center; padding: 0 6px">
+    <div style="width: 4px; height: 4px; border-radius: 2px; background: #D9CEE0"></div>
+    <div style="width: 8px; height: 8px; border-radius: 4px; background: #E6B6FF; box-shadow: 0 0 0 4px rgba(230,182,255,.25)"></div>
+    <div style="width: 12px; height: 12px; border-radius: 6px; background: #D9CEE0"></div>
+  </div>
+  <div class="sep"></div>
+  <div class="tool"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Undo" role="img"><path d="M9 14 4 9l5-5"></path><path d="M4 9h11a5 5 0 0 1 0 10h-3"></path></svg></div>
+  <div class="tool" style="opacity: .45"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Redo" role="img"><path d="m15 14 5-5-5-5"></path><path d="M20 9H9a5 5 0 0 0 0 10h3"></path></svg></div>
+</div>
+<div class="hint" style="position: absolute; left: 0; right: 0; top: 852px; display: flex; justify-content: center; gap: 8px; align-items: center; font-size: 12px; color: #B9AEC2"><span class="kbd">1–5</span><span>colour</span><span class="kbd">[ ]</span><span>stroke</span><span class="kbd">Ctrl Z</span><span>undo</span><span class="kbd">Del</span><span>delete selected</span><span class="kbd">Esc</span><span>discard</span></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"showKeys":{"editor":"boolean","default":false},"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const on = s.keys !== undefined ? s.keys : !!this.props.showKeys;
+    return { keysCls: on ? 'keys' : 'nokeys', toggle: () => this.setState({ keys: !on }) };
+  }
+}
+</script>
+</body>
+</html>

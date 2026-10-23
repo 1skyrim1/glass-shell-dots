@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Motion: pill morphs</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.glass{background:rgba(22,14,30,.44);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.20),inset 0 -1px 0 rgba(255,255,255,.04),0 10px 34px rgba(0,0,0,.38)}
+.lane{position:absolute;left:380px;width:1180px;height:190px;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.12)}
+.lane>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+.lbl{position:absolute;left:40px;width:300px;font-size:12.5px;line-height:19px;color:#CDBFD6}
+.lbl b{display:block;color:#F4EEF7;font-size:15px;font-weight:600;margin-bottom:4px}
+.lbl i{font-style:normal;font-family:'Geist Mono',ui-monospace,monospace;font-size:11.5px;color:#FFD3C2}
+.pl{position:absolute;height:38px;border-radius:19px;box-sizing:border-box;display:flex;align-items:center;font-size:13px}
+.bi{width:14px;height:14px;flex:none}
+.dot{position:absolute;top:0;width:8px;height:8px;border-radius:4px;background:rgba(238,230,242,.62)}
+.kk{position:absolute;font-family:'Geist Mono',ui-monospace,monospace;font-size:12px;padding:5px 10px;border-radius:9px;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.22);opacity:.3}
+/* lane 1: workspace switch */
+.cap1{position:absolute;top:0;left:-5px;width:18px;height:8px;border-radius:4px;background:#E6B6FF;animation:cap1 5s infinite}
+@keyframes cap1{0%,28%{left:-5px;width:18px}36%{left:-5px;width:44px}44%,72%{left:21px;width:18px}80%{left:-5px;width:44px}88%,100%{left:-5px;width:18px}}
+.tA{position:absolute;left:0;top:0;display:flex;align-items:center;gap:7px;white-space:nowrap;animation:tA 5s infinite}
+@keyframes tA{0%,32%{opacity:1;transform:translateY(0);filter:blur(0)}42%,76%{opacity:0;transform:translateY(-8px);filter:blur(3px)}86%,100%{opacity:1;transform:translateY(0);filter:blur(0)}}
+.tB{position:absolute;left:0;top:0;display:flex;align-items:center;gap:7px;white-space:nowrap;animation:tB 5s infinite}
+@keyframes tB{0%,34%{opacity:0;transform:translateY(8px);filter:blur(3px)}44%,74%{opacity:1;transform:translateY(0);filter:blur(0)}84%,100%{opacity:0;transform:translateY(8px);filter:blur(3px)}}
+.tbox{position:relative;height:18px;animation:tbox 5s infinite}
+@keyframes tbox{0%,32%{width:116px}46%,74%{width:96px}88%,100%{width:116px}}
+.k1a{animation:k1a 5s infinite}@keyframes k1a{0%,26%{opacity:.3}29%{opacity:1}36%,100%{opacity:.3}}
+.k1b{animation:k1b 5s infinite}@keyframes k1b{0%,70%{opacity:.3}73%{opacity:1}80%,100%{opacity:.3}}
+/* lane 2: media pill */
+.mwrap{position:absolute;left:276px;top:76px;height:38px;overflow:hidden;border-radius:19px;animation:mw 5s infinite}
+@keyframes mw{0%,12%{width:0;opacity:0;transform:translateX(-30px)}26%{width:170px;opacity:1;transform:translateX(4px)}32%,70%{width:162px;opacity:1;transform:translateX(0)}84%,100%{width:0;opacity:0;transform:translateX(-30px)}}
+.eq{width:2.5px;border-radius:1px;background:#F6D9FF;animation:eq .7s ease-in-out infinite alternate}
+@keyframes eq{from{height:4px}to{height:12px}}
+.k2a{animation:k2a 5s infinite}@keyframes k2a{0%,10%{opacity:.3}13%{opacity:1}20%,100%{opacity:.3}}
+.k2b{animation:k2b 5s infinite}@keyframes k2b{0%,68%{opacity:.3}71%{opacity:1}78%,100%{opacity:.3}}
+/* lane 3: recording pill splits */
+.rec{position:absolute;top:76px;height:38px;border-radius:19px;box-sizing:border-box;overflow:hidden;display:flex;align-items:center;gap:8px;padding-left:12px;animation:rec 5s infinite;backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px)}
+@keyframes rec{0%,8%{left:620px;width:38px;opacity:0;background:rgba(22,14,30,.44);border:1px solid rgba(255,255,255,.13)}12%{left:624px;width:38px;opacity:1;background:rgba(22,14,30,.5);border:1px solid rgba(255,255,255,.13)}22%{left:676px;width:38px;background:rgba(120,20,24,.45);border:1px solid rgba(255,138,128,.45)}30%,70%{left:666px;width:112px;opacity:1;background:rgba(120,20,24,.45);border:1px solid rgba(255,138,128,.45)}80%{left:640px;width:38px;opacity:1;background:rgba(22,14,30,.5)}86%,100%{left:620px;width:38px;opacity:0}}
+.neck{position:absolute;top:88px;height:14px;border-radius:7px;background:rgba(80,30,40,.55);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);animation:neck 5s infinite}
+@keyframes neck{0%,13%{left:640px;width:0;opacity:0}18%{left:640px;width:40px;opacity:1}24%{left:654px;width:20px;opacity:.8}28%,74%{left:660px;width:0;opacity:0}78%{left:646px;width:26px;opacity:.8}84%,100%{left:640px;width:0;opacity:0}}
+.rtxt{display:flex;align-items:center;gap:8px;white-space:nowrap;animation:rtxt 5s infinite}
+@keyframes rtxt{0%,26%{opacity:0}32%,68%{opacity:1}74%,100%{opacity:0}}
+.k3a{animation:k3a 5s infinite}@keyframes k3a{0%,6%{opacity:.3}9%{opacity:1}16%,100%{opacity:.3}}
+.k3b{animation:k3b 5s infinite}@keyframes k3b{0%,68%{opacity:.3}71%{opacity:1}78%,100%{opacity:.3}}
+/* lane 4: OSD drop */
+.osd{position:absolute;box-sizing:border-box;overflow:hidden;display:flex;align-items:center;gap:12px;padding:0 16px;animation:osd 5s infinite}
+@keyframes osd{0%,8%{left:518px;top:20px;width:144px;height:38px;border-radius:19px;opacity:0}11%{left:518px;top:20px;width:144px;height:38px;border-radius:19px;opacity:1}16%{left:540px;top:44px;width:100px;height:40px;border-radius:20px}24%,66%{left:445px;top:96px;width:290px;height:46px;border-radius:23px;opacity:1}76%{left:530px;top:40px;width:120px;height:38px;border-radius:19px;opacity:1}82%,100%{left:518px;top:20px;width:144px;height:38px;border-radius:19px;opacity:0}}
+.ofill{height:6px;border-radius:3px;background:#E6B6FF;animation:ofill 5s infinite}
+@keyframes ofill{0%,30%{width:40%}38%{width:48%}46%{width:56%}54%,100%{width:64%}}
+.ocont{display:flex;align-items:center;gap:12px;width:258px;flex:none;animation:ocont 5s infinite}
+@keyframes ocont{0%,18%{opacity:0}26%,64%{opacity:1}70%,100%{opacity:0}}
+.k4{animation:k4 1.2s infinite}@keyframes k4{0%,20%{opacity:.3}0%{opacity:.3}}
+.k4a{animation:k4a 5s infinite}@keyframes k4a{0%,28%{opacity:.3}31%{opacity:1}34%{opacity:.3}39%{opacity:1}42%{opacity:.3}47%{opacity:1}50%,100%{opacity:.3}}
+.play{position:absolute;top:0;bottom:0;width:2px;background:#FFB59C;box-shadow:0 0 8px #FFB59C;animation:play 5s linear infinite}
+@keyframes play{from{left:0}to{left:100%}}
+</style>
+</helmet>
+<div style="position: relative; width: 1600px; height: 900px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #EEE6F2; background: #100a14">
+
+<!-- lane 1 -->
+<div class="lbl" style="top: 44px"><b>Switch workspace</b>The capsule stretches toward the new dot like a drop of liquid, then lets go of the old one. The title blurs out upward while the new one rises in; the pill resizes to fit.<br><i>capsule 260 ms OutBack · title 180 ms · width 220 ms</i></div>
+<div class="lane" style="top: 30px">
+  <img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="pl glass" style="left: 30px; top: 76px; padding: 0 14px 0 13px; gap: 12px">
+    <div style="position: relative; width: 60px; height: 8px; margin-left: 5px">
+      <div class="dot" style="left: 0"></div><div class="dot" style="left: 13px"></div><div class="dot" style="left: 26px"></div><div class="dot" style="left: 39px; background: transparent; box-shadow: inset 0 0 0 1.5px rgba(238,230,242,.32)"></div><div class="dot" style="left: 52px; background: transparent; box-shadow: inset 0 0 0 1.5px rgba(238,230,242,.32)"></div>
+      <div class="cap1"></div>
+    </div>
+    <div style="width: 1px; height: 16px; background: rgba(255,255,255,.16)"></div>
+    <div class="tbox">
+      <div class="tA"><svg class="bi" style="color: #E6B6FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6M12 19h8"></path></svg><span style="font-weight: 500">Bar.qml — nvim</span></div>
+      <div class="tB"><svg class="bi" style="color: #E6B6FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="4"></rect><path d="M6 12h4M8 10v4M15 11h.01M18 13h.01"></path></svg><span style="font-weight: 500">Hollow Knight</span></div>
+    </div>
+  </div>
+  <div class="kk k1a" style="left: 860px; top: 80px">Super 3</div>
+  <div class="kk k1b" style="left: 960px; top: 80px">Super 1</div>
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255,255,255,.08)"><div class="play"></div></div>
+</div>
+
+<!-- lane 2 -->
+<div class="lbl" style="top: 254px"><b>Media pill appears</b>When something starts playing, the media pill slides out from behind the workspace pill with a small overshoot; when playback stops for 10 s it tucks back in.<br><i>in 320 ms OutBack · out 220 ms InCubic</i></div>
+<div class="lane" style="top: 240px">
+  <img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="mwrap"><div class="pl glass" style="position: relative; width: 162px; padding: 0 13px 0 6px; gap: 8px; font-size: 12.5px">
+    <div style="width: 26px; height: 26px; border-radius: 13px; background: #5E3876; display: flex; align-items: center; justify-content: center; gap: 2px; flex: none"><div class="eq"></div><div class="eq" style="animation-delay: -.3s"></div><div class="eq" style="animation-delay: -.5s"></div></div>
+    <span style="font-weight: 500; white-space: nowrap">Late Night Coding</span>
+  </div></div>
+  <div class="pl glass" style="left: 30px; top: 76px; width: 238px; padding: 0 14px 0 18px; gap: 12px; z-index: 2">
+    <div style="display: flex; gap: 5px; align-items: center"><div style="width: 18px; height: 8px; border-radius: 4px; background: #E6B6FF"></div><div style="width: 8px; height: 8px; border-radius: 4px; background: rgba(238,230,242,.62)"></div><div style="width: 8px; height: 8px; border-radius: 4px; background: rgba(238,230,242,.62)"></div><div style="width: 8px; height: 8px; border-radius: 4px; box-shadow: inset 0 0 0 1.5px rgba(238,230,242,.32)"></div><div style="width: 8px; height: 8px; border-radius: 4px; box-shadow: inset 0 0 0 1.5px rgba(238,230,242,.32)"></div></div>
+    <div style="width: 1px; height: 16px; background: rgba(255,255,255,.16)"></div>
+    <span style="font-weight: 500">Bar.qml — nvim</span>
+  </div>
+  <div class="kk k2a" style="left: 860px; top: 80px">play</div>
+  <div class="kk k2b" style="left: 940px; top: 80px">stop</div>
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255,255,255,.08)"><div class="play"></div></div>
+</div>
+
+<!-- lane 3 -->
+<div class="lbl" style="top: 464px"><b>Recording pill splits off</b>Like a cell dividing: a droplet bulges out of the clock's right end, a thin neck stretches and snaps, and the droplet turns red and widens to show the timer. Stopping runs it backwards and the droplet merges into the clock.<br><i>split 380 ms · colour 200 ms · merge 300 ms</i></div>
+<div class="lane" style="top: 450px">
+  <img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="neck"></div>
+  <div class="rec"><div class="rtxt"><div style="width: 10px; height: 10px; border-radius: 5px; background: #FF6B6B; box-shadow: 0 0 0 4px rgba(255,107,107,.25)"></div><span style="font-family: 'Geist Mono', ui-monospace, monospace; color: #FFE1DE">00:03</span></div></div>
+  <div class="pl glass" style="left: 518px; top: 76px; width: 144px; justify-content: center; gap: 10px; z-index: 2"><span style="color: #CDBFD6">Tue 20 Oct</span><span style="font-weight: 600; font-size: 14px">06:47</span></div>
+  <div class="kk k3a" style="left: 900px; top: 80px">Enter (start)</div>
+  <div class="kk k3b" style="left: 1030px; top: 80px">Super Shift R</div>
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255,255,255,.08)"><div class="play"></div></div>
+</div>
+
+<!-- lane 4 -->
+<div class="lbl" style="top: 674px"><b>OSD drops out of the clock</b>The first key press drips a droplet from the clock that springs into the OSD; further presses only move the fill. 1.2 s after the last press it gets pulled back up into the clock.<br><i>drop 300 ms · fill 120 ms per step · return 240 ms</i></div>
+<div class="lane" style="top: 660px">
+  <img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="osd glass"><div class="ocont">
+    <svg style="width: 17px; height: 17px; flex: none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+    <div style="flex: 1; height: 6px; border-radius: 3px; background: rgba(255,255,255,.14)"><div class="ofill"></div></div>
+  </div></div>
+  <div class="pl glass" style="left: 518px; top: 20px; width: 144px; justify-content: center; gap: 10px; z-index: 2"><span style="color: #CDBFD6">Tue 20 Oct</span><span style="font-weight: 600; font-size: 14px">06:47</span></div>
+  <div class="kk k4a" style="left: 900px; top: 104px">Vol +</div>
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255,255,255,.08)"><div class="play"></div></div>
+</div>
+
+<div style="position: absolute; left: 40px; top: 868px; font-size: 12px; color: #8f8499">All loops at half speed. The orange line under each lane is the playhead.</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

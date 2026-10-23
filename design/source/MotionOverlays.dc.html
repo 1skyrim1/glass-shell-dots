@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Motion: panels and overlays</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.m{position:absolute;width:496px;height:279px;border-radius:14px;overflow:hidden;background:#140b1a;box-shadow:0 0 0 1px rgba(255,255,255,.14),0 20px 50px rgba(0,0,0,.4)}
+.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.win{position:absolute;border-radius:6px;background:rgba(27,20,33,.92);border:1px solid rgba(255,255,255,.08)}
+.g{background:rgba(22,14,30,.5);backdrop-filter:blur(14px) saturate(170%);-webkit-backdrop-filter:blur(14px) saturate(170%);border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 22px rgba(0,0,0,.4)}
+.pp{position:absolute;top:4px;height:13px;border-radius:7px}
+.cap{position:absolute;width:496px;font-size:12.5px;line-height:18px;color:#CDBFD6}
+.cap b{display:block;color:#F4EEF7;font-size:14px;font-weight:600;margin-bottom:2px}
+.line{height:5px;border-radius:3px;background:rgba(255,255,255,.16);margin-bottom:6px}
+/* a: notification center */
+.nc{position:absolute;overflow:hidden;animation:nc 4s infinite}
+@keyframes nc{0%,8%{left:225px;top:4px;width:46px;height:13px;border-radius:7px;opacity:0}10%{opacity:1;left:225px;top:4px;width:46px;height:13px;border-radius:7px}16%{left:232px;top:12px;width:32px;height:26px;border-radius:13px}26%,66%{left:124px;top:22px;width:248px;height:180px;border-radius:14px;opacity:1}76%{left:225px;top:4px;width:46px;height:13px;border-radius:7px;opacity:1}78%,100%{left:225px;top:4px;width:46px;height:13px;opacity:0}}
+.ncc{position:absolute;left:10px;top:10px;width:228px;animation:ncc 4s infinite}
+@keyframes ncc{0%,20%{opacity:0;transform:translateY(6px)}30%,62%{opacity:1;transform:translateY(0)}68%,100%{opacity:0}}
+.clk{animation:clk 4s infinite}@keyframes clk{0%,8%{background:rgba(22,14,30,.5)}12%,72%{background:rgba(94,56,118,.75)}78%,100%{background:rgba(22,14,30,.5)}}
+/* b: power menu */
+.pdim{position:absolute;inset:0;background:rgba(8,4,12,.55);animation:pdim 4s infinite}
+@keyframes pdim{0%,4%{opacity:0}14%,82%{opacity:1}92%,100%{opacity:0}}
+.pt{position:absolute;top:118px;width:46px;height:46px;border-radius:13px;animation:pt 4s infinite}
+@keyframes pt{0%,6%{opacity:0;transform:translateY(24px) scale(.9)}16%{opacity:1;transform:translateY(-3px) scale(1.02)}20%,78%{opacity:1;transform:translateY(0) scale(1)}86%,100%{opacity:0;transform:translateY(18px) scale(.94)}}
+.parm{animation-name:pt,parm;animation-duration:4s;animation-iteration-count:infinite}
+@keyframes parm{0%,40%{background:rgba(22,14,30,.5);border-color:rgba(255,255,255,.16)}44%,74%{background:rgba(140,30,34,.6);border-color:rgba(255,138,128,.8)}80%,100%{background:rgba(22,14,30,.5)}}
+/* c: polkit */
+.kdim{position:absolute;inset:0;background:rgba(8,4,12,.6);animation:kdim 4s infinite}
+@keyframes kdim{0%,4%{opacity:0}12%,80%{opacity:1}90%,100%{opacity:0}}
+.dlg{position:absolute;left:148px;top:56px;width:200px;height:150px;border-radius:14px;box-sizing:border-box;padding:12px;animation:dlg 4s infinite}
+@keyframes dlg{0%,4%{opacity:0;transform:scale(.9)}14%{opacity:1;transform:scale(1.02)}18%,42%{opacity:1;transform:scale(1) translateX(0)}45%{transform:translateX(-8px)}48%{transform:translateX(8px)}51%{transform:translateX(-5px)}54%{transform:translateX(4px)}57%,76%{transform:translateX(0);opacity:1}84%,100%{opacity:0;transform:scale(.96)}}
+.fld{height:22px;border-radius:7px;margin-top:12px;animation:fld 4s infinite}
+@keyframes fld{0%,43%{background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px #E6B6FF}45%,62%{background:rgba(140,30,34,.4);box-shadow:inset 0 0 0 1px #FF8A80}66%,100%{background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px #E6B6FF}}
+/* d: capture */
+.flash{position:absolute;inset:0;background:#fff;pointer-events:none;animation:flash 4s infinite}
+@keyframes flash{0%{opacity:.6}5%,57%{opacity:0}59%{opacity:.55}63%,100%{opacity:0}}
+.cdim{position:absolute;inset:0;background:rgba(8,4,12,.5);animation:cdim 4s infinite}
+@keyframes cdim{0%,2%{opacity:0}8%,60%{opacity:1}66%,100%{opacity:0}}
+.ctool{position:absolute;left:168px;width:160px;height:24px;border-radius:12px;animation:ctool 4s infinite}
+@keyframes ctool{0%,8%{top:290px;opacity:0}18%,58%{top:236px;opacity:1}64%,100%{top:290px;opacity:0}}
+.sel{position:absolute;box-sizing:border-box;border:2px solid #E6B6FF;background:rgba(230,182,255,.06);animation:sel 4s infinite}
+@keyframes sel{0%,22%{left:290px;top:60px;width:0;height:0;opacity:0}24%{opacity:1;left:290px;top:60px;width:0;height:0}44%,58%{left:290px;top:60px;width:150px;height:96px;opacity:1}72%,86%{left:10px;top:225px;width:72px;height:46px;opacity:1;border-radius:6px;background:rgba(240,235,243,.9)}94%,100%{left:10px;top:225px;width:72px;height:46px;opacity:0}}
+/* e: control center page push */
+.ccp{position:absolute;right:10px;top:22px;width:190px;height:200px;border-radius:14px;overflow:hidden}
+.pa{position:absolute;inset:10px;animation:pa 4s infinite}
+@keyframes pa{0%,28%{transform:translateX(0);opacity:1}42%,70%{transform:translateX(-60%);opacity:0}84%,100%{transform:translateX(0);opacity:1}}
+.pb{position:absolute;inset:10px;animation:pb 4s infinite}
+@keyframes pb{0%,28%{transform:translateX(70%);opacity:0}42%,70%{transform:translateX(0);opacity:1}84%,100%{transform:translateX(70%);opacity:0}}
+.ccsz{animation:ccsz 4s infinite}
+@keyframes ccsz{0%,28%{height:150px}42%,70%{height:200px}84%,100%{height:150px}}
+/* f: toast fan */
+.t1{position:absolute;right:12px;width:180px;height:40px;border-radius:10px;animation:t1 4s infinite}
+@keyframes t1{0%,26%{top:24px}40%,72%{top:24px}}
+.t2{position:absolute;right:12px;width:180px;height:40px;border-radius:10px;animation:t2 4s infinite}
+@keyframes t2{0%,26%{top:30px;transform:scale(.94);opacity:.75}40%,72%{top:70px;transform:scale(1);opacity:1}86%,100%{top:30px;transform:scale(.94);opacity:.75}}
+.t3{position:absolute;right:12px;width:180px;height:40px;border-radius:10px;animation:t3 4s infinite}
+@keyframes t3{0%,26%{top:36px;transform:scale(.88);opacity:.5}40%,72%{top:116px;transform:scale(1);opacity:1}86%,100%{top:36px;transform:scale(.88);opacity:.5}}
+.cur{position:absolute;width:14px;height:14px;animation:cur 4s infinite}
+@keyframes cur{0%,10%{left:200px;top:200px}28%,74%{left:400px;top:40px}90%,100%{left:200px;top:200px}}
+</style>
+</helmet>
+<div style="position: relative; width: 1600px; height: 740px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #F4EEF7; background: #100a14">
+
+<!-- a -->
+<div class="m" style="left: 24px; top: 24px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="win" style="left: 4px; top: 20px; width: 268px; height: 255px"></div>
+  <div class="win" style="left: 276px; top: 20px; width: 216px; height: 255px"></div>
+  <div class="pp g" style="left: 4px; width: 74px"></div>
+  <div class="pp g clk" style="left: 225px; width: 46px"></div>
+  <div class="pp g" style="left: 418px; width: 60px"></div>
+  <div class="nc g"><div class="ncc">
+    <div style="display: flex; gap: 10px"><div style="width: 90px"><div style="font-size: 10px; font-weight: 600; margin-bottom: 6px">Tuesday</div><div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px"><div class="line" style="margin: 0"></div><div class="line" style="margin: 0"></div><div class="line" style="margin: 0"></div><div class="line" style="margin: 0"></div><div class="line" style="margin: 0"></div><div class="line" style="margin: 0"></div><div class="line" style="margin: 0"></div><div class="line" style="margin: 0"></div><div class="line" style="margin: 0; background: #E6B6FF"></div><div class="line" style="margin: 0"></div><div class="line" style="margin: 0"></div><div class="line" style="margin: 0"></div><div class="line" style="margin: 0"></div><div class="line" style="margin: 0"></div></div></div>
+    <div style="flex: 1"><div style="height: 34px; border-radius: 7px; background: rgba(230,182,255,.16); margin-bottom: 5px"></div><div style="height: 28px; border-radius: 7px; background: rgba(255,255,255,.08); margin-bottom: 5px"></div><div style="height: 28px; border-radius: 7px; background: rgba(255,255,255,.08)"></div></div></div>
+  </div></div>
+</div>
+<div class="cap" style="left: 24px; top: 311px"><b>Notification center</b>Drips out of the clock and springs open (420 ms). Calendar and list fade up 6 px once the shape is 60 % done. Closing pulls it back into the clock.</div>
+
+<!-- b -->
+<div class="m" style="left: 552px; top: 24px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="win" style="left: 4px; top: 20px; width: 268px; height: 255px"></div>
+  <div class="win" style="left: 276px; top: 20px; width: 216px; height: 255px"></div>
+  <div class="pdim"></div>
+  <div class="pt g" style="left: 118px"></div>
+  <div class="pt g" style="left: 172px; animation-delay: .05s"></div>
+  <div class="pt g" style="left: 226px; animation-delay: .1s"></div>
+  <div class="pt g" style="left: 280px; animation-delay: .15s"></div>
+  <div class="pt g parm" style="left: 334px; animation-delay: .2s"></div>
+</div>
+<div class="cap" style="left: 552px; top: 311px"><b>Power menu</b>Screen dims and blurs (200 ms). Tiles rise one after another, 40 ms apart, with a small bounce. Arming Power off turns its tile red; Esc drops them back down.</div>
+
+<!-- c -->
+<div class="m" style="left: 1080px; top: 24px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="win" style="left: 4px; top: 20px; width: 268px; height: 255px"></div>
+  <div class="win" style="left: 276px; top: 20px; width: 216px; height: 255px"></div>
+  <div class="kdim"></div>
+  <div class="dlg g" style="background: rgba(26,16,34,.75)">
+    <div style="display: flex; gap: 8px; align-items: center"><div style="width: 24px; height: 24px; border-radius: 7px; background: #5E3876"></div><div style="flex: 1"><div class="line" style="width: 80%"></div><div class="line" style="width: 60%; margin: 0"></div></div></div>
+    <div class="fld"></div>
+    <div style="display: flex; gap: 6px; margin-top: 16px"><div style="flex: 1; height: 20px; border-radius: 10px; background: rgba(255,255,255,.1)"></div><div style="flex: 1; height: 20px; border-radius: 10px; background: #E6B6FF"></div></div>
+  </div>
+</div>
+<div class="cap" style="left: 1080px; top: 311px"><b>Password prompt</b>Dim + blur, then the dialog scales up from 92 % (260 ms). A wrong password shakes it 4 times with damping (300 ms) and reds the field; success fades it out at 96 %.</div>
+
+<!-- d -->
+<div class="m" style="left: 24px; top: 380px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="win" style="left: 4px; top: 20px; width: 268px; height: 255px"></div>
+  <div class="win" style="left: 276px; top: 20px; width: 216px; height: 255px; background: #f0ebf3"></div>
+  <div class="cdim"></div>
+  <div class="sel"></div>
+  <div class="ctool g"></div>
+  <div class="flash"></div>
+</div>
+<div class="cap" style="left: 24px; top: 667px"><b>Capture</b>A soft flash marks the freeze, the screen dims and the toolbar rises. The selection draws from the drag point. On capture a second flash, then the selection flies into the corner and becomes the thumbnail.</div>
+
+<!-- e -->
+<div class="m" style="left: 552px; top: 380px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="win" style="left: 4px; top: 20px; width: 268px; height: 255px"></div>
+  <div class="pp g" style="left: 360px; width: 70px; background: rgba(94,56,118,.75)"></div>
+  <div class="ccp g ccsz">
+    <div class="pa"><div style="display: flex; gap: 6px; margin-bottom: 6px"><div style="flex: 1; height: 26px; border-radius: 8px; background: #E6B6FF"></div><div style="flex: 1; height: 26px; border-radius: 8px; background: #E6B6FF"></div></div><div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 8px"><div style="height: 26px; border-radius: 8px; background: rgba(255,255,255,.1)"></div><div style="height: 26px; border-radius: 8px; background: rgba(255,255,255,.1)"></div><div style="height: 26px; border-radius: 8px; background: rgba(255,255,255,.1)"></div></div><div class="line"></div><div class="line"></div></div>
+    <div class="pb"><div style="font-size: 10px; font-weight: 600; margin-bottom: 8px">‹ Wi-Fi &amp; Bluetooth</div><div style="height: 18px; border-radius: 6px; background: rgba(230,182,255,.2); margin-bottom: 5px"></div><div style="height: 18px; border-radius: 6px; background: rgba(255,255,255,.07); margin-bottom: 5px"></div><div style="height: 18px; border-radius: 6px; background: rgba(255,255,255,.07); margin-bottom: 5px"></div><div style="height: 18px; border-radius: 6px; background: rgba(255,255,255,.07); margin-bottom: 5px"></div><div style="height: 18px; border-radius: 6px; background: rgba(255,255,255,.07); margin-bottom: 5px"></div><div style="height: 18px; border-radius: 6px; background: rgba(255,255,255,.07)"></div></div>
+  </div>
+</div>
+<div class="cap" style="left: 552px; top: 667px"><b>Control Center sub-page</b>Pages push sideways: the main grid slides left and fades, the sub-page slides in from the right, and the panel's height springs to fit (300 ms). Esc / ‹ reverses.</div>
+
+<!-- f -->
+<div class="m" style="left: 1080px; top: 380px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="win" style="left: 4px; top: 20px; width: 268px; height: 255px"></div>
+  <div class="win" style="left: 276px; top: 20px; width: 216px; height: 255px"></div>
+  <div class="t3 g"></div>
+  <div class="t2 g"></div>
+  <div class="t1 g" style="top: 24px"><div style="padding: 8px 10px"><div class="line" style="width: 50%"></div><div class="line" style="width: 85%; margin: 0"></div></div></div>
+  <svg class="cur" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z" fill="#fff" stroke="#000" stroke-width="1.5"></path></svg>
+</div>
+<div class="cap" style="left: 1080px; top: 667px"><b>Toast stack</b>Hovering the stack fans it out (240 ms) and pauses every timer; moving away tucks the toasts back behind the newest one.</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":740}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

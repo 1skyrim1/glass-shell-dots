@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Screen share picker</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.nokeys .kbd,.nokeys .hint,.nokeys .key{display:none !important}
+.glass{background:rgba(22,14,30,.44);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.20),inset 0 -1px 0 rgba(255,255,255,.04),0 10px 34px rgba(0,0,0,.38)}
+.sheet{position:absolute;background:rgba(24,15,32,.55);backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%);border:1px solid rgba(255,255,255,.15);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 30px 80px rgba(0,0,0,.55);border-radius:30px;padding:20px;box-sizing:border-box}
+.kbd{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:#E4DAEA}
+.tab{height:32px;padding:0 16px;border-radius:16px;display:flex;align-items:center;font-size:13px;color:#CDBFD6}
+.card{position:relative;display:flex;flex-direction:column;gap:8px;font-size:12.5px}
+.th{position:relative;height:118px;border-radius:14px;overflow:hidden;background:#1b1421;box-shadow:0 0 0 1px rgba(255,255,255,.12)}
+.th img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.75}
+.key{position:absolute;top:8px;left:8px;font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.25)}
+.win{position:absolute;border-radius:14px;background:rgba(27,20,33,.92);border:1px solid rgba(255,255,255,.08)}
+.pl{position:relative;height:38px;border-radius:19px;box-sizing:border-box;display:flex;align-items:center;font-size:13px;flex:none}
+</style>
+</helmet>
+<div class="{{keysCls}}" onClick="{{toggle}}" style="position: relative; width: 1600px; height: 900px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #EEE6F2; background: #140b1a">
+<img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+<div class="win" style="left: 12px; top: 60px; width: 860px; height: 828px"></div>
+<div class="win" style="left: 882px; top: 60px; width: 706px; height: 828px"></div>
+<div style="position: absolute; inset: 0; background: rgba(8,4,12,.5)"></div>
+
+<div class="sheet" style="left: 300px; top: 110px; width: 1000px">
+  <div style="display: flex; align-items: center; gap: 14px">
+    <div style="width: 44px; height: 44px; border-radius: 14px; background: #262b45; display: flex; align-items: center; justify-content: center"><svg style="width: 22px; height: 22px" viewBox="0 0 24 24" fill="none" stroke="#B9C6FF" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"></path></svg></div>
+    <div style="flex: 1"><div style="font-size: 18px; font-weight: 600">Discord wants to share your screen</div><div style="font-size: 13px; color: #CDBFD6; margin-top: 2px">Pick what people in the call will see</div></div>
+    <div style="display: flex; padding: 3px; border-radius: 19px; background: rgba(255,255,255,.07)">
+      <div class="tab">Screen</div><div class="tab" style="background: rgba(255,255,255,.16); color: #F4EEF7; font-weight: 600; box-shadow: inset 0 1px 0 rgba(255,255,255,.2)">Window</div><div class="tab">Region</div>
+    </div>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 20px">
+    <div class="card"><div class="th" style="box-shadow: 0 0 0 3px #E6B6FF"><img src="/_blob/77a47c8dc400aae36435c9fb0d99ad03" alt=""><div style="position: absolute; left: 16px; top: 14px; right: 16px; bottom: 0; border-radius: 6px 6px 0 0; background: #2e2a1c"></div><span class="key">1</span></div><span><b style="font-weight: 600">Hollow Knight</b> <span style="color: #B9AEC2">· workspace 3</span></span></div>
+    <div class="card"><div class="th"><img src="/_blob/77a47c8dc400aae36435c9fb0d99ad03" alt=""><div style="position: absolute; left: 16px; top: 14px; right: 16px; bottom: 0; border-radius: 6px 6px 0 0; background: #19121e"></div><span class="key">2</span></div><span><b style="font-weight: 600">Bar.qml — nvim</b> <span style="color: #B9AEC2">· kitty</span></span></div>
+    <div class="card"><div class="th"><img src="/_blob/77a47c8dc400aae36435c9fb0d99ad03" alt=""><div style="position: absolute; left: 16px; top: 14px; right: 16px; bottom: 0; border-radius: 6px 6px 0 0; background: #f0ebf3"></div><span class="key">3</span></div><span><b style="font-weight: 600">Hyprland · ArchWiki</b> <span style="color: #B9AEC2">· Firefox</span></span></div>
+    <div class="card"><div class="th"><img src="/_blob/77a47c8dc400aae36435c9fb0d99ad03" alt=""><div style="position: absolute; left: 16px; top: 14px; right: 16px; bottom: 0; border-radius: 6px 6px 0 0; background: #1f2a26"></div><span class="key">4</span></div><span><b style="font-weight: 600">Downloads</b> <span style="color: #B9AEC2">· Files</span></span></div>
+    <div class="card"><div class="th"><img src="/_blob/77a47c8dc400aae36435c9fb0d99ad03" alt=""><div style="position: absolute; left: 16px; top: 14px; right: 16px; bottom: 0; border-radius: 6px 6px 0 0; background: #222033"></div><span class="key">5</span></div><span><b style="font-weight: 600">Steam</b> <span style="color: #B9AEC2">· Library</span></span></div>
+  </div>
+  <div style="display: flex; align-items: center; gap: 12px; margin-top: 22px">
+    <div style="display: flex; align-items: center; gap: 8px; font-size: 13px"><div style="width: 18px; height: 18px; border-radius: 5px; background: #E6B6FF; display: flex; align-items: center; justify-content: center"><svg style="width: 12px; height: 12px" viewBox="0 0 24 24" fill="none" stroke="#3a1a4d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></div>Share the window's audio</div>
+    <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; margin-left: 14px"><div style="width: 18px; height: 18px; border-radius: 5px; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.4)"></div>Remember for Discord</div>
+    <div style="flex: 1"></div>
+    <div style="height: 42px; padding: 0 20px; border-radius: 21px; background: rgba(255,255,255,.1); display: flex; align-items: center; gap: 8px; font-size: 14px">Cancel <span class="kbd">Esc</span></div>
+    <div style="height: 42px; padding: 0 22px; border-radius: 21px; background: #E6B6FF; color: #3a1a4d; font-weight: 600; display: flex; align-items: center; gap: 8px; font-size: 14px">Share <span class="kbd" style="background: rgba(58,26,77,.15); border-color: rgba(58,26,77,.25); color: #3a1a4d">Enter</span></div>
+  </div>
+</div>
+
+<!-- while sharing -->
+<div style="position: absolute; left: 300px; top: 712px; font-size: 13.5px; font-weight: 600; color: #F4EEF7">While sharing</div>
+<div style="position: absolute; left: 300px; top: 742px; width: 1000px; height: 110px; border-radius: 20px; overflow: hidden; box-shadow: 0 0 0 1px rgba(255,255,255,.14)">
+  <img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%">
+  <div style="position: absolute; top: 14px; left: 0; right: 0; display: flex; justify-content: center">
+    <div style="position: relative">
+      <div class="pl glass" style="padding: 0 14px; gap: 10px"><span style="color: #CDBFD6">Tue 20 Oct</span><span style="font-weight: 600; font-size: 14px">21:12</span></div>
+      <div class="pl" style="position: absolute; top: 0; left: calc(100% + 8px); padding: 0 6px 0 12px; gap: 9px; white-space: nowrap; background: rgba(20,80,50,.5); backdrop-filter: blur(26px); -webkit-backdrop-filter: blur(26px); border: 1px solid rgba(140,230,180,.5); box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 10px 34px rgba(0,0,0,.38); color: #D4F7E2">
+        <svg style="width: 15px; height: 15px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg>
+        <span>Sharing Hollow Knight</span>
+        <div style="height: 26px; padding: 0 10px; border-radius: 13px; background: rgba(255,255,255,.14); display: flex; align-items: center; font-size: 12px">Stop</div>
+      </div>
+    </div>
+  </div>
+  <div style="position: absolute; left: 20px; bottom: 14px; font-size: 12px; color: #EADDF0; width: 360px; line-height: 17px">A green pill splits off the clock (same motion as recording). Mic in use adds an orange dot to the status pill.</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"showKeys":{"editor":"boolean","default":false},"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const on = s.keys !== undefined ? s.keys : !!this.props.showKeys;
+    return { keysCls: on ? 'keys' : 'nokeys', toggle: () => this.setState({ keys: !on }) };
+  }
+}
+</script>
+</body>
+</html>

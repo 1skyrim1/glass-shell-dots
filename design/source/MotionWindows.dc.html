@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Motion: windows and workspaces</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.m{position:absolute;width:496px;height:279px;border-radius:14px;overflow:hidden;background:#140b1a;box-shadow:0 0 0 1px rgba(255,255,255,.14),0 20px 50px rgba(0,0,0,.4)}
+.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.w{position:absolute;border-radius:6px;background:rgba(27,20,33,.94);border:1px solid rgba(255,255,255,.1);box-sizing:border-box}
+.f{border:1.5px solid #E6B6FF}
+.g{background:rgba(22,14,30,.5);backdrop-filter:blur(14px) saturate(170%);-webkit-backdrop-filter:blur(14px) saturate(170%);border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 22px rgba(0,0,0,.4)}
+.pp{position:absolute;top:4px;height:13px;border-radius:7px}
+.cap{position:absolute;width:496px;font-size:12.5px;line-height:18px;color:#CDBFD6}
+.cap b{display:block;color:#F4EEF7;font-size:14px;font-weight:600;margin-bottom:2px}
+/* a open */
+.oa1{animation:oa1 4s infinite}@keyframes oa1{0%,20%{left:4px;width:488px}34%,84%{left:4px;width:268px}96%,100%{left:4px;width:488px}}
+.oa2{animation:oa2 4s infinite;transform-origin:50% 50%}@keyframes oa2{0%,20%{opacity:0;transform:scale(.86)}30%{opacity:1;transform:scale(1.02)}36%,84%{opacity:1;transform:scale(1)}92%,100%{opacity:0;transform:scale(.9)}}
+.oa1b{animation:oa1b 4s infinite}@keyframes oa1b{0%,84%{width:268px}96%,100%{width:488px}}
+/* b close */
+.cb{animation:cb 4s infinite;transform-origin:50% 50%}@keyframes cb{0%,30%{opacity:1;transform:scale(1)}40%,90%{opacity:0;transform:scale(.9)}100%{opacity:1;transform:scale(1)}}
+.cb2{animation:cb2 4s infinite}@keyframes cb2{0%,34%{top:20px;height:126px}46%,90%{top:20px;height:255px}100%{top:20px;height:126px}}
+/* c workspace slide */
+.ws1{animation:ws1 4s infinite}@keyframes ws1{0%,28%{transform:translateX(0)}44%,72%{transform:translateX(-110%)}88%,100%{transform:translateX(0)}}
+.ws2{animation:ws2 4s infinite}@keyframes ws2{0%,28%{transform:translateX(110%)}44%,72%{transform:translateX(0)}88%,100%{transform:translateX(110%)}}
+.wcap{position:absolute;top:3px;left:-2px;width:9px;height:4px;border-radius:2px;background:#E6B6FF;animation:wcap 4s infinite}
+@keyframes wcap{0%,28%{left:-2px;width:9px}34%{left:-2px;width:17px}42%,72%{left:6px;width:9px}80%{left:-2px;width:17px}88%,100%{left:-2px;width:9px}}
+/* d overview zoom */
+.oz{position:absolute;left:0;top:0;width:496px;height:279px;transform-origin:0 0;animation:oz 4s infinite}
+@keyframes oz{0%,22%{transform:translate(0,0) scale(1);border-radius:0}38%,72%{transform:translate(22px,36px) scale(.3);border-radius:16px}88%,100%{transform:translate(0,0) scale(1);border-radius:0}}
+.oc{animation:oc 4s infinite}@keyframes oc{0%,26%{opacity:0;transform:scale(.9)}40%,70%{opacity:1;transform:scale(1)}84%,100%{opacity:0;transform:scale(.9)}}
+.odim{position:absolute;inset:0;background:rgba(10,5,14,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:odim 4s infinite}
+@keyframes odim{0%,22%{opacity:0}36%,72%{opacity:1}88%,100%{opacity:0}}
+/* e alt tab */
+.at{position:absolute;left:58px;top:96px;width:380px;height:86px;border-radius:20px;display:flex;align-items:center;justify-content:space-around;padding:0 10px;box-sizing:border-box;animation:at 4s infinite}
+@keyframes at{0%,14%{opacity:0;transform:scale(.94)}22%,74%{opacity:1;transform:scale(1)}82%,100%{opacity:0;transform:scale(.97)}}
+.atr{position:absolute;top:10px;width:70px;height:66px;border-radius:14px;box-shadow:inset 0 0 0 1.5px #E6B6FF;background:rgba(230,182,255,.14);animation:atr 4s infinite}
+@keyframes atr{0%,30%{left:10px}36%,48%{left:84px}54%,74%{left:158px}100%{left:158px}}
+.ati{width:44px;height:44px;border-radius:12px}
+/* f fullscreen */
+.fs{animation:fs 4s infinite}@keyframes fs{0%,26%{left:4px;top:20px;width:268px;height:255px;border-radius:6px}40%,72%{left:0;top:0;width:496px;height:279px;border-radius:0}86%,100%{left:4px;top:20px;width:268px;height:255px;border-radius:6px}}
+.fsp{animation:fsp 4s infinite}@keyframes fsp{0%,24%{opacity:1;transform:translateY(0)}34%,74%{opacity:0;transform:translateY(-16px)}86%,100%{opacity:1;transform:translateY(0)}}
+</style>
+</helmet>
+<div style="position: relative; width: 1600px; height: 740px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #F4EEF7; background: #100a14">
+
+<!-- a open -->
+<div class="m" style="left: 24px; top: 24px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="pp g" style="left: 4px; width: 74px"></div><div class="pp g" style="left: 225px; width: 46px"></div><div class="pp g" style="left: 418px; width: 74px"></div>
+  <div class="w oa1" style="top: 20px; height: 255px"></div>
+  <div class="w f oa2" style="left: 276px; top: 20px; width: 216px; height: 255px; background: #f0ebf3"></div>
+</div>
+<div class="cap" style="left: 24px; top: 311px"><b>Window opens</b>The new window pops in at its tile from 86 % with a slight overshoot (Hyprland "popin 86%", 280 ms); the existing window slides to make room. Closing (end of loop) shrinks to 90 % and fades.</div>
+
+<!-- b close -->
+<div class="m" style="left: 552px; top: 24px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="pp g" style="left: 4px; width: 74px"></div><div class="pp g" style="left: 225px; width: 46px"></div><div class="pp g" style="left: 418px; width: 74px"></div>
+  <div class="w" style="left: 4px; top: 20px; width: 268px; height: 255px"></div>
+  <div class="w cb2" style="left: 276px; width: 216px; background: #f0ebf3"></div>
+  <div class="w f cb" style="left: 276px; top: 150px; width: 216px; height: 125px"></div>
+</div>
+<div class="cap" style="left: 552px; top: 311px"><b>Window closes · Super+Q</b>The window shrinks to 90 % and fades (200 ms) while its neighbour grows into the space; focus moves to the neighbour and its accent border fades in.</div>
+
+<!-- c workspace -->
+<div class="m" style="left: 1080px; top: 24px">
+  <div class="ws1" style="position: absolute; inset: 0"><img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt=""><div class="w f" style="left: 4px; top: 20px; width: 268px; height: 255px"></div><div class="w" style="left: 276px; top: 20px; width: 216px; height: 255px; background: #f0ebf3"></div></div>
+  <div class="ws2" style="position: absolute; inset: 0"><img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt=""><div class="w f" style="left: 4px; top: 20px; width: 488px; height: 255px; background: #262b45"></div></div>
+  <div class="pp g" style="left: 4px; width: 74px; z-index: 2"><div style="position: absolute; left: 8px; top: 0; width: 30px; height: 11px"><div style="position: absolute; top: 3px; left: 0; width: 4px; height: 4px; border-radius: 2px; background: rgba(238,230,242,.6)"></div><div style="position: absolute; top: 3px; left: 8px; width: 4px; height: 4px; border-radius: 2px; background: rgba(238,230,242,.6)"></div><div style="position: absolute; top: 3px; left: 16px; width: 4px; height: 4px; border-radius: 2px; background: rgba(238,230,242,.6)"></div><div class="wcap"></div></div></div>
+  <div class="pp g" style="left: 225px; width: 46px; z-index: 2"></div><div class="pp g" style="left: 418px; width: 74px; z-index: 2"></div>
+</div>
+<div class="cap" style="left: 1080px; top: 311px"><b>Switch workspace · Super+1–9</b>Workspaces slide horizontally (left for a higher number, right for lower, 300 ms). The pills stay put; only the capsule in the workspace pill stretches along with the slide.</div>
+
+<!-- d overview -->
+<div class="m" style="left: 24px; top: 380px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="" style="filter: blur(6px) brightness(.6)">
+  <div class="g oc" style="position: absolute; left: 178px; top: 36px; width: 149px; height: 84px; border-radius: 10px"></div>
+  <div class="g oc" style="position: absolute; left: 334px; top: 36px; width: 149px; height: 84px; border-radius: 10px"></div>
+  <div class="g oc" style="position: absolute; left: 22px; top: 130px; width: 149px; height: 84px; border-radius: 10px; opacity: .6"></div>
+  <div class="g oc" style="position: absolute; left: 178px; top: 130px; width: 149px; height: 84px; border-radius: 10px"></div>
+  <div class="odim"></div>
+  <div class="oz" style="overflow: hidden"><img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt=""><div class="w f" style="left: 4px; top: 20px; width: 268px; height: 255px"></div><div class="w" style="left: 276px; top: 20px; width: 216px; height: 255px; background: #f0ebf3"></div></div>
+</div>
+<div class="cap" style="left: 24px; top: 667px"><b>Overview · Super+Tab</b>The current workspace zooms out into its card (380 ms) while the others fade in around it and the background blurs. Enter on another card zooms into that one instead.</div>
+
+<!-- e alt tab -->
+<div class="m" style="left: 552px; top: 380px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="w f" style="left: 4px; top: 20px; width: 268px; height: 255px"></div>
+  <div class="w" style="left: 276px; top: 20px; width: 216px; height: 255px; background: #f0ebf3"></div>
+  <div class="at g">
+    <div class="atr"></div>
+    <div class="ati" style="background: #2a1f33"></div><div class="ati" style="background: #3a2a1f"></div><div class="ati" style="background: #262b45"></div><div class="ati" style="background: #1f3328"></div><div class="ati" style="background: #2e2a1c"></div>
+  </div>
+</div>
+<div class="cap" style="left: 552px; top: 667px"><b>Alt+Tab</b>Appears only if Alt is held longer than 120 ms (a quick Alt+Tab just swaps windows without showing it). The ring glides between icons; releasing Alt fades it and focuses the window.</div>
+
+<!-- f fullscreen -->
+<div class="m" style="left: 1080px; top: 380px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="w" style="left: 276px; top: 20px; width: 216px; height: 255px; background: #f0ebf3"></div>
+  <div class="w f fs" style="background: #2e2a1c"></div>
+  <div class="fsp" style="position: absolute; inset: 0"><div class="pp g" style="left: 4px; width: 74px"></div><div class="pp g" style="left: 225px; width: 46px"></div><div class="pp g" style="left: 418px; width: 74px"></div></div>
+</div>
+<div class="cap" style="left: 1080px; top: 667px"><b>Fullscreen · Super+F and games</b>The window grows to the edges (260 ms) and the pills float up and fade. Toasts are held back until you leave fullscreen, except critical ones.</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":740}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

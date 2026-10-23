@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Capture tool, region mode</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.nokeys .kbd,.nokeys .hint,.nokeys .num,.nokeys .key{display:none !important}
+.glass{background:rgba(22,14,30,.50);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(255,255,255,.04),0 14px 40px rgba(0,0,0,.45)}
+.ic{width:17px;height:17px;flex:none}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+.kbd{font-family:'Geist Mono',ui-monospace,monospace;font-size:10.5px;padding:1px 5px;border-radius:5px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:#E4DAEA}
+.win{position:absolute;border-radius:14px;background:#1b1421;border:1px solid rgba(255,255,255,.08);overflow:hidden}
+.ln{height:8px;border-radius:4px;margin-bottom:11px}
+.dim{position:absolute;background:rgba(8,4,12,.58)}
+.h{position:absolute;width:12px;height:12px;border-radius:6px;background:#fff;border:2px solid #E6B6FF;box-sizing:border-box}
+.seg{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:70px;height:56px;border-radius:16px;font-size:11.5px;color:#D9CEE0}
+.act{background:#E6B6FF;color:#3a1a4d;font-weight:600}
+.act .kbd{background:rgba(58,26,77,.15);border-color:rgba(58,26,77,.25);color:#3a1a4d}
+.sep{width:1px;height:36px;background:rgba(255,255,255,.14);margin:0 6px}
+</style>
+</helmet>
+<div class="{{keysCls}}" onClick="{{toggle}}" style="position: relative; width: 1600px; height: 900px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #EEE6F2; background: #140b1a">
+<img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+<div class="glass" style="position: absolute; top: 10px; left: 12px; width: 238px; height: 38px; border-radius: 19px"></div>
+<div class="glass" style="position: absolute; top: 10px; left: 258px; width: 162px; height: 38px; border-radius: 19px"></div>
+<div class="glass" style="position: absolute; top: 10px; left: 728px; width: 144px; height: 38px; border-radius: 19px"></div>
+<div class="glass" style="position: absolute; top: 10px; left: 1360px; width: 182px; height: 38px; border-radius: 19px"></div>
+<div class="glass" style="position: absolute; top: 10px; left: 1550px; width: 38px; height: 38px; border-radius: 19px"></div>
+<div class="win" style="left: 12px; top: 60px; width: 860px; height: 828px; background: rgba(19,12,24,.92); padding: 40px 30px; box-sizing: border-box">
+  <div class="ln" style="width: 30%; background: #FFB59C; opacity: .5"></div><div class="ln" style="width: 52%; background: rgba(255,255,255,.12)"></div><div class="ln" style="width: 44%; background: #E6B6FF; opacity: .4"></div><div class="ln" style="width: 61%; background: rgba(255,255,255,.12)"></div><div class="ln" style="width: 25%; background: rgba(255,255,255,.12)"></div><div class="ln" style="width: 70%; background: #C5E3B4; opacity: .35"></div><div class="ln" style="width: 48%; background: rgba(255,255,255,.12)"></div><div class="ln" style="width: 36%; background: rgba(255,255,255,.12)"></div>
+</div>
+<div class="win" style="left: 882px; top: 60px; width: 706px; height: 466px; background: #f3eff6; color: #22192a">
+  <div style="height: 76px; background: #261d2d"></div>
+  <div style="padding: 26px 30px">
+    <div style="font-size: 26px; font-weight: 600; margin-bottom: 14px">Hyprland</div>
+    <div style="font-size: 13px; line-height: 21px; color: #3b3045; width: 520px">A dynamic tiling Wayland compositor with smooth animations, rounded corners and per-window rules. Configuration is reloaded live whenever the file changes.</div>
+    <div class="mono" style="margin-top: 16px; padding: 12px 14px; border-radius: 8px; background: #e7e0ec; font-size: 12px; line-height: 19px; color: #2d2336; width: 520px">bind("SUPER SHIFT", "S", exec("qs ipc call capture open"))</div>
+  </div>
+</div>
+<div class="win" style="left: 882px; top: 536px; width: 706px; height: 352px; background: #1e1724"></div>
+
+<!-- dim everything except the selection: 920,128 → 1440,452 -->
+<div class="dim" style="left: 0; top: 0; width: 1600px; height: 128px"></div>
+<div class="dim" style="left: 0; top: 452px; width: 1600px; height: 448px"></div>
+<div class="dim" style="left: 0; top: 128px; width: 920px; height: 324px"></div>
+<div class="dim" style="left: 1440px; top: 128px; width: 160px; height: 324px"></div>
+
+<div style="position: absolute; left: 919px; top: 127px; width: 522px; height: 326px; box-sizing: border-box; border: 2px solid #E6B6FF; box-shadow: 0 0 0 1px rgba(0,0,0,.4)"></div>
+<div class="h" style="left: 914px; top: 122px"></div><div class="h" style="left: 1174px; top: 122px"></div><div class="h" style="left: 1434px; top: 122px"></div>
+<div class="h" style="left: 914px; top: 284px"></div><div class="h" style="left: 1434px; top: 284px"></div>
+<div class="h" style="left: 914px; top: 446px"></div><div class="h" style="left: 1174px; top: 446px"></div><div class="h" style="left: 1434px; top: 446px"></div>
+<div class="mono glass" style="position: absolute; left: 920px; top: 88px; height: 28px; padding: 0 10px; border-radius: 14px; display: flex; align-items: center; font-size: 12px; gap: 8px">624 × 389 <span style="color: #B9AEC2">at 1104, 154</span></div>
+
+<!-- loupe -->
+<div style="position: absolute; left: 1452px; top: 464px; width: 104px; height: 104px; border-radius: 52px; overflow: hidden; border: 2px solid rgba(255,255,255,.7); box-shadow: 0 10px 30px rgba(0,0,0,.5); background: #f3eff6">
+  <div style="position: absolute; left: 0; top: 0; width: 52px; height: 104px; background: #f3eff6"></div>
+  <div style="position: absolute; left: 0; top: 52px; width: 104px; height: 52px; background: #1b1421"></div>
+  <div style="position: absolute; left: 50px; top: 0; width: 4px; height: 104px; background: #E6B6FF"></div>
+  <div style="position: absolute; left: 0; top: 50px; width: 104px; height: 4px; background: #E6B6FF"></div>
+  <div style="position: absolute; inset: 0; background-image: repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 1px, transparent 1px 13px), repeating-linear-gradient(90deg, rgba(0,0,0,.18) 0 1px, transparent 1px 13px)"></div>
+</div>
+<div class="mono" style="position: absolute; left: 1452px; top: 574px; width: 104px; text-align: center; font-size: 11px; color: #EEE6F2">#F3EFF6</div>
+
+<!-- toolbar -->
+<div class="glass" style="position: absolute; left: 418px; top: 770px; height: 74px; border-radius: 37px; padding: 0 9px; display: flex; align-items: center; gap: 4px; box-sizing: border-box">
+  <div class="seg act"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2v14a2 2 0 0 0 2 2h14"></path><path d="M18 22V8a2 2 0 0 0-2-2H2"></path></svg><span>Region <span class="kbd">R</span></span></div>
+  <div class="seg"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M2 9h20"></path></svg><span>Window <span class="kbd">W</span></span></div>
+  <div class="seg"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg><span>Screen <span class="kbd">S</span></span></div>
+  <div class="sep"></div>
+  <div style="display: flex; padding: 4px; border-radius: 20px; background: rgba(255,255,255,.07); gap: 2px">
+    <div style="width: 46px; height: 40px; border-radius: 16px; background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center; box-shadow: inset 0 1px 0 rgba(255,255,255,.25)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Screenshot" role="img"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg></div>
+    <div style="width: 46px; height: 40px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #CDBFD6"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Record" role="img"><path d="m22 8-6 4 6 4V8z"></path><rect x="2" y="6" width="14" height="12" rx="2"></rect></svg></div>
+  </div>
+  <span class="kbd" style="margin-left: 4px">Tab</span>
+  <div class="sep"></div>
+  <div style="display: flex; flex-direction: column; gap: 3px; font-size: 11.5px; color: #D9CEE0; padding: 0 8px">
+    <div>Delay <b style="font-weight: 600">off</b> <span class="kbd">D</span></div>
+    <div>Copy + save <span class="kbd">O</span></div>
+  </div>
+  <div class="sep"></div>
+  <div style="height: 50px; padding: 0 18px; border-radius: 25px; background: #E6B6FF; color: #3a1a4d; font-weight: 600; font-size: 13.5px; display: flex; align-items: center; gap: 10px">Capture <span class="kbd" style="background: rgba(58,26,77,.15); border-color: rgba(58,26,77,.25); color: #3a1a4d">Enter</span></div>
+  <div style="width: 40px; height: 40px; border-radius: 20px; display: flex; align-items: center; justify-content: center; color: #CDBFD6; margin-left: 4px"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-label="Cancel (Esc)" role="img"><path d="M18 6 6 18M6 6l12 12"></path></svg></div>
+</div>
+
+<!-- after-capture card -->
+<div style="position: absolute; left: 40px; top: 676px; font-size: 12px; font-weight: 600; color: #F4EEF7">After capture (bottom-left, 6 s)</div>
+<div class="glass" style="position: absolute; left: 40px; top: 700px; width: 330px; border-radius: 22px; padding: 12px; box-sizing: border-box; display: flex; gap: 12px; align-items: center">
+  <div style="width: 112px; height: 70px; border-radius: 10px; background: #f3eff6; flex: none; padding: 10px; box-sizing: border-box; border: 1px solid rgba(255,255,255,.3)"><div style="height: 8px; width: 50%; border-radius: 3px; background: #22192a; margin-bottom: 7px"></div><div style="height: 4px; width: 90%; border-radius: 2px; background: #b8adc2; margin-bottom: 4px"></div><div style="height: 4px; width: 80%; border-radius: 2px; background: #b8adc2; margin-bottom: 7px"></div><div style="height: 12px; width: 92%; border-radius: 3px; background: #e0d8e6"></div></div>
+  <div style="flex: 1; display: flex; flex-direction: column; gap: 6px; font-size: 12px">
+    <div style="font-weight: 600; font-size: 12.5px">Copied to clipboard</div>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; color: #D9CEE0"><span>Annotate <span class="kbd">E</span></span><span>Save as <span class="kbd">S</span></span><span>Delete <span class="kbd">X</span></span></div>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"showKeys":{"editor":"boolean","default":false},"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const on = s.keys !== undefined ? s.keys : !!this.props.showKeys;
+    return { keysCls: on ? 'keys' : 'nokeys', toggle: () => this.setState({ keys: !on }) };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Desktop with glass pills</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.glass{background:rgba(22,14,30,.44);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.20),inset 0 -1px 0 rgba(255,255,255,.04),0 10px 34px rgba(0,0,0,.38)}
+.bl{position:absolute;top:10px;left:12px;display:flex;gap:8px}
+.bc{position:absolute;top:10px;left:0;right:0;display:flex;justify-content:center;pointer-events:none}
+.br{position:absolute;top:10px;right:12px;display:flex;gap:8px}
+.pl{position:relative;height:38px;border-radius:19px;box-sizing:border-box;display:flex;align-items:center;font-size:13px;flex:none}
+.bi{width:15px;height:15px;flex:none}
+.ws{display:flex;align-items:center;gap:5px}
+.wa{width:18px;height:8px;border-radius:4px;background:#E6B6FF}
+.wo{width:8px;height:8px;border-radius:4px;background:rgba(238,230,242,.62)}
+.we{width:8px;height:8px;border-radius:4px;box-sizing:border-box;border:1.5px solid rgba(238,230,242,.32)}
+.ttl{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+.vsep{width:1px;height:16px;background:rgba(255,255,255,.16)}
+.ic{width:15px;height:15px;flex:none}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+.kbd{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:#E4DAEA}
+.nokeys .kbd,.nokeys .hint,.nokeys .num,.nokeys .key{display:none !important}
+.code div{white-space:pre;height:19px}
+.ln{display:inline-block;width:34px;text-align:right;margin-right:14px;color:#6f6578}
+.kw{color:#FFB59C}.ty{color:#E6B6FF}.pr{color:#D9C8E8}.st{color:#C5E3B4}.cm{color:#9a8fa3;font-style:italic}.nu{color:#FFD59C}
+</style>
+</helmet>
+<div class="{{keysCls}}" onClick="{{toggle}}" style="position: relative; width: 1600px; height: 900px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #EEE6F2; background: #140b1a">
+<img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+
+<!-- ===== Pills ===== -->
+<div class="bl">
+  <div class="pl glass" style="padding: 0 14px 0 13px; gap: 12px">
+    <div class="ws"><div class="wa"></div><div class="wo"></div><div class="wo"></div><div class="we"></div><div class="we"></div></div>
+    <div class="vsep"></div>
+    <div style="display: flex; align-items: center; gap: 7px"><svg class="bi" style="width: 14px; height: 14px; color: #E6B6FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6M12 19h8"></path></svg><span class="ttl">Bar.qml — nvim</span></div>
+  </div>
+  <div class="pl glass" style="padding: 0 13px 0 6px; gap: 8px; font-size: 12.5px">
+    <div style="width: 26px; height: 26px; border-radius: 13px; background: #5E3876; display: flex; align-items: center; justify-content: center; gap: 2px"><div style="width: 2.5px; height: 7px; border-radius: 1px; background: #F6D9FF"></div><div style="width: 2.5px; height: 11px; border-radius: 1px; background: #F6D9FF"></div><div style="width: 2.5px; height: 5px; border-radius: 1px; background: #F6D9FF"></div></div>
+    <span class="ttl" style="max-width: 110px">Late Night Coding</span>
+  </div>
+</div>
+
+<div class="bc">
+  <div class="pl glass" style="padding: 0 14px; gap: 10px"><span style="color: #CDBFD6">Tue 20 Oct</span><span style="font-weight: 600; font-size: 14px">06:47</span></div>
+</div>
+
+<div class="br">
+  <div class="pl glass" style="padding: 0 12px 0 9px; gap: 10px">
+    <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; padding: 3px 7px; border-radius: 8px; background: rgba(255,255,255,.08); color: #D9CEE0">DE</div>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M2 8.82a15 15 0 0 1 20 0"></path><path d="M5 12.86a10 10 0 0 1 14 0"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path></svg>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 7 10 10-5 5V2l5 5L7 17"></path></svg>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+    <div style="display: flex; align-items: center; gap: 5px"><svg class="bi" style="width: 20px" viewBox="0 0 28 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3"></rect><path d="M25 10v4"></path><rect x="5" y="9" width="11" height="6" rx="1" fill="currentColor" stroke="none"></rect></svg><span style="font-size: 12px">78%</span></div>
+  </div>
+  <div class="pl glass" style="width: 38px; justify-content: center">
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+    <div style="position: absolute; top: 8px; right: 9px; width: 7px; height: 7px; border-radius: 4px; background: #FFB59C"></div>
+  </div>
+</div>
+
+<!-- ===== Master: kitty + neovim (focused) ===== -->
+<div style="position: absolute; left: 12px; top: 60px; width: 860px; height: 828px; border-radius: 14px; box-sizing: border-box; border: 2px solid #E6B6FF; background: rgba(19,12,24,.86); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); box-shadow: 0 0 0 4px rgba(230,182,255,.12), 0 18px 50px rgba(0,0,0,.45); overflow: hidden; display: flex; flex-direction: column">
+  <div class="mono" style="display: flex; align-items: center; gap: 2px; padding: 8px 10px 0; font-size: 12px">
+    <div style="padding: 5px 12px; border-radius: 8px 8px 0 0; background: rgba(255,255,255,.07); color: #EEE6F2">Bar.qml</div>
+    <div style="padding: 5px 12px; color: #9a8fa3">ClockPill.qml</div>
+    <div style="padding: 5px 12px; color: #9a8fa3">GlassRect.qml</div>
+    <div style="padding: 5px 12px; color: #9a8fa3">hyprland.lua</div>
+  </div>
+  <div class="mono code" style="flex: 1; padding: 12px 0 0 6px; font-size: 12.5px; line-height: 19px; color: #E4DAEA; background: rgba(255,255,255,.035)">
+    <div><span class="ln">1</span><span class="kw">import</span> <span class="ty">QtQuick</span></div>
+    <div><span class="ln">2</span><span class="kw">import</span> <span class="ty">Quickshell</span></div>
+    <div><span class="ln">3</span><span class="kw">import</span> <span class="st">"pills"</span></div>
+    <div><span class="ln">4</span></div>
+    <div><span class="ln">5</span><span class="cm">// Islands: every pill is its own glass surface and</span></div>
+    <div><span class="ln">6</span><span class="cm">// only exists while it has something to show</span></div>
+    <div><span class="ln">7</span><span class="ty">PanelWindow</span> {</div>
+    <div><span class="ln">8</span>    <span class="pr">anchors</span> { <span class="pr">top</span>: <span class="nu">true</span>; <span class="pr">left</span>: <span class="nu">true</span>; <span class="pr">right</span>: <span class="nu">true</span> }</div>
+    <div><span class="ln">9</span>    <span class="pr">implicitHeight</span>: <span class="nu">48</span></div>
+    <div><span class="ln">10</span>    <span class="pr">color</span>: <span class="st">"transparent"</span></div>
+    <div><span class="ln">11</span></div>
+    <div><span class="ln">12</span>    <span class="ty">Row</span> {                       <span class="cm">// left cluster</span></div>
+    <div><span class="ln">13</span>        <span class="pr">spacing</span>: <span class="nu">8</span></div>
+    <div><span class="ln">14</span>        <span class="ty">WorkspacePill</span> {}         <span class="cm">// 5 dots + focused window</span></div>
+    <div><span class="ln">15</span>        <span class="ty">MediaPill</span> { <span class="pr">visible</span>: Media.active !== <span class="nu">null</span> }</div>
+    <div><span class="ln">16</span>    }</div>
+    <div><span class="ln">17</span>    <span class="ty">ClockPill</span> {</div>
+    <div><span class="ln">18</span>        <span class="pr">id</span>: clock; <span class="pr">anchors.horizontalCenter</span>: parent.horizontalCenter</div>
+    <div><span class="ln">19</span>    }</div>
+    <div><span class="ln">20</span>    <span class="ty">ModePill</span> {               <span class="cm">// REC timer, resize mode …</span></div>
+    <div><span class="ln">21</span>        <span class="pr">anchors.left</span>: clock.right</div>
+    <div style="background: rgba(230,182,255,.10)"><span class="ln" style="color: #E6B6FF">22</span>        <span class="pr">visible</span>: Modes.current !== <span class="st">""</span><span style="background: #E6B6FF; color: #2a1236"> </span></div>
+    <div><span class="ln">23</span>    }</div>
+    <div><span class="ln">24</span>    <span class="ty">StatusPill</span> { <span class="pr">anchors.right</span>: bell.left }</div>
+    <div><span class="ln">25</span>    <span class="ty">BellPill</span>   { <span class="pr">id</span>: bell; <span class="pr">anchors.right</span>: parent.right }</div>
+    <div><span class="ln">26</span>}</div>
+    <div><span class="ln">27</span></div>
+    <div><span class="ln">28</span><span class="cm">// GlassRect.qml reads Config.glass: subtle | balanced | heavy</span></div>
+    <div><span class="ln" style="color: #4c4352">~</span></div>
+    <div><span class="ln" style="color: #4c4352">~</span></div>
+    <div><span class="ln" style="color: #4c4352">~</span></div>
+    <div><span class="ln" style="color: #4c4352">~</span></div>
+    <div><span class="ln" style="color: #4c4352">~</span></div>
+    <div><span class="ln" style="color: #4c4352">~</span></div>
+    <div><span class="ln" style="color: #4c4352">~</span></div>
+    <div><span class="ln" style="color: #4c4352">~</span></div>
+    <div><span class="ln" style="color: #4c4352">~</span></div>
+    <div><span class="ln" style="color: #4c4352">~</span></div>
+    <div><span class="ln" style="color: #4c4352">~</span></div>
+    <div><span class="ln" style="color: #4c4352">~</span></div>
+    <div><span class="ln" style="color: #4c4352">~</span></div>
+  </div>
+  <div class="mono" style="display: flex; align-items: center; height: 26px; font-size: 11.5px; background: rgba(255,255,255,.05)">
+    <div style="height: 100%; padding: 0 12px; display: flex; align-items: center; background: #E6B6FF; color: #3a1a4d; font-weight: 600">INSERT</div>
+    <div style="padding: 0 12px; color: #D9C8E8">main</div>
+    <div style="padding: 0 12px; color: #EEE6F2">Bar.qml [+]</div>
+    <div style="flex: 1"></div>
+    <div style="padding: 0 12px; color: #9a8fa3">qml  utf-8</div>
+    <div style="height: 100%; padding: 0 12px; display: flex; align-items: center; background: #5E3876; color: #F6D9FF">22:41</div>
+  </div>
+  <div class="mono" style="height: 22px; padding: 0 12px; font-size: 11.5px; color: #9a8fa3; display: flex; align-items: center">-- INSERT --</div>
+</div>
+
+<!-- ===== Stack top: browser ===== -->
+<div style="position: absolute; left: 882px; top: 60px; width: 706px; height: 466px; border-radius: 14px; box-sizing: border-box; border: 1px solid rgba(255,255,255,.09); background: #1b1421; box-shadow: 0 14px 40px rgba(0,0,0,.4); overflow: hidden; display: flex; flex-direction: column">
+  <div style="display: flex; align-items: center; gap: 6px; padding: 8px 10px 0; font-size: 12px">
+    <div style="padding: 6px 12px; border-radius: 8px 8px 0 0; background: #261d2d; color: #EEE6F2; display: flex; gap: 8px; align-items: center"><span style="width: 10px; height: 10px; border-radius: 3px; background: #7da0d8"></span>Hyprland · ArchWiki</div>
+    <div style="padding: 6px 12px; color: #9a8fa3">Quickshell docs</div>
+    <div style="padding: 6px 12px; color: #9a8fa3">matugen · GitHub</div>
+  </div>
+  <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #261d2d">
+    <div style="flex: 1; height: 28px; border-radius: 14px; background: #1b1421; display: flex; align-items: center; padding: 0 14px; font-size: 12px; color: #CDBFD6">wiki.archlinux.org/title/Hyprland</div>
+  </div>
+  <div style="flex: 1; display: flex; gap: 22px; padding: 22px 26px; background: #f3eff6; color: #22192a">
+    <div style="width: 150px; flex: none; font-size: 11.5px; line-height: 22px; color: #5b4f66">
+      <div style="font-weight: 600; color: #22192a; margin-bottom: 4px">Contents</div>
+      <div>1 Installation</div><div>2 Configuration</div><div style="padding-left: 10px">2.1 Keybinds</div><div style="padding-left: 10px">2.2 Window rules</div><div>3 Tips and tricks</div><div>4 Troubleshooting</div>
+    </div>
+    <div style="flex: 1; min-width: 0">
+      <div style="font-size: 26px; font-weight: 600; letter-spacing: -.3px; margin-bottom: 4px">Hyprland</div>
+      <div style="height: 1px; background: #d8d0de; margin-bottom: 14px"></div>
+      <div style="font-size: 13px; line-height: 21px; color: #3b3045">A dynamic tiling Wayland compositor with smooth animations, rounded corners and per-window rules. Configuration is reloaded live whenever the file changes.</div>
+      <div style="font-size: 17px; font-weight: 600; margin: 16px 0 6px">Configuration</div>
+      <div style="font-size: 13px; line-height: 21px; color: #3b3045">Keybinds map a modifier and key to a dispatcher. Use a single main modifier and keep variants on Shift so the layout stays easy to remember.</div>
+      <div class="mono" style="margin-top: 12px; padding: 12px 14px; border-radius: 8px; background: #e7e0ec; font-size: 12px; line-height: 19px; color: #2d2336">bind("SUPER", "Space", exec("qs ipc call launcher toggle"))<br>bind("SUPER SHIFT", "S", exec("qs ipc call capture open"))</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Stack bottom: chat ===== -->
+<div style="position: absolute; left: 882px; top: 536px; width: 706px; height: 352px; border-radius: 14px; box-sizing: border-box; border: 1px solid rgba(255,255,255,.09); background: #1e1724; box-shadow: 0 14px 40px rgba(0,0,0,.4); overflow: hidden; display: flex">
+  <div style="width: 58px; flex: none; background: #160f1b; display: flex; flex-direction: column; align-items: center; gap: 10px; padding-top: 12px">
+    <div style="width: 38px; height: 38px; border-radius: 12px; background: #5E3876; color: #F6D9FF; font-weight: 600; font-size: 13px; display: flex; align-items: center; justify-content: center">DF</div>
+    <div style="width: 38px; height: 38px; border-radius: 19px; background: #33283b; color: #CDBFD6; font-size: 13px; display: flex; align-items: center; justify-content: center">GN</div>
+    <div style="width: 38px; height: 38px; border-radius: 19px; background: #33283b; color: #CDBFD6; font-size: 13px; display: flex; align-items: center; justify-content: center">UNI</div>
+  </div>
+  <div style="width: 170px; flex: none; background: #1a1320; padding: 14px 10px; box-sizing: border-box; font-size: 12.5px; color: #9a8fa3; display: flex; flex-direction: column; gap: 4px">
+    <div style="font-weight: 600; color: #EEE6F2; padding: 0 8px 8px">dotfiles club</div>
+    <div style="padding: 5px 8px"># general</div>
+    <div style="padding: 5px 8px; border-radius: 6px; background: rgba(255,255,255,.07); color: #EEE6F2"># quickshell</div>
+    <div style="padding: 5px 8px"># show-your-rice</div>
+    <div style="padding: 5px 8px"># gaming</div>
+  </div>
+  <div style="flex: 1; display: flex; flex-direction: column; padding: 14px 16px; box-sizing: border-box; gap: 14px; font-size: 12.5px">
+    <div style="display: flex; gap: 10px"><div style="width: 30px; height: 30px; border-radius: 15px; background: #6b4a7d; flex: none"></div><div><div style="font-weight: 600">mara <span style="font-weight: 400; color: #8f8499; font-size: 11px">06:31</span></div><div style="color: #D9CEE0; line-height: 18px">anyone tried the built-in polkit service in quickshell yet?</div></div></div>
+    <div style="display: flex; gap: 10px"><div style="width: 30px; height: 30px; border-radius: 15px; background: #8a5a46; flex: none"></div><div><div style="font-weight: 600">jonas <span style="font-weight: 400; color: #8f8499; font-size: 11px">06:40</span></div><div style="color: #D9CEE0; line-height: 18px">yep, replaced hyprpolkitagent last week. works great</div></div></div>
+    <div style="display: flex; gap: 10px"><div style="width: 30px; height: 30px; border-radius: 15px; background: #E6B6FF; flex: none"></div><div><div style="font-weight: 600">you <span style="font-weight: 400; color: #8f8499; font-size: 11px">06:46</span></div><div style="color: #D9CEE0; line-height: 18px">switched to separate pills, way cleaner</div></div></div>
+    <div style="flex: 1"></div>
+    <div style="height: 36px; border-radius: 10px; background: #2a2131; display: flex; align-items: center; padding: 0 12px; color: #8f8499">Message #quickshell</div>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"showKeys":{"editor":"boolean","default":false},"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const on = s.keys !== undefined ? s.keys : !!this.props.showKeys;
+    return { keysCls: on ? 'keys' : 'nokeys', toggle: () => this.setState({ keys: !on }) };
+  }
+}
+</script>
+</body>
+</html>

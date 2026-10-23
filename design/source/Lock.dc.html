@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lock screen</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;family=Outfit:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.nokeys .kbd,.nokeys .hint{display:none !important}
+.glass{background:rgba(22,14,30,.40);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(255,255,255,.04),0 14px 40px rgba(0,0,0,.35)}
+.pw{background:rgba(94,56,118,.45);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(230,182,255,.65);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 0 0 5px rgba(230,182,255,.16),0 14px 40px rgba(0,0,0,.35)}
+.ic{width:16px;height:16px;flex:none}
+.kbd{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:#E4DAEA}
+.clock{font-family:'Outfit',sans-serif;font-weight:600;font-size:156px;letter-spacing:-4px;line-height:1;font-variant-numeric:tabular-nums}
+.chip{height:44px;border-radius:22px;box-sizing:border-box;display:flex;align-items:center;gap:10px;font-size:13.5px}
+.av{border-radius:50%;overflow:hidden;flex:none}
+.av img{width:100%;height:100%;object-fit:cover;display:block}
+</style>
+</helmet>
+<div class="{{keysCls}}" onClick="{{toggle}}" style="position: relative; width: 1600px; height: 900px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #F4EEF7; background: #140b1a">
+<div style="position: absolute; inset: -40px; filter: blur(30px) brightness(.62) saturate(1.2)">
+  <img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="" style="position: absolute; left: 40px; top: 40px; width: 1600px; height: 900px; object-fit: cover">
+  <div style="position: absolute; left: 52px; top: 100px; width: 860px; height: 828px; border-radius: 14px; background: #1b1421"></div>
+  <div style="position: absolute; left: 922px; top: 100px; width: 706px; height: 466px; border-radius: 14px; background: #e9e2ee"></div>
+  <div style="position: absolute; left: 922px; top: 576px; width: 706px; height: 352px; border-radius: 14px; background: #2a2131"></div>
+</div>
+
+<div style="position: absolute; left: 0; right: 0; top: 118px; text-align: center">
+  <div class="clock">06:52</div>
+  <div style="font-size: 20px; font-weight: 500; color: #EADDF0; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 8px"><svg class="ic" style="width: 15px; height: 15px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Tuesday, 20 October</div>
+</div>
+
+<div style="position: absolute; left: 0; right: 0; top: 486px; display: flex; flex-direction: column; align-items: center">
+  <div class="av" style="width: 104px; height: 104px; box-shadow: 0 0 0 3px rgba(255,255,255,.28), 0 16px 40px rgba(0,0,0,.4)"><img src="/_blob/0449b84263dd9d25f2d7f330244d6abd" alt="Profile picture"></div>
+  <div style="font-size: 21px; font-weight: 600; margin-top: 16px">[username]</div>
+  <div class="pw" style="margin-top: 24px; width: 320px; height: 52px; border-radius: 26px; box-sizing: border-box; padding: 0 6px 0 22px; display: flex; align-items: center; gap: 10px">
+    <div style="flex: 1; font-size: 14px; color: #EADDF0">Enter password</div>
+    <div style="width: 40px; height: 40px; border-radius: 20px; background: #E6B6FF; color: #3a1a4d; display: flex; align-items: center; justify-content: center"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-label="Unlock" role="img"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></div>
+  </div>
+</div>
+
+<div style="position: absolute; right: 32px; bottom: 28px; display: flex; align-items: center; gap: 10px">
+  <span class="kbd">Alt P</span>
+  <div class="chip glass" style="padding: 0 16px">
+    <svg class="ic" style="width: 20px" viewBox="0 0 28 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3"></rect><path d="M25 10v4"></path><rect x="5" y="9" width="11" height="6" rx="1" fill="currentColor" stroke="none"></rect></svg>78 %
+  </div>
+  <div class="chip glass" style="width: 44px; justify-content: center"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-label="Power options" role="img"><path d="M12 2v10"></path><path d="M18.4 6.6a9 9 0 1 1-12.77.04"></path></svg></div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"showKeys":{"editor":"boolean","default":false},"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const on = s.keys !== undefined ? s.keys : !!this.props.showKeys;
+    return { keysCls: on ? 'keys' : 'nokeys', toggle: () => this.setState({ keys: !on }) };
+  }
+}
+</script>
+</body>
+</html>

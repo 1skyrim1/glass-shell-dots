@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Login, user switcher open</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;family=Outfit:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.nokeys .kbd,.nokeys .hint{display:none !important}
+.glass{background:rgba(22,14,30,.40);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(255,255,255,.04),0 14px 40px rgba(0,0,0,.35)}
+.lit{background:rgba(94,56,118,.6);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(230,182,255,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 14px 40px rgba(0,0,0,.35)}
+.pop{background:rgba(24,15,32,.55);backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%);border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 30px 80px rgba(0,0,0,.5)}
+.pw{background:rgba(94,56,118,.45);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(230,182,255,.65);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 0 0 5px rgba(230,182,255,.16),0 14px 40px rgba(0,0,0,.35)}
+.ic{width:16px;height:16px;flex:none}
+.kbd{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:#E4DAEA}
+.clock{font-family:'Outfit',sans-serif;font-weight:600;font-size:156px;letter-spacing:-4px;line-height:1;font-variant-numeric:tabular-nums}
+.chip{height:44px;border-radius:22px;box-sizing:border-box;display:flex;align-items:center;gap:10px;font-size:13.5px}
+.av{border-radius:50%;overflow:hidden;flex:none;display:flex;align-items:center;justify-content:center}
+.av img{width:100%;height:100%;object-fit:cover;display:block}
+.u{display:flex;align-items:center;gap:12px;height:56px;padding:0 12px 0 8px;border-radius:16px}
+</style>
+</helmet>
+<div class="{{keysCls}}" onClick="{{toggle}}" style="position: relative; width: 1600px; height: 900px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #F4EEF7; background: #140b1a">
+<img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+<div style="position: absolute; inset: 0; background: rgba(10,5,14,.22)"></div>
+
+<div style="position: absolute; left: 0; right: 0; top: 118px; text-align: center">
+  <div class="clock">06:47</div>
+  <div style="font-size: 20px; font-weight: 500; color: #EADDF0; margin-top: 12px">Tuesday, 20 October</div>
+</div>
+
+<!-- centre follows the focused row: Guest -->
+<div style="position: absolute; left: 0; right: 0; top: 486px; display: flex; flex-direction: column; align-items: center">
+  <div class="av" style="width: 104px; height: 104px; background: #2F4A3A; color: #C9F0D6; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 44px; box-shadow: 0 0 0 3px rgba(255,255,255,.28), 0 16px 40px rgba(0,0,0,.4)">G</div>
+  <div style="font-size: 21px; font-weight: 600; margin-top: 16px">Guest</div>
+  <div class="pw" style="margin-top: 24px; width: 320px; height: 52px; border-radius: 26px; box-sizing: border-box; padding: 0 6px 0 22px; display: flex; align-items: center; gap: 10px">
+    <div style="flex: 1; font-size: 14px; color: #EADDF0">No password · press Enter</div>
+    <div style="width: 40px; height: 40px; border-radius: 20px; background: #E6B6FF; color: #3a1a4d; display: flex; align-items: center; justify-content: center"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-label="Log in" role="img"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></div>
+  </div>
+</div>
+
+<!-- popup grows up out of the chip -->
+<div class="pop" style="position: absolute; left: 32px; bottom: 82px; width: 300px; border-radius: 24px; padding: 8px; box-sizing: border-box">
+  <div style="font-size: 11.5px; letter-spacing: .6px; text-transform: uppercase; color: #B9AEC2; padding: 8px 10px 6px">Users</div>
+  <div class="u">
+    <div class="av" style="width: 40px; height: 40px"><img src="/_blob/0449b84263dd9d25f2d7f330244d6abd" alt=""></div>
+    <div style="flex: 1"><div style="font-size: 14px; font-weight: 500">[username]</div><div style="font-size: 11.5px; color: #B9AEC2">last login today, 06:12</div></div>
+    <svg class="ic" style="color: #E6B6FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-label="Last used" role="img"><path d="M20 6 9 17l-5-5"></path></svg>
+  </div>
+  <div class="u" style="background: rgba(230,182,255,.16); box-shadow: inset 0 0 0 1px rgba(230,182,255,.35)">
+    <div class="av" style="width: 40px; height: 40px; background: #2F4A3A; color: #C9F0D6; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 17px">G</div>
+    <div style="flex: 1"><div style="font-size: 14px; font-weight: 500">Guest</div><div style="font-size: 11.5px; color: #B9AEC2">no password · files wiped on logout</div></div>
+  </div>
+  <div class="hint" style="display: flex; align-items: center; gap: 7px; padding: 10px 10px 6px; font-size: 11.5px; color: #B9AEC2"><span class="kbd">↑↓</span><span>choose</span><span class="kbd" style="margin-left: 4px">Enter</span><span>pick</span><span class="kbd" style="margin-left: 4px">Esc</span><span>close</span></div>
+</div>
+
+<div style="position: absolute; left: 32px; bottom: 28px; display: flex; align-items: center; gap: 10px">
+  <div class="chip lit" style="padding: 0 16px 0 5px">
+    <div class="av" style="width: 34px; height: 34px; background: #2F4A3A; color: #C9F0D6; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 15px">G</div>
+    <span style="font-weight: 500">Guest</span>
+    <svg class="ic" style="width: 14px; height: 14px; color: #F6D9FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+  </div>
+</div>
+
+<div style="position: absolute; right: 32px; bottom: 28px; display: flex; align-items: center; gap: 10px">
+  <div class="chip glass" style="padding: 0 16px">
+    <svg class="ic" style="width: 20px" viewBox="0 0 28 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3"></rect><path d="M25 10v4"></path><rect x="5" y="9" width="11" height="6" rx="1" fill="currentColor" stroke="none"></rect></svg>78 %
+  </div>
+  <div class="chip glass" style="width: 44px; justify-content: center"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-label="Power options" role="img"><path d="M12 2v10"></path><path d="M18.4 6.6a9 9 0 1 1-12.77.04"></path></svg></div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"showKeys":{"editor":"boolean","default":false},"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const on = s.keys !== undefined ? s.keys : !!this.props.showKeys;
+    return { keysCls: on ? 'keys' : 'nokeys', toggle: () => this.setState({ keys: !on }) };
+  }
+}
+</script>
+</body>
+</html>

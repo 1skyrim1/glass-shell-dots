@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Notification states</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.nokeys .kbd,.nokeys .hint{display:none !important}
+.glass{background:rgba(22,14,30,.48);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(255,255,255,.04),0 14px 40px rgba(0,0,0,.4)}
+.card{position:absolute;border-radius:20px;padding:12px;box-sizing:border-box}
+.ic{width:14px;height:14px;flex:none}
+.kbd{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:#E4DAEA}
+.hd{display:flex;align-items:center;gap:9px;font-size:12px;color:#CDBFD6}
+.app{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex:none}
+.cap{position:absolute;font-size:12.5px;color:#CDBFD6;line-height:18px}
+.cap b{display:block;color:#F4EEF7;font-weight:600;font-size:14px;margin-bottom:2px}
+.btn{height:30px;padding:0 12px;border-radius:15px;display:flex;align-items:center;font-size:12px;background:rgba(255,255,255,.1)}
+.msg{font-size:13px;line-height:19px;margin-top:6px}
+.msg b{font-weight:600}
+</style>
+</helmet>
+<div class="{{keysCls}}" onClick="{{toggle}}" style="position: relative; width: 1600px; height: 900px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #EEE6F2; background: #140b1a">
+<img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+<div style="position: absolute; inset: 0; background: rgba(10,5,14,.4)"></div>
+
+<!-- toast stack -->
+<div class="cap" style="left: 1248px; top: 24px; width: 340px"><b>Toast stack</b>3 at once: newest in front, older ones tuck behind. Hover fans them out.</div>
+<div class="glass card" style="left: 1272px; top: 136px; width: 292px; height: 90px; opacity: .55; transform: scale(.9); transform-origin: top center"></div>
+<div class="glass card" style="left: 1260px; top: 124px; width: 316px; height: 96px; opacity: .8; transform: scale(.95); transform-origin: top center"></div>
+<div class="glass card" style="left: 1248px; top: 106px; width: 340px">
+  <div class="hd"><div class="app" style="background: #262b45"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#B9C6FF" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"></path></svg></div><span style="flex: 1">Discord · jonas</span><span>now</span></div>
+  <div class="msg">pushed the fix, try it again</div>
+  <div style="margin-top: 9px; height: 3px; border-radius: 2px; background: rgba(255,255,255,.12)"><div style="width: 80%; height: 3px; border-radius: 2px; background: #E6B6FF"></div></div>
+</div>
+<div style="position: absolute; left: 1248px; top: 248px; width: 340px; text-align: center; font-size: 11.5px; color: #B9AEC2">+2 older · timers pause while hovered</div>
+
+<!-- critical -->
+<div class="cap" style="left: 1248px; top: 300px; width: 340px"><b>Critical</b>Never times out, breaks through do not disturb.</div>
+<div class="card" style="left: 1248px; top: 362px; width: 340px; background: rgba(110,24,24,.55); backdrop-filter: blur(26px); -webkit-backdrop-filter: blur(26px); border: 1px solid rgba(255,138,128,.6); box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 14px 40px rgba(0,0,0,.4)">
+  <div class="hd" style="color: #FFD6D1"><div class="app" style="background: #FF6B6B"><svg class="ic" viewBox="0 0 28 24" fill="none" stroke="#2b0707" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3"></rect><path d="M25 10v4"></path></svg></div><span style="flex: 1">Battery</span><span>now</span></div>
+  <div class="msg" style="color: #FFE1DE"><b>Battery at 5 %.</b> Suspending in 2 min unless you plug in.</div>
+  <div style="display: flex; gap: 6px; margin-top: 10px"><div class="btn" style="background: rgba(255,255,255,.16)">Suspend now</div><div class="btn" style="background: transparent; color: #FFC9C3">Battery saver</div></div>
+</div>
+
+<!-- reminder -->
+<div class="cap" style="left: 1248px; top: 520px; width: 340px"><b>Calendar reminder</b>10 min before an event.</div>
+<div class="glass card" style="left: 1248px; top: 562px; width: 340px">
+  <div class="hd"><div class="app" style="background: #3a2a1f"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#FFB59C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg></div><span style="flex: 1">Calendar</span><span>in 10 min</span></div>
+  <div class="msg"><b>Lecture · Algorithms</b> · 10:15 – 11:45</div>
+  <div style="display: flex; gap: 6px; margin-top: 10px"><div class="btn">Snooze 5 min</div><div class="btn" style="background: transparent; color: #CDBFD6">Dismiss</div></div>
+</div>
+
+<!-- reply typing -->
+<div class="cap" style="left: 40px; top: 24px; width: 400px"><b>Inline reply</b>R on a message: the field grows, Enter sends, Esc keeps the draft.</div>
+<div class="glass card" style="left: 40px; top: 86px; width: 400px; box-shadow: inset 0 0 0 1.5px #E6B6FF, 0 14px 40px rgba(0,0,0,.4)">
+  <div class="hd"><div class="app" style="background: #262b45"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#B9C6FF" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"></path></svg></div><span style="flex: 1">Discord · #quickshell</span><span>2 min</span></div>
+  <div class="msg"><b>mara</b> send screenshots when it's done!</div>
+  <div style="display: flex; align-items: center; gap: 8px; margin-top: 10px; min-height: 40px; padding: 0 6px 0 12px; border-radius: 12px; background: rgba(10,6,14,.5); box-shadow: inset 0 0 0 1px rgba(230,182,255,.5); font-size: 13px">
+    <span style="flex: 1">almost there, posting tonight<span style="display: inline-block; width: 2px; height: 16px; background: #E6B6FF; vertical-align: -3px; margin-left: 2px"></span></span>
+    <div style="width: 30px; height: 30px; border-radius: 15px; background: #E6B6FF; color: #3a1a4d; display: flex; align-items: center; justify-content: center"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-label="Send" role="img"><path d="m22 2-7 20-4-9-9-4z"></path><path d="M22 2 11 13"></path></svg></div>
+  </div>
+  <div style="font-size: 11.5px; color: #C5E3B4; margin-top: 8px">After sending: “Sent ✓” for 1 s, then the card collapses.</div>
+</div>
+
+<!-- group expanded -->
+<div class="cap" style="left: 40px; top: 330px; width: 400px"><b>Group, expanded</b>Groups show the newest message; Space expands the rest.</div>
+<div class="glass card" style="left: 40px; top: 392px; width: 400px">
+  <div class="hd"><div class="app" style="background: #262b45"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#B9C6FF" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"></path></svg></div><span style="flex: 1">Discord · dotfiles club</span><span>5 new</span></div>
+  <div style="border-left: 2px solid rgba(255,255,255,.12); margin: 10px 0 0 12px; padding-left: 12px; display: flex; flex-direction: column; gap: 8px; font-size: 12.5px; line-height: 18px">
+    <div><b style="font-weight: 600">jonas</b> <span style="color: #8f8499">#quickshell · 2 min</span><br>yep, replaced hyprpolkitagent last week</div>
+    <div><b style="font-weight: 600">mara</b> <span style="color: #8f8499">#quickshell · 4 min</span><br>send screenshots when it's done!</div>
+    <div><b style="font-weight: 600">kai</b> <span style="color: #8f8499">#gaming · 12 min</span><br>anyone up for a round later?</div>
+  </div>
+  <div style="display: flex; gap: 6px; margin-top: 10px"><div class="btn">Collapse</div><div class="btn" style="background: transparent; color: #CDBFD6">Mark all read</div></div>
+</div>
+
+<!-- progress + summary -->
+<div class="cap" style="left: 40px; top: 674px; width: 400px"><b>Progress</b>long tasks update the same card in place</div>
+<div class="glass card" style="left: 40px; top: 716px; width: 400px">
+  <div class="hd"><div class="app" style="background: #1f3328"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#B8E3C4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></div><span style="flex: 1">System · updating 12 packages</span><span>7 / 12</span></div>
+  <div style="margin-top: 10px; height: 6px; border-radius: 3px; background: rgba(255,255,255,.12)"><div style="width: 58%; height: 6px; border-radius: 3px; background: #C5E3B4"></div></div>
+  <div style="font-size: 11.5px; color: #B9AEC2; margin-top: 6px">installing mesa 25.2 …</div>
+</div>
+
+<!-- empty center -->
+<div class="cap" style="left: 480px; top: 24px; width: 360px"><b>Center: empty + do not disturb</b>what the right column shows when nothing is waiting</div>
+<div class="card" style="left: 480px; top: 86px; width: 360px; padding: 16px; background: rgba(24,15,32,.52); backdrop-filter: blur(34px); -webkit-backdrop-filter: blur(34px); border: 1px solid rgba(255,255,255,.14); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 30px 80px rgba(0,0,0,.5); border-radius: 26px">
+  <div style="display: flex; align-items: center; gap: 8px"><div style="flex: 1; font-size: 15px; font-weight: 600">Notifications</div><span style="font-size: 12px; color: #E6B6FF">Do not disturb · 1 h</span><div style="width: 34px; height: 20px; border-radius: 10px; background: #E6B6FF; position: relative"><div style="position: absolute; right: 3px; top: 3px; width: 14px; height: 14px; border-radius: 7px; background: #3a1a4d"></div></div></div>
+  <div style="display: flex; flex-direction: column; align-items: center; padding: 50px 0 46px; gap: 10px">
+    <div style="width: 56px; height: 56px; border-radius: 28px; background: rgba(230,182,255,.14); display: flex; align-items: center; justify-content: center"><svg style="width: 24px; height: 24px; color: #E6B6FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.73 21a2 2 0 0 1-3.46 0"></path><path d="M18.63 13A17.89 17.89 0 0 1 18 8"></path><path d="M6.26 6.26A5.86 5.86 0 0 0 6 8c0 7-3 9-3 9h14"></path><path d="M18 8a6 6 0 0 0-9.33-5"></path><path d="m1 1 22 22"></path></svg></div>
+    <div style="font-size: 14.5px; font-weight: 500">All caught up</div>
+    <div style="font-size: 12px; color: #B9AEC2">Quiet until 08:00. Critical alerts still come through.</div>
+  </div>
+</div>
+
+<!-- summary after dnd -->
+<div class="cap" style="left: 480px; top: 470px; width: 360px"><b>Catch-up after quiet time</b>when do not disturb or game mode ends, one summary toast instead of a flood</div>
+<div class="glass card" style="left: 480px; top: 550px; width: 360px">
+  <div class="hd"><div class="app" style="background: #5E3876"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#F6D9FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div><span style="flex: 1">While you were gaming</span><span>1 h 12 min</span></div>
+  <div class="msg">7 notifications from Discord, Firefox and System</div>
+  <div style="display: flex; gap: 6px; margin-top: 10px"><div class="btn">Show</div><div class="btn" style="background: transparent; color: #CDBFD6">Clear</div></div>
+</div>
+
+<!-- calendar day -->
+<div class="cap" style="left: 880px; top: 24px; width: 330px"><b>Calendar: other day</b>Enter on a date swaps the "Today" list for that day</div>
+<div class="card" style="left: 880px; top: 86px; width: 330px; padding: 16px; background: rgba(24,15,32,.52); backdrop-filter: blur(34px); -webkit-backdrop-filter: blur(34px); border: 1px solid rgba(255,255,255,.14); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 30px 80px rgba(0,0,0,.5); border-radius: 26px">
+  <div style="display: flex; align-items: baseline; gap: 10px"><span style="font-size: 22px; font-weight: 600">Thu 22 Oct</span><span style="font-size: 12px; color: #B9AEC2">in 2 days</span></div>
+  <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 12px">
+    <div style="display: flex; gap: 10px; padding: 9px 10px; border-radius: 12px; background: rgba(255,255,255,.06); font-size: 12.5px"><div style="width: 3px; border-radius: 2px; background: #FFB59C"></div><div><div style="font-weight: 500">Tutorial · Linear Algebra</div><div style="color: #B9AEC2; font-size: 11.5px">14:00 – 15:00</div></div></div>
+    <div style="display: flex; gap: 10px; padding: 9px 10px; border-radius: 12px; background: rgba(255,255,255,.06); font-size: 12.5px"><div style="width: 3px; border-radius: 2px; background: #E6B6FF"></div><div><div style="font-weight: 500">Exercise sheet 4 due</div><div style="color: #B9AEC2; font-size: 11.5px">all day</div></div></div>
+  </div>
+  <div style="font-size: 11.5px; color: #B9AEC2; margin-top: 12px">T jumps back to today</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"showKeys":{"editor":"boolean","default":false},"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const on = s.keys !== undefined ? s.keys : !!this.props.showKeys;
+    return { keysCls: on ? 'keys' : 'nokeys', toggle: () => this.setState({ keys: !on }) };
+  }
+}
+</script>
+</body>
+</html>

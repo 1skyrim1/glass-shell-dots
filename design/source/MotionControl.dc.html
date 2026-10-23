@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Motion: status pill to Control Center</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.glass{background:rgba(22,14,30,.44);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.20),inset 0 -1px 0 rgba(255,255,255,.04),0 10px 34px rgba(0,0,0,.38)}
+.ic{width:15px;height:15px;flex:none}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+.win{position:absolute;border-radius:14px;background:rgba(27,20,33,.92);border:1px solid rgba(255,255,255,.08)}
+.blob{position:absolute;overflow:hidden;background:rgba(24,15,32,.50);backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%);border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 30px 80px rgba(0,0,0,.5);animation:ccBlob 6s infinite}
+@keyframes ccBlob{
+0%,9%{left:1360px;top:10px;width:182px;height:38px;border-radius:19px;opacity:0}
+10%{left:1360px;top:10px;width:182px;height:38px;border-radius:19px;opacity:1}
+15%{left:1368px;top:10px;width:166px;height:96px;border-radius:30px;opacity:1}
+22%{left:1170px;top:54px;width:422px;height:574px;border-radius:30px;opacity:1}
+26%,66%{left:1178px;top:58px;width:410px;height:560px;border-radius:26px;opacity:1}
+73%{left:1360px;top:10px;width:182px;height:38px;border-radius:19px;opacity:1}
+75%,100%{left:1360px;top:10px;width:182px;height:38px;border-radius:19px;opacity:0}}
+.neck{position:absolute;left:1411px;top:36px;width:80px;height:36px;border-radius:18px;background:rgba(24,15,32,.5);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);animation:ccNeck 6s infinite}
+@keyframes ccNeck{0%,12%{opacity:0;transform:scaleY(.3)}17%{opacity:1;transform:scaleY(1)}25%,100%{opacity:0;transform:scaleY(.6)}}
+.cc{position:absolute;left:0;top:0;width:410px;padding:16px;box-sizing:border-box;animation:ccContent 6s infinite}
+@keyframes ccContent{0%,19%{opacity:0;transform:translateY(10px)}29%,63%{opacity:1;transform:translateY(0)}68%,100%{opacity:0;transform:translateY(-6px)}}
+.pillhl{animation:ccPill 6s infinite}
+@keyframes ccPill{0%,9%{background:rgba(22,14,30,.44)}12%,68%{background:rgba(94,56,118,.6)}74%,100%{background:rgba(22,14,30,.44)}}
+.k1{animation:ccK1 6s infinite}
+@keyframes ccK1{0%,4%{opacity:.35;transform:scale(1)}7%{opacity:1;transform:scale(.94)}12%,100%{opacity:.35;transform:scale(1)}}
+.k2{animation:ccK2 6s infinite}
+@keyframes ccK2{0%,62%{opacity:.35;transform:scale(1)}65%{opacity:1;transform:scale(.94)}70%,100%{opacity:.35;transform:scale(1)}}
+.play{position:absolute;top:0;bottom:0;width:2px;background:#FFB59C;box-shadow:0 0 8px #FFB59C;animation:ccPlay 6s linear infinite}
+@keyframes ccPlay{from{left:0%}to{left:100%}}
+.t{position:relative;height:26px;border-radius:8px;background:rgba(255,255,255,.05);margin-top:6px}
+.seg{position:absolute;top:3px;bottom:3px;border-radius:6px;font-size:11px;display:flex;align-items:center;padding-left:8px;white-space:nowrap;overflow:hidden;box-sizing:border-box}
+.tile{height:58px;border-radius:16px;background:rgba(255,255,255,.08)}
+.on{background:#E6B6FF}
+.kk{font-family:'Geist Mono',ui-monospace,monospace;font-size:14px;padding:8px 14px;border-radius:12px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22)}
+</style>
+</helmet>
+<div style="position: relative; width: 1600px; height: 900px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #EEE6F2; background: #140b1a">
+<img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+<div class="win" style="left: 12px; top: 60px; width: 860px; height: 828px"></div>
+<div class="win" style="left: 882px; top: 60px; width: 706px; height: 466px; background: #f0ebf3"></div>
+<div class="win" style="left: 882px; top: 536px; width: 706px; height: 352px"></div>
+
+<div class="glass" style="position: absolute; top: 10px; left: 12px; width: 238px; height: 38px; border-radius: 19px"></div>
+<div class="glass" style="position: absolute; top: 10px; left: 258px; width: 162px; height: 38px; border-radius: 19px"></div>
+<div class="glass" style="position: absolute; top: 10px; left: 728px; width: 144px; height: 38px; border-radius: 19px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 13px"><span style="color: #CDBFD6">Tue 20 Oct</span><span style="font-weight: 600; font-size: 14px">06:47</span></div>
+<div class="glass pillhl" style="position: absolute; top: 10px; left: 1360px; width: 182px; height: 38px; border-radius: 19px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 13px">
+  <div class="mono" style="font-size: 11px; padding: 3px 7px; border-radius: 8px; background: rgba(255,255,255,.08)">DE</div>
+  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M2 8.82a15 15 0 0 1 20 0"></path><path d="M5 12.86a10 10 0 0 1 14 0"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path></svg>
+  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 7 10 10-5 5V2l5 5L7 17"></path></svg>
+  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+  <span style="font-size: 12px">78%</span>
+</div>
+<div class="glass" style="position: absolute; top: 10px; left: 1550px; width: 38px; height: 38px; border-radius: 19px"></div>
+
+<div class="neck"></div>
+<div class="blob">
+  <div class="cc">
+    <div style="display: flex; align-items: center; gap: 10px; padding-bottom: 12px"><div style="flex: 1"><div style="font-size: 14px; font-weight: 600">78 %</div><div style="font-size: 11.5px; color: #B9AEC2">about 3 h 40 min left</div></div><div style="width: 34px; height: 34px; border-radius: 17px; background: rgba(255,255,255,.08)"></div><div style="width: 34px; height: 34px; border-radius: 17px; background: rgba(255,255,255,.08)"></div></div>
+    <div style="display: flex; gap: 8px"><div class="tile on" style="flex: 1; display: flex; align-items: center; padding: 0 14px; color: #3a1a4d; font-size: 13px; font-weight: 600">Wi-Fi</div><div class="tile on" style="flex: 1; display: flex; align-items: center; padding: 0 14px; color: #3a1a4d; font-size: 13px; font-weight: 600">Bluetooth</div></div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 8px"><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile on"></div><div class="tile"></div></div>
+    <div style="height: 40px; border-radius: 20px; background: rgba(255,255,255,.08); margin-top: 12px; display: flex; align-items: center; padding: 0 16px"><div style="flex: 1; height: 6px; border-radius: 3px; background: rgba(255,255,255,.14)"><div style="width: 64%; height: 6px; border-radius: 3px; background: #E6B6FF"></div></div></div>
+    <div style="height: 40px; border-radius: 20px; background: rgba(255,255,255,.08); margin-top: 8px; display: flex; align-items: center; padding: 0 16px"><div style="flex: 1; height: 6px; border-radius: 3px; background: rgba(255,255,255,.14)"><div style="width: 40%; height: 6px; border-radius: 3px; background: #FFB59C"></div></div></div>
+    <div style="height: 70px; border-radius: 18px; background: rgba(255,255,255,.07); margin-top: 10px"></div>
+    <div style="height: 34px; border-radius: 14px; background: rgba(255,255,255,.07); margin-top: 14px"></div>
+    <div style="height: 34px; border-radius: 10px; background: rgba(255,255,255,.05); margin-top: 14px; width: 60%"></div>
+  </div>
+</div>
+
+<!-- keystroke display -->
+<div style="position: absolute; left: 40px; top: 420px; display: flex; align-items: center; gap: 12px">
+  <span style="font-size: 12px; color: #CDBFD6; width: 90px">Keystrokes</span>
+  <span class="kk k1">Super A</span>
+  <span class="kk k2">Esc</span>
+</div>
+
+<!-- timeline -->
+<div class="glass" style="position: absolute; left: 40px; top: 480px; width: 1100px; border-radius: 24px; padding: 18px 22px; box-sizing: border-box">
+  <div style="display: flex; align-items: baseline; gap: 12px"><span style="font-size: 15px; font-weight: 600">Status pill → Control Center</span><span style="font-size: 12px; color: #CDBFD6">loop shown at half speed · real open ≈ 400 ms, close ≈ 220 ms</span></div>
+  <div style="position: relative; margin-top: 12px">
+    <div style="display: grid; grid-template-columns: 140px 1fr; gap: 0 12px; align-items: center; font-size: 12px; color: #CDBFD6">
+      <span>Blob geometry</span>
+      <div class="t"><div class="seg" style="left: 10%; width: 5%; background: rgba(230,182,255,.35)">stretch</div><div class="seg" style="left: 15%; width: 11%; background: #E6B6FF; color: #3a1a4d">spring out</div><div class="seg" style="left: 66%; width: 9%; background: rgba(255,181,156,.6); color: #2a1236">snap back</div></div>
+      <span>Liquid neck</span>
+      <div class="t"><div class="seg" style="left: 12%; width: 13%; background: rgba(230,182,255,.25)">bridge</div></div>
+      <span>Content</span>
+      <div class="t"><div class="seg" style="left: 19%; width: 10%; background: rgba(197,227,180,.5); color: #12240c">fade up 10 px</div><div class="seg" style="left: 63%; width: 5%; background: rgba(197,227,180,.3)">out</div></div>
+      <span>Pill tint</span>
+      <div class="t"><div class="seg" style="left: 10%; width: 58%; background: rgba(94,56,118,.7)">pill stays lit while its panel is open</div></div>
+    </div>
+    <div style="position: absolute; left: 152px; right: 0; top: 0; bottom: 0; pointer-events: none"><div class="play"></div></div>
+  </div>
+  <div style="font-size: 12px; color: #CDBFD6; margin-top: 14px; line-height: 18px">The pill never moves. A glass droplet the same size appears on top of it, stretches down, then springs into the panel with a slight overshoot (Easing.OutBack 1.2). Content starts fading once the shape is 60 % done. Closing is the reverse with no overshoot.</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

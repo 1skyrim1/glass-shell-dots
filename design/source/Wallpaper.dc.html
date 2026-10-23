@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Wallpaper switcher</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.nokeys .kbd,.nokeys .hint,.nokeys .num,.nokeys .key{display:none !important}
+.glass{background:rgba(12,18,28,.44);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.20),inset 0 -1px 0 rgba(255,255,255,.04),0 10px 34px rgba(0,0,0,.38)}
+.sheet{background:rgba(12,18,28,.50);backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 30px 80px rgba(0,0,0,.5)}
+.bl{position:absolute;top:10px;left:12px;display:flex;gap:8px}
+.bc{position:absolute;top:10px;left:0;right:0;display:flex;justify-content:center;pointer-events:none}
+.br{position:absolute;top:10px;right:12px;display:flex;gap:8px}
+.pl{position:relative;height:38px;border-radius:19px;box-sizing:border-box;display:flex;align-items:center;font-size:13px;flex:none}
+.bi{width:15px;height:15px;flex:none}
+.ws{display:flex;align-items:center;gap:5px}
+.wa{width:18px;height:8px;border-radius:4px;background:#9ECAFF}
+.wo{width:8px;height:8px;border-radius:4px;background:rgba(230,237,246,.62)}
+.we{width:8px;height:8px;border-radius:4px;box-sizing:border-box;border:1.5px solid rgba(230,237,246,.32)}
+.ttl{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+.vsep{width:1px;height:16px;background:rgba(255,255,255,.16)}
+.ic{width:15px;height:15px;flex:none}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+.kbd{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:#DCE6F2}
+.th{position:relative;width:194px;height:109px;border-radius:16px;overflow:hidden;flex:none;border:1px solid rgba(255,255,255,.14)}
+.th img{width:100%;height:100%;object-fit:cover;display:block}
+.tl{position:absolute;left:10px;bottom:8px;font-size:12px;font-weight:600;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.dot{width:18px;height:18px;border-radius:9px;border:1px solid rgba(255,255,255,.25)}
+</style>
+</helmet>
+<div class="{{keysCls}}" onClick="{{toggle}}" style="position: relative; width: 1600px; height: 900px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #E6EDF6; background: #050913">
+<img src="/_blob/5d13b8ea91e18aad79d366a211e483c8" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+
+<!-- pills already previewing the Fjord palette -->
+<div class="bl">
+  <div class="pl glass" style="padding: 0 14px 0 13px; gap: 12px">
+    <div class="ws"><div class="wa"></div><div class="wo"></div><div class="wo"></div><div class="we"></div><div class="we"></div></div>
+    <div class="vsep"></div>
+    <div style="display: flex; align-items: center; gap: 7px"><svg class="bi" style="width: 14px; height: 14px; color: #9ECAFF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6M12 19h8"></path></svg><span class="ttl">Bar.qml — nvim</span></div>
+  </div>
+  <div class="pl glass" style="padding: 0 13px 0 6px; gap: 8px; font-size: 12.5px">
+    <div style="width: 26px; height: 26px; border-radius: 13px; background: #1F4A73; display: flex; align-items: center; justify-content: center; gap: 2px"><div style="width: 2.5px; height: 7px; border-radius: 1px; background: #D1E4FF"></div><div style="width: 2.5px; height: 11px; border-radius: 1px; background: #D1E4FF"></div><div style="width: 2.5px; height: 5px; border-radius: 1px; background: #D1E4FF"></div></div>
+    <span class="ttl" style="max-width: 110px">Late Night Coding</span>
+  </div>
+</div>
+<div class="bc"><div class="pl glass" style="padding: 0 14px; gap: 10px"><span style="color: #BBC7DB">Tue 20 Oct</span><span style="font-weight: 600; font-size: 14px">06:48</span></div></div>
+<div class="br">
+  <div class="pl glass" style="padding: 0 12px 0 9px; gap: 10px">
+    <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; padding: 3px 7px; border-radius: 8px; background: rgba(255,255,255,.08)">DE</div>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M2 8.82a15 15 0 0 1 20 0"></path><path d="M5 12.86a10 10 0 0 1 14 0"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path></svg>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 7 10 10-5 5V2l5 5L7 17"></path></svg>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+    <div style="display: flex; align-items: center; gap: 5px"><svg class="bi" style="width: 20px" viewBox="0 0 28 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3"></rect><path d="M25 10v4"></path><rect x="5" y="9" width="11" height="6" rx="1" fill="currentColor" stroke="none"></rect></svg><span style="font-size: 12px">78%</span></div>
+  </div>
+  <div class="pl glass" style="width: 38px; justify-content: center"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><div style="position: absolute; top: 8px; right: 9px; width: 7px; height: 7px; border-radius: 4px; background: #7FD8C3"></div></div>
+</div>
+
+<!-- Switcher sheet -->
+<div class="sheet" style="position: absolute; left: 130px; top: 620px; width: 1340px; border-radius: 32px; padding: 20px 22px; box-sizing: border-box">
+  <div style="display: flex; gap: 14px; align-items: center; justify-content: center">
+    <div class="th"><img src="/_blob/77a47c8dc400aae36435c9fb0d99ad03" alt="Dusk"><span class="tl">Dusk</span></div>
+    <div class="th" style="width: 240px; height: 135px; border: 2px solid #9ECAFF; box-shadow: 0 0 0 5px rgba(158,202,255,.22)"><img src="/_blob/20c6cf8a754edfc10f89255a0a9c7f45" alt="Fjord"><span class="tl">Fjord</span></div>
+    <div class="th"><img src="/_blob/0449b84263dd9d25f2d7f330244d6abd" alt="Sakura"><span class="tl">Sakura</span></div>
+    <div class="th"><img src="/_blob/d5fc6511c4ecf56ebd9879711f20b287" alt="Ember"><span class="tl">Ember</span></div>
+    <div class="th"><img src="/_blob/98ed5ca4e2836b0cfda224a293e71b68" alt="Moss"><span class="tl">Moss</span></div>
+    <div class="th"><img src="/_blob/1a23439b17889ccb310fdc7dbeb1d74f" alt="Mono"><span class="tl">Mono</span></div>
+  </div>
+  <div style="display: flex; align-items: center; gap: 10px; margin-top: 16px; font-size: 12.5px; color: #A9B7C9">
+    <span style="color: #E6EDF6; font-weight: 600">Fjord</span>
+    <div style="display: flex; gap: 5px"><div class="dot" style="background: #9ECAFF"></div><div class="dot" style="background: #BBC7DB"></div><div class="dot" style="background: #7FD8C3"></div><div class="dot" style="background: #111418"></div></div>
+    <span>previewing live</span>
+    <span style="flex: 1"></span>
+    <span class="hint" style="display: flex; align-items: center; gap: 8px"><span class="kbd">← →</span><span>browse</span><span class="kbd" style="margin-left: 6px">Enter</span><span>apply</span><span class="kbd" style="margin-left: 6px">R</span><span>random</span><span class="kbd" style="margin-left: 6px">Esc</span><span>revert</span></span>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"showKeys":{"editor":"boolean","default":false},"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const on = s.keys !== undefined ? s.keys : !!this.props.showKeys;
+    return { keysCls: on ? 'keys' : 'nokeys', toggle: () => this.setState({ keys: !on }) };
+  }
+}
+</script>
+</body>
+</html>

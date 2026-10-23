@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Motion: clock pill to launcher, bell pill to toast</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.glass{background:rgba(22,14,30,.44);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.20),inset 0 -1px 0 rgba(255,255,255,.04),0 10px 34px rgba(0,0,0,.38)}
+.ic{width:15px;height:15px;flex:none}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+.win{position:absolute;border-radius:14px;background:rgba(27,20,33,.92);border:1px solid rgba(255,255,255,.08)}
+.drop{position:absolute;overflow:hidden;background:rgba(24,15,32,.52);backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%);border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 30px 80px rgba(0,0,0,.5)}
+.la{animation:laBlob 8s infinite}
+@keyframes laBlob{
+0%,4%{left:728px;top:10px;width:144px;height:38px;border-radius:19px;opacity:0}
+5%{left:728px;top:10px;width:144px;height:38px;border-radius:19px;opacity:1}
+9%{left:744px;top:36px;width:112px;height:70px;border-radius:35px;opacity:1}
+15%{left:462px;top:144px;width:676px;height:376px;border-radius:32px;opacity:1}
+18%,38%{left:470px;top:150px;width:660px;height:360px;border-radius:28px;opacity:1}
+44%{left:728px;top:10px;width:144px;height:38px;border-radius:19px;opacity:1}
+45%,100%{left:728px;top:10px;width:144px;height:38px;border-radius:19px;opacity:0}}
+.lc{position:absolute;left:0;top:0;width:660px;padding:14px;box-sizing:border-box;animation:laContent 8s infinite}
+@keyframes laContent{0%,13%{opacity:0;transform:translateY(10px)}20%,36%{opacity:1;transform:translateY(0)}40%,100%{opacity:0;transform:translateY(-6px)}}
+.dim{position:absolute;inset:0;background:rgba(10,5,14,.36);animation:laDim 8s infinite}
+@keyframes laDim{0%,6%{opacity:0}16%,37%{opacity:1}44%,100%{opacity:0}}
+.clockhl{animation:laClock 8s infinite}
+@keyframes laClock{0%,4%{background:rgba(22,14,30,.44)}7%,40%{background:rgba(94,56,118,.6)}45%,100%{background:rgba(22,14,30,.44)}}
+.to{animation:toBlob 8s infinite}
+@keyframes toBlob{
+0%,54%{left:1550px;top:10px;width:38px;height:38px;border-radius:19px;opacity:0}
+55%{left:1550px;top:10px;width:38px;height:38px;border-radius:19px;opacity:1}
+59%{left:1380px;top:10px;width:208px;height:38px;border-radius:19px;opacity:1}
+64%{left:1244px;top:56px;width:348px;height:116px;border-radius:24px;opacity:1}
+67%,86%{left:1248px;top:58px;width:340px;height:110px;border-radius:22px;opacity:1}
+92%{left:1550px;top:10px;width:38px;height:38px;border-radius:19px;opacity:1}
+93%,100%{left:1550px;top:10px;width:38px;height:38px;border-radius:19px;opacity:0}}
+.tc{position:absolute;left:0;top:0;width:340px;padding:12px;box-sizing:border-box;animation:toContent 8s infinite}
+@keyframes toContent{0%,62%{opacity:0;transform:translateY(8px)}68%,84%{opacity:1;transform:translateY(0)}88%,100%{opacity:0}}
+.prog{animation:toProg 8s linear infinite}
+@keyframes toProg{0%,66%{width:100%}86%,100%{width:0%}}
+.belldot{animation:toDot 8s infinite}
+@keyframes toDot{0%,88%{opacity:0}92%,100%{opacity:1}}
+.k1{animation:k1 8s infinite}@keyframes k1{0%,2%{opacity:.35}4%{opacity:1;transform:scale(.94)}9%,100%{opacity:.35;transform:scale(1)}}
+.k2{animation:k2 8s infinite}@keyframes k2{0%,35%{opacity:.35}37%{opacity:1;transform:scale(.94)}42%,100%{opacity:.35;transform:scale(1)}}
+.k3{animation:k3 8s infinite}@keyframes k3{0%,52%{opacity:.35}55%{opacity:1;transform:scale(.94)}60%,100%{opacity:.35;transform:scale(1)}}
+.kk{font-family:'Geist Mono',ui-monospace,monospace;font-size:14px;padding:8px 14px;border-radius:12px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22)}
+.play{position:absolute;top:0;bottom:0;width:2px;background:#FFB59C;box-shadow:0 0 8px #FFB59C;animation:play 8s linear infinite}
+@keyframes play{from{left:0%}to{left:100%}}
+.t{position:relative;height:26px;border-radius:8px;background:rgba(255,255,255,.05);margin-top:6px}
+.seg{position:absolute;top:3px;bottom:3px;border-radius:6px;font-size:11px;display:flex;align-items:center;padding-left:8px;white-space:nowrap;overflow:hidden;box-sizing:border-box}
+.row{display:flex;align-items:center;gap:14px;height:54px;padding:0 14px;border-radius:14px}
+.tile{width:38px;height:38px;border-radius:11px}
+</style>
+</helmet>
+<div style="position: relative; width: 1600px; height: 900px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #EEE6F2; background: #140b1a">
+<img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+<div class="win" style="left: 12px; top: 60px; width: 860px; height: 828px"></div>
+<div class="win" style="left: 882px; top: 60px; width: 706px; height: 466px; background: #f0ebf3"></div>
+<div class="win" style="left: 882px; top: 536px; width: 706px; height: 352px"></div>
+<div class="dim"></div>
+
+<div class="glass" style="position: absolute; top: 10px; left: 12px; width: 238px; height: 38px; border-radius: 19px"></div>
+<div class="glass" style="position: absolute; top: 10px; left: 258px; width: 162px; height: 38px; border-radius: 19px"></div>
+<div class="glass clockhl" style="position: absolute; top: 10px; left: 728px; width: 144px; height: 38px; border-radius: 19px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 13px"><span style="color: #CDBFD6">Tue 20 Oct</span><span style="font-weight: 600; font-size: 14px">06:47</span></div>
+<div class="glass" style="position: absolute; top: 10px; left: 1360px; width: 182px; height: 38px; border-radius: 19px"></div>
+<div class="glass" style="position: absolute; top: 10px; left: 1550px; width: 38px; height: 38px; border-radius: 19px; display: flex; align-items: center; justify-content: center"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><div class="belldot" style="position: absolute; top: 8px; right: 9px; width: 7px; height: 7px; border-radius: 4px; background: #FFB59C"></div></div>
+
+<!-- launcher droplet -->
+<div class="drop la">
+  <div class="lc">
+    <div style="display: flex; align-items: center; gap: 14px; height: 54px; padding: 0 16px; border-radius: 18px; background: rgba(255,255,255,.07)">
+      <svg class="ic" style="width: 20px; height: 20px; color: #E6B6FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+      <span style="font-size: 19px">fir</span>
+    </div>
+    <div style="height: 12px"></div>
+    <div class="row" style="background: rgba(230,182,255,.16); box-shadow: inset 0 0 0 1px rgba(230,182,255,.35)"><div class="tile" style="background: #3a2a1f"></div><div><div style="font-size: 14.5px; font-weight: 500"><span style="color: #E6B6FF; font-weight: 700">Fir</span>efox</div><div style="font-size: 12px; color: #B9AEC2">Web browser</div></div></div>
+    <div class="row"><div class="tile" style="background: rgba(255,255,255,.06)"></div><div style="font-size: 14.5px"><span style="color: #E6B6FF; font-weight: 700">Fir</span>efox · New private window</div></div>
+    <div class="row"><div class="tile" style="background: #1f3328"></div><div style="font-size: 14.5px"><span style="color: #E6B6FF; font-weight: 700">Fir</span>ewall</div></div>
+    <div class="row"><div class="tile" style="background: #262b45"></div><div style="font-size: 14.5px"><span style="color: #E6B6FF; font-weight: 700">Fir</span>mware updates</div></div>
+  </div>
+</div>
+
+<!-- toast droplet -->
+<div class="drop to">
+  <div class="tc">
+    <div style="display: flex; align-items: center; gap: 9px; font-size: 12px; color: #CDBFD6"><div style="width: 26px; height: 26px; border-radius: 8px; background: #262b45"></div><span style="flex: 1">Discord · mara</span><span>now</span></div>
+    <div style="margin-top: 8px; font-size: 13px">send screenshots when it's done!</div>
+    <div style="margin-top: 10px; height: 3px; border-radius: 2px; background: rgba(255,255,255,.12)"><div class="prog" style="height: 3px; border-radius: 2px; background: #E6B6FF"></div></div>
+  </div>
+</div>
+
+<!-- keystrokes -->
+<div style="position: absolute; left: 40px; top: 594px; display: flex; align-items: center; gap: 12px">
+  <span style="font-size: 12px; color: #CDBFD6; width: 90px">Events</span>
+  <span class="kk k1">Super Space</span>
+  <span class="kk k2">Esc</span>
+  <span class="kk k3">new message</span>
+</div>
+
+<!-- timeline -->
+<div class="glass" style="position: absolute; left: 40px; top: 646px; width: 1520px; border-radius: 24px; padding: 16px 22px; box-sizing: border-box">
+  <div style="display: flex; align-items: baseline; gap: 12px"><span style="font-size: 15px; font-weight: 600">Clock pill → launcher · Bell pill → toast</span><span style="font-size: 12px; color: #CDBFD6">loop shown at half speed</span></div>
+  <div style="position: relative; margin-top: 10px">
+    <div style="display: grid; grid-template-columns: 140px 1fr; gap: 0 12px; align-items: center; font-size: 12px; color: #CDBFD6">
+      <span>Launcher</span>
+      <div class="t"><div class="seg" style="left: 5%; width: 4%; background: rgba(230,182,255,.35)">drip</div><div class="seg" style="left: 9%; width: 9%; background: #E6B6FF; color: #3a1a4d">spring to centre</div><div class="seg" style="left: 38%; width: 6%; background: rgba(255,181,156,.6); color: #2a1236">suck back</div></div>
+      <span>Toast</span>
+      <div class="t"><div class="seg" style="left: 55%; width: 4%; background: rgba(230,182,255,.35)">widen</div><div class="seg" style="left: 59%; width: 8%; background: #E6B6FF; color: #3a1a4d">drop + spring</div><div class="seg" style="left: 67%; width: 19%; background: rgba(230,182,255,.15)">timer drains</div><div class="seg" style="left: 86%; width: 6%; background: rgba(255,181,156,.6); color: #2a1236">back into bell</div></div>
+    </div>
+    <div style="position: absolute; left: 152px; right: 0; top: 0; bottom: 0; pointer-events: none"><div class="play"></div></div>
+  </div>
+  <div style="font-size: 12px; color: #CDBFD6; margin-top: 12px; line-height: 18px">Everything is born from and returns to the pill it belongs to. The launcher drips out of the clock and springs into the centre. A toast first widens along the top edge, then drops. Expired toasts leave a dot on the bell, so you can see where they went.</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

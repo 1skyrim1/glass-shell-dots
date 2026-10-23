@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Session edge cases and error states</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;family=Outfit:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.m{position:absolute;width:496px;height:279px;border-radius:14px;overflow:hidden;background:#140b1a;box-shadow:0 0 0 1px rgba(255,255,255,.14),0 20px 50px rgba(0,0,0,.4)}
+.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.blur{position:absolute;inset:-20px;width:536px;height:319px;object-fit:cover;filter:blur(12px) brightness(.6) saturate(1.2)}
+.cap{position:absolute;width:496px;font-size:12.5px;line-height:18px;color:#CDBFD6}
+.cap b{display:block;color:#F4EEF7;font-size:14px;font-weight:600;margin-bottom:2px}
+.clk{position:absolute;left:0;right:0;top:34px;text-align:center;font-family:'Outfit',sans-serif;font-weight:600;font-size:50px;letter-spacing:-1.5px;line-height:1}
+.av{position:absolute;left:231px;top:118px;width:34px;height:34px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 1.5px rgba(255,255,255,.3)}
+.av img{width:100%;height:100%;object-fit:cover}
+.nm{position:absolute;left:0;right:0;top:158px;text-align:center;font-size:11px;font-weight:600}
+.pw{position:absolute;left:173px;top:178px;width:150px;height:26px;border-radius:13px;box-sizing:border-box;display:flex;align-items:center;gap:4px;padding:0 3px 0 10px;background:rgba(94,56,118,.5);border:1px solid rgba(230,182,255,.65);box-shadow:0 0 0 3px rgba(230,182,255,.14);font-size:9.5px;color:#EADDF0}
+.go{width:20px;height:20px;border-radius:10px;background:#E6B6FF;margin-left:auto;flex:none;display:flex;align-items:center;justify-content:center;color:#3a1a4d}
+.dt{width:5px;height:5px;border-radius:3px;background:#F6D9FF;flex:none}
+.glass{background:rgba(22,14,30,.44);backdrop-filter:blur(16px) saturate(170%);-webkit-backdrop-filter:blur(16px) saturate(170%);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 8px 24px rgba(0,0,0,.35)}
+.win{position:absolute;border-radius:6px;background:rgba(27,20,33,.92);border:1px solid rgba(255,255,255,.08)}
+.pl{position:absolute;top:4px;height:12px;border-radius:6px}
+</style>
+</helmet>
+<div style="position: relative; width: 1600px; height: 1170px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #F4EEF7; background: #100a14">
+
+<!-- 1 wrong password -->
+<div class="m" style="left: 24px; top: 24px">
+  <img class="blur" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="clk">06:52</div>
+  <div class="av"><img src="/_blob/0449b84263dd9d25f2d7f330244d6abd" alt=""></div>
+  <div class="nm">[username]</div>
+  <div class="pw" style="left: 166px; background: rgba(140,30,34,.55); border-color: rgba(255,138,128,.8); box-shadow: 0 0 0 3px rgba(255,107,107,.2); color: #FFE1DE">Wrong password<div class="go" style="background: #FF8A80; color: #2b0707"><svg style="width: 10px; height: 10px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></div></div>
+  <svg style="position: absolute; left: 136px; top: 180px; width: 24px; height: 22px" viewBox="0 0 24 22" aria-hidden="true"><path d="M20 3 8 3M22 11 4 11M20 19 8 19" stroke="rgba(255,138,128,.7)" stroke-width="2" stroke-linecap="round"></path></svg>
+  <svg style="position: absolute; left: 336px; top: 180px; width: 24px; height: 22px" viewBox="0 0 24 22" aria-hidden="true"><path d="M4 3 16 3M2 11 20 11M4 19 16 19" stroke="rgba(255,138,128,.7)" stroke-width="2" stroke-linecap="round"></path></svg>
+  <div style="position: absolute; left: 0; right: 0; top: 214px; text-align: center; font-size: 9.5px; color: #FFC9C3">3rd attempt · wait 10 s before trying again</div>
+</div>
+<div class="cap" style="left: 24px; top: 312px"><b>Wrong password</b>Pill turns red, shakes twice (±8 px, 280 ms) and clears. After 3 failures faillock adds a visible countdown instead of silently ignoring input.</div>
+
+<!-- 2 authenticating -->
+<div class="m" style="left: 552px; top: 24px">
+  <img class="blur" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="clk">06:52</div>
+  <div class="av"><img src="/_blob/0449b84263dd9d25f2d7f330244d6abd" alt=""></div>
+  <div class="nm">[username]</div>
+  <div class="pw" style="opacity: .85"><div class="dt" style="opacity: .5"></div><div class="dt" style="opacity: .5"></div><div class="dt" style="opacity: .5"></div><div class="dt" style="opacity: .5"></div><div class="dt" style="opacity: .5"></div>
+    <div class="go" style="background: transparent"><svg style="width: 16px; height: 16px" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="rgba(246,217,255,.25)" stroke-width="3"></circle><path d="M12 3a9 9 0 0 1 9 9" fill="none" stroke="#F6D9FF" stroke-width="3" stroke-linecap="round"></path></svg></div>
+  </div>
+</div>
+<div class="cap" style="left: 552px; top: 312px"><b>Checking password</b>The arrow becomes a spinner, the dots dim and typing is blocked. On success the whole lock layer plays the unlock animation (row 00).</div>
+
+<!-- 3 caps lock -->
+<div class="m" style="left: 1080px; top: 24px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="clk">06:47</div>
+  <div class="av"><img src="/_blob/0449b84263dd9d25f2d7f330244d6abd" alt=""></div>
+  <div class="nm">[username]</div>
+  <div class="pw"><div class="dt"></div><div class="dt"></div><div class="dt"></div><div class="go"><svg style="width: 10px; height: 10px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></div></div>
+  <div style="position: absolute; left: 0; right: 0; top: 212px; display: flex; justify-content: center"><div style="display: flex; align-items: center; gap: 5px; height: 18px; padding: 0 8px; border-radius: 9px; background: rgba(110,60,16,.6); border: 1px solid rgba(255,190,120,.5); font-size: 9.5px; color: #FFE2C7"><svg style="width: 10px; height: 10px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 4-8 8h5v6h6v-6h5z"></path></svg>Caps Lock is on · layout DE</div></div>
+</div>
+<div class="cap" style="left: 1080px; top: 312px"><b>Caps Lock / layout hint</b>A small amber chip drops under the pill when Caps Lock is on. It also names the active layout, so a NeoQwertz/QWERTZ mix-up is obvious.</div>
+
+<!-- 4 idle warning -->
+<div class="m" style="left: 24px; top: 404px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="win" style="left: 4px; top: 20px; width: 268px; height: 255px"></div>
+  <div class="win" style="left: 276px; top: 20px; width: 216px; height: 143px; background: #e9e2ee"></div>
+  <div class="win" style="left: 276px; top: 167px; width: 216px; height: 108px"></div>
+  <div style="position: absolute; inset: 0; background: rgba(8,4,12,.55)"></div>
+  <div class="glass" style="position: absolute; left: 168px; top: 5px; width: 160px; height: 22px; border-radius: 11px; display: flex; align-items: center; gap: 6px; padding: 0 8px; box-sizing: border-box; font-size: 9.5px">
+    <svg style="width: 12px; height: 12px" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="3"></circle><circle cx="12" cy="12" r="9" fill="none" stroke="#E6B6FF" stroke-width="3" stroke-dasharray="56.5" stroke-dashoffset="34" transform="rotate(-90 12 12)" stroke-linecap="round"></circle></svg>
+    <span>Locking in 8 s · move to stay</span>
+  </div>
+</div>
+<div class="cap" style="left: 24px; top: 692px"><b>About to lock (idle)</b>10 s before the idle lock, the screen dims to 45 % and the clock pill turns into a countdown. Any input cancels it. Skipped while a video plays or Keep awake is on.</div>
+
+<!-- 5 polkit wrong -->
+<div class="m" style="left: 552px; top: 404px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div style="position: absolute; inset: 0; background: rgba(8,4,12,.6)"></div>
+  <div style="position: absolute; left: 148px; top: 52px; width: 200px; border-radius: 14px; padding: 12px; box-sizing: border-box; background: rgba(26,16,34,.75); border: 1px solid rgba(255,255,255,.16); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 20px 50px rgba(0,0,0,.5)">
+    <div style="display: flex; gap: 8px; align-items: center"><div style="width: 26px; height: 26px; border-radius: 8px; background: #5E3876"></div><div><div style="font-size: 10.5px; font-weight: 600">Authentication required</div><div style="font-size: 8.5px; color: #CDBFD6">Firewall wants to change settings</div></div></div>
+    <div style="margin-top: 10px; height: 24px; border-radius: 8px; background: rgba(140,30,34,.4); box-shadow: inset 0 0 0 1px rgba(255,138,128,.8); display: flex; align-items: center; padding: 0 8px; font-size: 9px; color: #FFE1DE">Wrong password</div>
+    <div style="font-size: 8.5px; color: #FFC9C3; margin-top: 5px">2 tries left</div>
+    <div style="display: flex; gap: 6px; margin-top: 8px"><div style="flex: 1; height: 20px; border-radius: 10px; background: rgba(255,255,255,.1)"></div><div style="flex: 1; height: 20px; border-radius: 10px; background: #E6B6FF"></div></div>
+  </div>
+</div>
+<div class="cap" style="left: 552px; top: 692px"><b>Polkit: wrong password</b>The dialog shakes, the field turns red and shows how many tries are left. After the last try it closes and a notification says the request was denied.</div>
+
+<!-- 6 power off confirm -->
+<div class="m" style="left: 1080px; top: 404px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div style="position: absolute; inset: 0; background: rgba(8,4,12,.55)"></div>
+  <div style="position: absolute; left: 0; right: 0; top: 112px; display: flex; justify-content: center; gap: 6px">
+    <div class="glass" style="width: 50px; height: 50px; border-radius: 13px"></div>
+    <div class="glass" style="width: 50px; height: 50px; border-radius: 13px"></div>
+    <div class="glass" style="width: 50px; height: 50px; border-radius: 13px"></div>
+    <div class="glass" style="width: 50px; height: 50px; border-radius: 13px"></div>
+    <div style="width: 50px; height: 50px; border-radius: 13px; background: rgba(140,30,34,.55); border: 1px solid rgba(255,138,128,.7); box-shadow: 0 0 0 3px rgba(255,107,107,.2); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px">
+      <svg style="width: 18px; height: 18px" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="rgba(255,225,222,.25)" stroke-width="2.5"></circle><circle cx="12" cy="12" r="9" fill="none" stroke="#FFE1DE" stroke-width="2.5" stroke-dasharray="56.5" stroke-dashoffset="22" transform="rotate(-90 12 12)" stroke-linecap="round"></circle></svg>
+      <span style="font-size: 7px; color: #FFE1DE">P again</span>
+    </div>
+  </div>
+</div>
+<div class="cap" style="left: 1080px; top: 692px"><b>Power menu: confirm</b>Reboot and Power off arm on the first press: the tile turns red and a ring runs for 3 s. Press the same key or click again to confirm; anything else disarms it.</div>
+
+<!-- 7 critical battery -->
+<div class="m" style="left: 24px; top: 784px; height: 279px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="win" style="left: 4px; top: 20px; width: 268px; height: 255px"></div>
+  <div class="win" style="left: 276px; top: 20px; width: 216px; height: 255px"></div>
+  <div style="position: absolute; left: 286px; top: 24px; width: 200px; border-radius: 12px; padding: 9px; box-sizing: border-box; background: rgba(110,24,24,.6); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,138,128,.6); box-shadow: 0 10px 30px rgba(0,0,0,.4)">
+    <div style="font-size: 10px; font-weight: 600; color: #FFE1DE">Battery at 5 %</div>
+    <div style="font-size: 8.5px; color: #FFC9C3; margin-top: 3px">Suspending in 2 min unless you plug in</div>
+    <div style="display: flex; gap: 5px; margin-top: 7px"><div style="height: 16px; padding: 0 8px; border-radius: 8px; background: rgba(255,255,255,.14); font-size: 8px; display: flex; align-items: center">Suspend now</div><div style="height: 16px; padding: 0 8px; border-radius: 8px; font-size: 8px; display: flex; align-items: center; color: #FFC9C3">Saver mode</div></div>
+  </div>
+</div>
+<div class="cap" style="left: 24px; top: 1072px"><b>Critical battery</b>At 5 % a red toast that can't time out drops from the bell, even in do not disturb. At 3 % the laptop suspends on its own.</div>
+<div class="cap" style="left: 552px; top: 1072px"><b>Shutting down</b>After Power off / Reboot / Log out: the desktop fades to black in 400 ms and a quiet Outfit label stays until apps have closed. It names the app that's holding things up.</div>
+<div class="cap" style="left: 1080px; top: 1072px"><b>Other password prompts</b>SSH and GPG passphrases (pinentry) and the keyring use the same dialog as polkit, with their own icon and a "remember" checkbox.</div>
+
+<!-- 8 shutting down -->
+<div class="m" style="left: 552px; top: 784px; background: #050307">
+  <div style="position: absolute; left: 0; right: 0; top: 104px; text-align: center; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 22px; color: #EADDF0">Powering off</div>
+  <div style="position: absolute; left: 0; right: 0; top: 142px; display: flex; justify-content: center; gap: 5px"><div class="dt" style="background: #E6B6FF"></div><div class="dt" style="background: #E6B6FF; opacity: .6"></div><div class="dt" style="background: #E6B6FF; opacity: .3"></div></div>
+  <div style="position: absolute; left: 0; right: 0; top: 176px; text-align: center; font-size: 9.5px; color: #8f8499">waiting for Firefox to close…</div>
+</div>
+
+<!-- 9 pinentry -->
+<div class="m" style="left: 1080px; top: 784px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div style="position: absolute; inset: 0; background: rgba(8,4,12,.6)"></div>
+  <div style="position: absolute; left: 148px; top: 60px; width: 200px; border-radius: 14px; padding: 12px; box-sizing: border-box; background: rgba(26,16,34,.75); border: 1px solid rgba(255,255,255,.16); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 20px 50px rgba(0,0,0,.5)">
+    <div style="display: flex; gap: 8px; align-items: center"><div style="width: 26px; height: 26px; border-radius: 8px; background: #1f3328; display: flex; align-items: center; justify-content: center"><svg style="width: 13px; height: 13px" viewBox="0 0 24 24" fill="none" stroke="#B8E3C4" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7.5" cy="15.5" r="5.5"></circle><path d="m21 2-9.6 9.6M15.5 7.5l3 3L22 7l-3-3"></path></svg></div><div><div style="font-size: 10.5px; font-weight: 600">Unlock SSH key</div><div style="font-size: 8.5px; color: #CDBFD6">git push · ~/.ssh/id_ed25519</div></div></div>
+    <div style="margin-top: 10px; height: 24px; border-radius: 8px; background: rgba(255,255,255,.08); box-shadow: inset 0 0 0 1px #E6B6FF"></div>
+    <div style="font-size: 8.5px; color: #CDBFD6; margin-top: 6px; display: flex; align-items: center; gap: 5px"><div style="width: 9px; height: 9px; border-radius: 3px; background: #E6B6FF"></div>Remember for this session</div>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":1170}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

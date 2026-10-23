@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Notifications and calendar</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.bl{position:absolute;top:10px;left:12px;display:flex;gap:8px}
+.bc{position:absolute;top:10px;left:0;right:0;display:flex;justify-content:center;pointer-events:none}
+.br{position:absolute;top:10px;right:12px;display:flex;gap:8px}
+.pl{position:relative;height:38px;border-radius:19px;box-sizing:border-box;display:flex;align-items:center;font-size:13px;flex:none}
+.bi{width:15px;height:15px;flex:none}
+.ws{display:flex;align-items:center;gap:5px}
+.wa{width:18px;height:8px;border-radius:4px;background:#E6B6FF}
+.wo{width:8px;height:8px;border-radius:4px;background:rgba(238,230,242,.62)}
+.we{width:8px;height:8px;border-radius:4px;box-sizing:border-box;border:1.5px solid rgba(238,230,242,.32)}
+.ttl{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+.vsep{width:1px;height:16px;background:rgba(255,255,255,.16)}
+.lit{background:rgba(94,56,118,.6);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(230,182,255,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 10px 34px rgba(0,0,0,.38)}
+.nokeys .kbd,.nokeys .hint,.nokeys .num,.nokeys .key{display:none !important}
+.glass{background:rgba(22,14,30,.44);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.20),inset 0 -1px 0 rgba(255,255,255,.04),0 10px 34px rgba(0,0,0,.38)}
+.panel{position:absolute;background:rgba(24,15,32,.50);backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 30px 80px rgba(0,0,0,.5);border-radius:26px;padding:16px;box-sizing:border-box}
+.ic{width:16px;height:16px;flex:none}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+.kbd{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:#E4DAEA}
+.d{height:34px;display:flex;align-items:center;justify-content:center;font-size:12.5px;border-radius:17px;position:relative}
+.dot{position:absolute;bottom:4px;width:4px;height:4px;border-radius:2px;background:#FFB59C}
+.ev{display:flex;gap:10px;padding:9px 10px;border-radius:12px;background:rgba(255,255,255,.06);font-size:12.5px}
+.bar{width:3px;border-radius:2px;flex:none}
+.n{border-radius:16px;background:rgba(255,255,255,.07);padding:12px;box-sizing:border-box}
+.app{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex:none}
+.hd{display:flex;align-items:center;gap:9px;font-size:12px;color:#CDBFD6}
+.win{position:absolute;border-radius:14px;background:rgba(27,20,33,.92);border:1px solid rgba(255,255,255,.08)}
+</style>
+</helmet>
+<div class="{{keysCls}}" onClick="{{toggle}}" style="position: relative; width: 1600px; height: 900px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #EEE6F2; background: #140b1a">
+<img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+<div class="win" style="left: 12px; top: 60px; width: 860px; height: 828px"></div>
+<div class="win" style="left: 882px; top: 60px; width: 706px; height: 466px; background: #f0ebf3"></div>
+<div class="win" style="left: 882px; top: 536px; width: 706px; height: 352px"></div>
+
+<div class="bl">
+  <div class="pl glass" style="padding: 0 14px 0 13px; gap: 12px">
+    <div class="ws"><div class="wa"></div><div class="wo"></div><div class="wo"></div><div class="we"></div><div class="we"></div></div>
+    <div class="vsep"></div>
+    <div style="display: flex; align-items: center; gap: 7px"><svg class="bi" style="width: 14px; height: 14px; color: #E6B6FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6M12 19h8"></path></svg><span class="ttl">Bar.qml — nvim</span></div>
+  </div>
+  <div class="pl glass" style="padding: 0 13px 0 6px; gap: 8px; font-size: 12.5px">
+    <div style="width: 26px; height: 26px; border-radius: 13px; background: #5E3876; display: flex; align-items: center; justify-content: center; gap: 2px"><div style="width: 2.5px; height: 7px; border-radius: 1px; background: #F6D9FF"></div><div style="width: 2.5px; height: 11px; border-radius: 1px; background: #F6D9FF"></div><div style="width: 2.5px; height: 5px; border-radius: 1px; background: #F6D9FF"></div></div>
+    <span class="ttl" style="max-width: 110px">Late Night Coding</span>
+  </div>
+</div>
+<div class="bc"><div class="pl lit" style="padding: 0 14px; gap: 10px"><span style="color: #E8DCEF">Tue 20 Oct</span><span style="font-weight: 600; font-size: 14px">06:47</span></div></div>
+<div class="br">
+  <div class="pl glass" style="padding: 0 12px 0 9px; gap: 10px">
+    <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; padding: 3px 7px; border-radius: 8px; background: rgba(255,255,255,.08)">DE</div>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M2 8.82a15 15 0 0 1 20 0"></path><path d="M5 12.86a10 10 0 0 1 14 0"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path></svg>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 7 10 10-5 5V2l5 5L7 17"></path></svg>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+    <div style="display: flex; align-items: center; gap: 5px"><svg class="bi" style="width: 20px" viewBox="0 0 28 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3"></rect><path d="M25 10v4"></path><rect x="5" y="9" width="11" height="6" rx="1" fill="currentColor" stroke="none"></rect></svg><span style="font-size: 12px">78%</span></div>
+  </div>
+  <div class="pl glass" style="width: 38px; justify-content: center"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
+</div>
+<div style="position: absolute; inset: 56px 0 0 0; background: rgba(10,5,14,.22)"></div>
+
+<div class="panel" style="left: 400px; top: 58px; width: 800px; display: flex; gap: 16px">
+  <!-- calendar column -->
+  <div style="width: 330px; flex: none">
+    <div style="display: flex; align-items: baseline; justify-content: space-between; padding: 2px 4px 10px">
+      <div><div style="font-size: 30px; font-weight: 600; letter-spacing: -.5px">Tuesday</div><div style="font-size: 13px; color: #CDBFD6">20 October 2026</div></div>
+      <div style="display: flex; gap: 4px"><span class="kbd">[</span><span class="kbd">]</span></div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; font-size: 11px; color: #B9AEC2; text-align: center; padding: 4px 0">
+      <div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div><div>Su</div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px">
+      <div class="d"></div><div class="d"></div><div class="d"></div><div class="d">1</div><div class="d">2</div><div class="d" style="color: #B9AEC2">3</div><div class="d" style="color: #B9AEC2">4</div>
+      <div class="d">5</div><div class="d">6</div><div class="d">7</div><div class="d">8</div><div class="d">9</div><div class="d" style="color: #B9AEC2">10</div><div class="d" style="color: #B9AEC2">11</div>
+      <div class="d">12</div><div class="d">13</div><div class="d">14</div><div class="d">15</div><div class="d">16</div><div class="d" style="color: #B9AEC2">17</div><div class="d" style="color: #B9AEC2">18</div>
+      <div class="d">19</div><div class="d" style="background: #E6B6FF; color: #3a1a4d; font-weight: 700">20</div><div class="d">21</div><div class="d">22<span class="dot"></span></div><div class="d">23</div><div class="d" style="color: #B9AEC2">24</div><div class="d" style="color: #B9AEC2">25</div>
+      <div class="d">26</div><div class="d">27<span class="dot"></span></div><div class="d">28</div><div class="d">29</div><div class="d">30<span class="dot"></span></div><div class="d" style="color: #B9AEC2">31</div><div class="d"></div>
+    </div>
+    <div style="font-size: 11.5px; letter-spacing: .6px; text-transform: uppercase; color: #B9AEC2; padding: 16px 4px 8px">Today</div>
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <div class="ev"><div class="bar" style="background: #E6B6FF"></div><div style="flex: 1"><div style="font-weight: 500">Lecture · Algorithms</div><div style="color: #B9AEC2; font-size: 11.5px">10:15 – 11:45</div></div></div>
+      <div class="ev"><div class="bar" style="background: #FFB59C"></div><div style="flex: 1"><div style="font-weight: 500">Study group</div><div style="color: #B9AEC2; font-size: 11.5px">14:00 – 15:30 · library</div></div></div>
+      <div class="ev"><div class="bar" style="background: #B9C6FF"></div><div style="flex: 1"><div style="font-weight: 500">Dotfiles club call</div><div style="color: #B9AEC2; font-size: 11.5px">20:00 · Discord</div></div></div>
+    </div>
+  </div>
+
+  <div style="width: 1px; background: rgba(255,255,255,.10)"></div>
+
+  <!-- notifications column -->
+  <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 6px 2px 4px">
+      <div style="flex: 1; font-size: 15px; font-weight: 600">Notifications</div>
+      <span style="font-size: 12px; color: #CDBFD6">Do not disturb</span>
+      <div style="width: 34px; height: 20px; border-radius: 10px; background: rgba(255,255,255,.16); position: relative"><div style="position: absolute; left: 3px; top: 3px; width: 14px; height: 14px; border-radius: 7px; background: #EEE6F2"></div></div>
+    </div>
+
+    <div class="n" style="box-shadow: inset 0 0 0 1.5px #E6B6FF; background: rgba(230,182,255,.12)">
+      <div class="hd"><div class="app" style="background: #262b45"><svg class="ic" style="width: 14px" viewBox="0 0 24 24" fill="none" stroke="#B9C6FF" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"></path></svg></div><span style="flex: 1">Discord · dotfiles club · #quickshell</span><span>3 new · 2 min</span></div>
+      <div style="margin-top: 8px; font-size: 13px; line-height: 19px"><b style="font-weight: 600">jonas</b>  yep, replaced hyprpolkitagent last week. works great</div>
+      <div style="margin-top: 2px; font-size: 12.5px; line-height: 19px; color: #CDBFD6"><b style="font-weight: 600">mara</b>  send screenshots when it's done!</div>
+      <div style="display: flex; align-items: center; gap: 8px; margin-top: 10px; height: 34px; padding: 0 6px 0 12px; border-radius: 10px; background: rgba(10,6,14,.4); font-size: 12.5px; color: #9a8fa3">
+        <span style="flex: 1">Reply to #quickshell</span><span class="kbd">R</span>
+      </div>
+    </div>
+
+    <div class="n">
+      <div class="hd"><div class="app" style="background: #1f3328"><svg class="ic" style="width: 14px" viewBox="0 0 24 24" fill="none" stroke="#B8E3C4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></div><span style="flex: 1">System · updates</span><span>8 min</span></div>
+      <div style="margin-top: 8px; font-size: 13px">12 packages can be upgraded</div>
+      <div style="display: flex; gap: 6px; margin-top: 10px">
+        <div style="font-size: 12px; padding: 6px 12px; border-radius: 10px; background: rgba(255,255,255,.1)">Update in kitty <span class="kbd" style="margin-left: 4px">U</span></div>
+        <div style="font-size: 12px; padding: 6px 12px; border-radius: 10px; color: #CDBFD6">Later</div>
+      </div>
+    </div>
+
+    <div class="n" style="display: flex; gap: 12px; align-items: center">
+      <div style="width: 84px; height: 48px; border-radius: 8px; overflow: hidden; flex: none; border: 1px solid rgba(255,255,255,.15)"><img src="/_blob/77a47c8dc400aae36435c9fb0d99ad03" alt="Screenshot thumbnail" style="width: 100%; height: 100%; object-fit: cover"></div>
+      <div style="flex: 1; min-width: 0"><div class="hd"><span style="flex: 1">Capture · screenshot saved</span><span>41 min</span></div><div style="font-size: 12.5px; margin-top: 4px">~/Pictures/Screenshots · copied</div></div>
+    </div>
+
+    <div class="n" style="opacity: .85">
+      <div class="hd"><div class="app" style="background: #3a2a1f"><svg class="ic" style="width: 14px" viewBox="0 0 24 24" fill="none" stroke="#FFB59C" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div><span style="flex: 1">Firefox · download complete</span><span>1 h</span></div>
+    </div>
+
+    <div class="hint" style="display: flex; align-items: center; gap: 7px; padding: 6px 2px 0; font-size: 11.5px; color: #B9AEC2; flex-wrap: wrap">
+      <span class="kbd">J K</span><span>move</span><span class="kbd" style="margin-left: 4px">Enter</span><span>open</span><span class="kbd" style="margin-left: 4px">R</span><span>reply</span><span class="kbd" style="margin-left: 4px">D</span><span>dismiss</span><span class="kbd" style="margin-left: 4px">Shift D</span><span>clear all</span>
+    </div>
+  </div>
+</div>
+
+<!-- toast example -->
+<div style="position: absolute; left: 1248px; top: 92px; width: 340px; font-size: 12px; color: #F4EEF7; font-weight: 600">Toast from the bell pill (center closed)</div>
+<div class="glass" style="position: absolute; left: 1248px; top: 116px; width: 340px; border-radius: 20px; padding: 12px; box-sizing: border-box">
+  <div class="hd"><div class="app" style="background: #262b45"><svg class="ic" style="width: 14px" viewBox="0 0 24 24" fill="none" stroke="#B9C6FF" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"></path></svg></div><span style="flex: 1">Discord · mara</span><span>now</span></div>
+  <div style="margin-top: 7px; font-size: 13px">send screenshots when it's done!</div>
+  <div style="margin-top: 9px; height: 3px; border-radius: 2px; background: rgba(255,255,255,.12)"><div style="width: 60%; height: 3px; border-radius: 2px; background: #E6B6FF"></div></div>
+  <div class="hint" style="display: flex; gap: 6px; margin-top: 9px; font-size: 11.5px; color: #CDBFD6; align-items: center"><span class="kbd">Super N</span><span>open and reply</span></div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"showKeys":{"editor":"boolean","default":false},"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const on = s.keys !== undefined ? s.keys : !!this.props.showKeys;
+    return { keysCls: on ? 'keys' : 'nokeys', toggle: () => this.setState({ keys: !on }) };
+  }
+}
+</script>
+</body>
+</html>

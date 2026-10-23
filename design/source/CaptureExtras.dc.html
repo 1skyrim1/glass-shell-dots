@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Capture extras: colour picker, countdown, screen mode, recording done</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;family=Outfit:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.m{position:absolute;width:740px;height:416px;border-radius:16px;overflow:hidden;background:#140b1a;box-shadow:0 0 0 1px rgba(255,255,255,.14),0 20px 50px rgba(0,0,0,.4)}
+.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.win{position:absolute;border-radius:8px;background:rgba(27,20,33,.94);border:1px solid rgba(255,255,255,.08)}
+.glass{background:rgba(22,14,30,.5);backdrop-filter:blur(20px) saturate(170%);-webkit-backdrop-filter:blur(20px) saturate(170%);border:1px solid rgba(255,255,255,.15);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 10px 30px rgba(0,0,0,.4)}
+.cap{position:absolute;width:740px;font-size:12.5px;line-height:18px;color:#CDBFD6}
+.cap b{display:block;color:#F4EEF7;font-size:14px;font-weight:600;margin-bottom:2px}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+.btn{height:24px;padding:0 10px;border-radius:12px;display:flex;align-items:center;font-size:10.5px;background:rgba(255,255,255,.12)}
+</style>
+</helmet>
+<div style="position: relative; width: 1600px; height: 1040px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #F4EEF7; background: #100a14">
+
+<!-- 1 colour picker -->
+<div class="m" style="left: 40px; top: 24px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="win" style="left: 6px; top: 28px; width: 398px; height: 382px"></div>
+  <div class="win" style="left: 410px; top: 28px; width: 324px; height: 382px; background: #f0ebf3"></div>
+  <div style="position: absolute; left: 418px; top: 36px; width: 120px; height: 26px; border-radius: 6px; background: #E6B6FF"></div>
+  <!-- crosshair -->
+  <div style="position: absolute; left: 470px; top: 30px; width: 1px; height: 40px; background: rgba(0,0,0,.6)"></div>
+  <div style="position: absolute; left: 450px; top: 49px; width: 40px; height: 1px; background: rgba(0,0,0,.6)"></div>
+  <!-- loupe -->
+  <div style="position: absolute; left: 480px; top: 70px; width: 120px; height: 120px; border-radius: 60px; overflow: hidden; border: 3px solid #fff; box-shadow: 0 10px 30px rgba(0,0,0,.5); background: #E6B6FF">
+    <div style="position: absolute; left: 0; top: 70px; width: 120px; height: 50px; background: #f0ebf3"></div>
+    <div style="position: absolute; inset: 0; background-image: repeating-linear-gradient(0deg, rgba(0,0,0,.14) 0 1px, transparent 1px 12px), repeating-linear-gradient(90deg, rgba(0,0,0,.14) 0 1px, transparent 1px 12px)"></div>
+    <div style="position: absolute; left: 54px; top: 54px; width: 12px; height: 12px; box-sizing: border-box; border: 2px solid #1d1424"></div>
+  </div>
+  <div class="glass" style="position: absolute; left: 470px; top: 200px; border-radius: 16px; padding: 10px 12px; display: flex; gap: 10px; align-items: center">
+    <div style="width: 30px; height: 30px; border-radius: 9px; background: #E6B6FF; box-shadow: inset 0 0 0 1px rgba(255,255,255,.4)"></div>
+    <div><div class="mono" style="font-size: 13px; font-weight: 500">#E6B6FF</div><div class="mono" style="font-size: 10.5px; color: #CDBFD6">rgb(230 182 255)</div></div>
+  </div>
+</div>
+<div class="cap" style="left: 40px; top: 448px"><b>Colour picker · Super+Shift+C</b>The screen freezes, the cursor gets a magnifier (8× zoom, one pixel boxed) and a chip with the value. Click or Enter copies hex; Tab cycles hex / rgb / hsl; arrow keys nudge one pixel. The colour lands in clipboard history as a swatch.</div>
+
+<!-- 2 countdown -->
+<div class="m" style="left: 820px; top: 24px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="win" style="left: 6px; top: 28px; width: 398px; height: 382px"></div>
+  <div class="win" style="left: 410px; top: 28px; width: 324px; height: 216px; background: #f0ebf3"></div>
+  <div class="win" style="left: 410px; top: 250px; width: 324px; height: 160px"></div>
+  <div style="position: absolute; inset: 0; background: rgba(8,4,12,.55)"></div>
+  <div style="position: absolute; left: 408px; top: 248px; width: 328px; height: 164px; box-sizing: border-box; border: 2.5px solid #E6B6FF; border-radius: 9px; box-shadow: 0 0 0 4px rgba(230,182,255,.2)"></div>
+  <div class="glass" style="position: absolute; left: 310px; top: 148px; width: 120px; height: 120px; border-radius: 60px; display: flex; align-items: center; justify-content: center; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 64px">3</div>
+  <svg style="position: absolute; left: 304px; top: 142px; width: 132px; height: 132px" viewBox="0 0 132 132" aria-hidden="true"><circle cx="66" cy="66" r="63" fill="none" stroke="#FF6B6B" stroke-width="3" stroke-linecap="round" stroke-dasharray="396" stroke-dashoffset="132" transform="rotate(-90 66 66)"></circle></svg>
+  <div style="position: absolute; left: 0; right: 0; top: 290px; text-align: center; font-size: 12px; color: #EADDF0">Recording Discord window · Esc cancels</div>
+</div>
+<div class="cap" style="left: 820px; top: 448px"><b>Countdown before recording</b>Optional 3 s countdown (D toggles 0 / 3 / 5 s). A red ring drains around each number; the overlay and the bar's pills are hidden from the recording.</div>
+
+<!-- 3 screen mode -->
+<div class="m" style="left: 40px; top: 536px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="win" style="left: 6px; top: 28px; width: 398px; height: 382px"></div>
+  <div class="win" style="left: 410px; top: 28px; width: 324px; height: 382px; background: #f0ebf3"></div>
+  <div style="position: absolute; inset: 0; background: rgba(230,182,255,.08); box-shadow: inset 0 0 0 3px #E6B6FF"></div>
+  <div class="glass" style="position: absolute; left: 230px; top: 340px; height: 44px; border-radius: 22px; padding: 0 6px; display: flex; align-items: center; gap: 4px; font-size: 11px">
+    <div style="padding: 6px 10px; border-radius: 14px; color: #D9CEE0">Region</div>
+    <div style="padding: 6px 10px; border-radius: 14px; color: #D9CEE0">Window</div>
+    <div style="padding: 6px 10px; border-radius: 14px; background: #E6B6FF; color: #3a1a4d; font-weight: 600">Screen</div>
+    <div style="width: 1px; height: 22px; background: rgba(255,255,255,.15); margin: 0 4px"></div>
+    <div style="padding: 6px 12px; border-radius: 14px; background: #E6B6FF; color: #3a1a4d; font-weight: 600">Capture</div>
+  </div>
+</div>
+<div class="cap" style="left: 40px; top: 960px"><b>Screen mode</b>The whole screen gets the accent frame. On capture, a white flash (80 ms) and the frame shrinks into the thumbnail in the corner.</div>
+
+<!-- 4 recording done + trim -->
+<div class="m" style="left: 820px; top: 536px">
+  <img class="bg" src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="">
+  <div class="win" style="left: 6px; top: 28px; width: 398px; height: 382px"></div>
+  <div class="win" style="left: 410px; top: 28px; width: 324px; height: 382px"></div>
+  <div class="glass" style="position: absolute; left: 418px; top: 34px; width: 310px; border-radius: 16px; padding: 10px; box-sizing: border-box">
+    <div style="display: flex; gap: 10px">
+      <div style="position: relative; width: 96px; height: 54px; border-radius: 8px; overflow: hidden; flex: none"><img src="/_blob/77a47c8dc400aae36435c9fb0d99ad03" alt="" style="width: 100%; height: 100%; object-fit: cover"><div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center"><div style="width: 22px; height: 22px; border-radius: 11px; background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center"><svg style="width: 10px; height: 10px" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M7 4v16l13-8z"></path></svg></div></div><span class="mono" style="position: absolute; right: 4px; bottom: 3px; font-size: 9px; background: rgba(0,0,0,.6); padding: 0 4px; border-radius: 4px">0:42</span></div>
+      <div><div style="font-size: 11.5px; font-weight: 600">Recording saved</div><div style="font-size: 10px; color: #CDBFD6; margin-top: 2px">~/Videos/Captures · 18 MB</div></div>
+    </div>
+    <div style="display: flex; gap: 5px; margin-top: 8px"><div class="btn">Copy</div><div class="btn">Open folder</div><div class="btn" style="background: rgba(230,182,255,.3)">Trim</div></div>
+  </div>
+  <!-- trim strip -->
+  <div class="glass" style="position: absolute; left: 70px; top: 290px; width: 600px; border-radius: 18px; padding: 12px; box-sizing: border-box">
+    <div style="position: relative; height: 40px; border-radius: 8px; overflow: hidden; display: flex">
+      <img src="/_blob/77a47c8dc400aae36435c9fb0d99ad03" alt="" style="width: 20%; height: 100%; object-fit: cover; opacity: .5"><img src="/_blob/20c6cf8a754edfc10f89255a0a9c7f45" alt="" style="width: 20%; height: 100%; object-fit: cover"><img src="/_blob/77a47c8dc400aae36435c9fb0d99ad03" alt="" style="width: 20%; height: 100%; object-fit: cover"><img src="/_blob/20c6cf8a754edfc10f89255a0a9c7f45" alt="" style="width: 20%; height: 100%; object-fit: cover"><img src="/_blob/77a47c8dc400aae36435c9fb0d99ad03" alt="" style="width: 20%; height: 100%; object-fit: cover; opacity: .5"></div>
+    <div style="position: absolute; left: 124px; top: 10px; width: 352px; height: 44px; box-sizing: border-box; border: 3px solid #E6B6FF; border-radius: 9px"></div>
+    <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 10.5px; color: #CDBFD6"><span class="mono">0:08 → 0:34 · 26 s</span><span>, . move start/end · Enter save copy</span></div>
+  </div>
+</div>
+<div class="cap" style="left: 820px; top: 960px"><b>Recording done · trim</b>The toast leaves the red pill as it collapses. Trim opens a filmstrip right under it; the original is kept, a trimmed copy is saved next to it.</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":1040}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

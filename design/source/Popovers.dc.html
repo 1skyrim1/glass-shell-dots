@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pill popovers, menus and tooltips</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.nokeys .kbd,.nokeys .hint,.nokeys .key{display:none !important}
+.glass{background:rgba(22,14,30,.44);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.20),inset 0 -1px 0 rgba(255,255,255,.04),0 10px 34px rgba(0,0,0,.38)}
+.pop{position:absolute;background:rgba(24,15,32,.55);backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%);border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 24px 60px rgba(0,0,0,.45);border-radius:22px;padding:10px;box-sizing:border-box}
+.lit{background:rgba(94,56,118,.6);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(230,182,255,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 10px 34px rgba(0,0,0,.38)}
+.bl{position:absolute;top:10px;left:12px;display:flex;gap:8px}
+.bc{position:absolute;top:10px;left:0;right:0;display:flex;justify-content:center;pointer-events:none}
+.br{position:absolute;top:10px;right:12px;display:flex;gap:8px}
+.pl{position:relative;height:38px;border-radius:19px;box-sizing:border-box;display:flex;align-items:center;font-size:13px;flex:none}
+.bi{width:15px;height:15px;flex:none}
+.ws{display:flex;align-items:center;gap:5px}
+.wa{width:18px;height:8px;border-radius:4px;background:#E6B6FF}
+.wo{width:8px;height:8px;border-radius:4px;background:rgba(238,230,242,.62)}
+.we{width:8px;height:8px;border-radius:4px;box-sizing:border-box;border:1.5px solid rgba(238,230,242,.32)}
+.ttl{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+.vsep{width:1px;height:16px;background:rgba(255,255,255,.16)}
+.kbd{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:#E4DAEA}
+.tag{position:absolute;font-size:12px;color:#CDBFD6;display:flex;align-items:center;gap:8px}
+.tag b{color:#F4EEF7;font-weight:600;font-size:13.5px}
+.how{font-size:11px;padding:2px 8px;border-radius:9px;background:rgba(255,181,156,.18);color:#FFD3C2}
+.mi{display:flex;align-items:center;gap:10px;height:36px;padding:0 10px;border-radius:11px;font-size:13px}
+.sep{height:1px;background:rgba(255,255,255,.10);margin:5px 6px}
+.win{position:absolute;border-radius:14px;background:rgba(27,20,33,.92);border:1px solid rgba(255,255,255,.08)}
+.st{display:flex;flex-direction:column;align-items:center;gap:10px;font-size:12px;color:#CDBFD6}
+</style>
+</helmet>
+<div class="{{keysCls}}" onClick="{{toggle}}" style="position: relative; width: 1600px; height: 900px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #EEE6F2; background: #140b1a">
+<img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+<div class="win" style="left: 12px; top: 60px; width: 860px; height: 828px; opacity: .55"></div>
+<div class="win" style="left: 882px; top: 60px; width: 706px; height: 828px; opacity: .55"></div>
+
+<!-- pills -->
+<div class="bl">
+  <div class="pl glass" style="padding: 0 14px 0 13px; gap: 12px">
+    <div class="ws"><div class="wa"></div><div class="wo" style="box-shadow: 0 0 0 3px rgba(238,230,242,.25)"></div><div class="wo"></div><div class="we"></div><div class="we"></div></div>
+    <div class="vsep"></div>
+    <div style="display: flex; align-items: center; gap: 7px"><svg class="bi" style="width: 14px; height: 14px; color: #E6B6FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6M12 19h8"></path></svg><span class="ttl">Bar.qml — nvim</span></div>
+  </div>
+  <div class="pl lit" style="padding: 0 13px 0 6px; gap: 8px; font-size: 12.5px">
+    <div style="width: 26px; height: 26px; border-radius: 13px; background: #E6B6FF; display: flex; align-items: center; justify-content: center; gap: 2px"><div style="width: 2.5px; height: 7px; border-radius: 1px; background: #3a1a4d"></div><div style="width: 2.5px; height: 11px; border-radius: 1px; background: #3a1a4d"></div><div style="width: 2.5px; height: 5px; border-radius: 1px; background: #3a1a4d"></div></div>
+    <span class="ttl" style="max-width: 110px">Late Night Coding</span>
+  </div>
+</div>
+<div class="bc"><div class="pl glass" style="padding: 0 14px; gap: 10px"><span style="color: #CDBFD6">Tue 20 Oct</span><span style="font-weight: 600; font-size: 14px">06:47</span></div></div>
+<div class="br">
+  <div class="pl glass" style="padding: 0 12px 0 9px; gap: 10px">
+    <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; padding: 3px 7px; border-radius: 8px; background: rgba(230,182,255,.3); color: #F6D9FF">DE</div>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M2 8.82a15 15 0 0 1 20 0"></path><path d="M5 12.86a10 10 0 0 1 14 0"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path></svg>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 7 10 10-5 5V2l5 5L7 17"></path></svg>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+    <div style="display: flex; align-items: center; gap: 5px"><svg class="bi" style="width: 20px" viewBox="0 0 28 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3"></rect><path d="M25 10v4"></path><rect x="5" y="9" width="11" height="6" rx="1" fill="currentColor" stroke="none"></rect></svg><span style="font-size: 12px">78%</span></div>
+  </div>
+  <div class="pl lit" style="width: 38px; justify-content: center"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
+</div>
+
+<!-- 1 workspace peek -->
+<div class="tag" style="left: 24px; top: 72px"><b>Workspace peek</b><span class="how">hover a dot 400 ms</span></div>
+<div class="pop" style="left: 24px; top: 102px; width: 290px">
+  <div style="display: flex; align-items: baseline; justify-content: space-between; padding: 4px 6px 8px"><span style="font-size: 13.5px; font-weight: 600">Workspace 2</span><span style="font-size: 11.5px; color: #B9AEC2">2 windows</span></div>
+  <div style="position: relative; height: 120px; border-radius: 12px; overflow: hidden; background: #1b1421">
+    <img src="/_blob/77a47c8dc400aae36435c9fb0d99ad03" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .7">
+    <div style="position: absolute; left: 6px; top: 6px; width: 170px; height: 108px; border-radius: 6px; background: #f0ebf3"></div>
+    <div style="position: absolute; left: 182px; top: 6px; width: 82px; height: 108px; border-radius: 6px; background: #261d2d"></div>
+  </div>
+  <div class="mi" style="margin-top: 6px"><svg class="bi" style="color: #FFB59C" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg><span style="flex: 1; font-size: 12.5px">Lecture notes — Firefox</span></div>
+  <div class="mi"><svg class="bi" style="color: #B8E3C4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg><span style="flex: 1; font-size: 12.5px">Downloads — Files</span></div>
+</div>
+
+<!-- 2 media popover -->
+<div class="tag" style="left: 344px; top: 72px"><b>Media</b><span class="how">click the media pill</span></div>
+<div class="pop" style="left: 344px; top: 102px; width: 360px; padding: 14px">
+  <div style="display: flex; gap: 14px; align-items: center">
+    <div style="width: 76px; height: 76px; border-radius: 14px; overflow: hidden; flex: none; box-shadow: 0 8px 20px rgba(0,0,0,.4)"><img src="/_blob/0449b84263dd9d25f2d7f330244d6abd" alt="Cover art" style="width: 100%; height: 100%; object-fit: cover"></div>
+    <div style="min-width: 0"><div style="font-size: 15px; font-weight: 600">Late Night Coding</div><div style="font-size: 12.5px; color: #CDBFD6; margin-top: 2px">[artist] · Spotify</div></div>
+  </div>
+  <div style="margin-top: 14px; height: 5px; border-radius: 3px; background: rgba(255,255,255,.14)"><div style="width: 33%; height: 5px; border-radius: 3px; background: #EEE6F2; position: relative"><div style="position: absolute; right: -6px; top: -4px; width: 13px; height: 13px; border-radius: 7px; background: #fff"></div></div></div>
+  <div style="display: flex; justify-content: space-between; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; color: #B9AEC2; margin-top: 6px"><span>1:12</span><span>-2:28</span></div>
+  <div style="display: flex; align-items: center; justify-content: center; gap: 22px; margin-top: 6px">
+    <svg class="bi" style="color: #B9AEC2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Shuffle" role="img"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"></path></svg>
+    <svg style="width: 22px; height: 22px" viewBox="0 0 24 24" fill="currentColor" aria-label="Previous" role="img"><path d="M19 20 9 12l10-8v16zM5 19V5h2v14H5z"></path></svg>
+    <div style="width: 50px; height: 50px; border-radius: 25px; background: #EEE6F2; color: #1d1424; display: flex; align-items: center; justify-content: center"><svg style="width: 20px; height: 20px" viewBox="0 0 24 24" fill="currentColor" aria-label="Pause" role="img"><path d="M6 4h4v16H6zM14 4h4v16h-4z"></path></svg></div>
+    <svg style="width: 22px; height: 22px" viewBox="0 0 24 24" fill="currentColor" aria-label="Next" role="img"><path d="m5 4 10 8-10 8V4zM17 5h2v14h-2V5z"></path></svg>
+    <svg class="bi" style="color: #B9AEC2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Repeat" role="img"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14M7 22l-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>
+  </div>
+  <div class="sep" style="margin: 12px 0 10px"></div>
+  <div style="display: flex; gap: 6px; font-size: 12px">
+    <div style="padding: 6px 12px; border-radius: 12px; background: rgba(230,182,255,.22); color: #F6D9FF">Spotify</div>
+    <div style="padding: 6px 12px; border-radius: 12px; background: rgba(255,255,255,.06); color: #CDBFD6">Firefox · YouTube</div>
+  </div>
+  <div class="hint" style="display: flex; align-items: center; gap: 7px; margin-top: 10px; font-size: 11.5px; color: #B9AEC2"><span class="kbd">Space</span><span>play</span><span class="kbd">← →</span><span>seek</span><span class="kbd">Tab</span><span>player</span></div>
+</div>
+
+<!-- 3 tooltips -->
+<div class="tag" style="left: 734px; top: 72px"><b>Tooltips</b><span class="how">hover 600 ms</span></div>
+<div style="position: absolute; left: 734px; top: 104px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start">
+  <div class="glass" style="height: 30px; border-radius: 15px; padding: 0 12px; display: flex; align-items: center; gap: 8px; font-size: 12.5px"><svg class="bi" style="width: 13px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M2 8.82a15 15 0 0 1 20 0"></path><path d="M5 12.86a10 10 0 0 1 14 0"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path></svg>eduroam · strong signal</div>
+  <div class="glass" style="height: 30px; border-radius: 15px; padding: 0 12px; display: flex; align-items: center; gap: 8px; font-size: 12.5px">Battery 78 % · 3 h 40 min left</div>
+  <div class="glass" style="height: 30px; border-radius: 15px; padding: 0 12px; display: flex; align-items: center; gap: 8px; font-size: 12.5px">Headphones · volume 64 %</div>
+  <div style="font-size: 11.5px; color: #B9AEC2; width: 230px; line-height: 17px">One line, no title, never covers the pill. Only for icons whose state isn't readable at a glance.</div>
+</div>
+
+<!-- 4 layout menu -->
+<div class="tag" style="left: 1010px; top: 72px"><b>Keyboard layout</b><span class="how">right-click DE</span></div>
+<div class="pop" style="left: 1010px; top: 102px; width: 250px">
+  <div class="mi" style="background: rgba(230,182,255,.16)"><span style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; width: 24px; color: #F6D9FF">DE</span><span style="flex: 1">German (QWERTZ)</span><svg class="bi" style="color: #E6B6FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></div>
+  <div class="mi"><span style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; width: 24px; color: #CDBFD6">NEO</span><span style="flex: 1">NeoQwertz</span></div>
+  <div class="sep"></div>
+  <div style="font-size: 11.5px; color: #B9AEC2; padding: 4px 10px 6px">Left-click the badge to cycle</div>
+</div>
+
+<!-- 5 bell menu -->
+<div class="tag" style="left: 1300px; top: 72px"><b>Bell menu</b><span class="how">right-click bell</span></div>
+<div class="pop" style="left: 1300px; top: 102px; width: 276px">
+  <div style="font-size: 11.5px; letter-spacing: .6px; text-transform: uppercase; color: #B9AEC2; padding: 6px 10px 4px">Do not disturb</div>
+  <div class="mi"><span style="flex: 1">For 1 hour</span><span class="key kbd">1</span></div>
+  <div class="mi"><span style="flex: 1">Until tomorrow morning</span><span class="key kbd">2</span></div>
+  <div class="mi"><span style="flex: 1">Until I turn it off</span><span class="key kbd">3</span></div>
+  <div class="sep"></div>
+  <div class="mi"><span style="flex: 1">Clear all notifications</span><span class="key kbd">Shift D</span></div>
+</div>
+
+<!-- micro-interaction states -->
+<div style="position: absolute; left: 24px; right: 24px; top: 560px; height: 1px; background: rgba(255,255,255,.14)"></div>
+<div class="tag" style="left: 24px; top: 580px"><b>Every pill, button and tile reacts the same way</b></div>
+<div style="position: absolute; left: 24px; top: 624px; display: flex; gap: 46px; align-items: flex-end">
+  <div class="st"><div class="pl glass" style="padding: 0 14px; gap: 10px"><span style="color: #CDBFD6">Tue 20 Oct</span><b style="font-weight: 600">06:47</b></div>Rest</div>
+  <div class="st"><div class="pl glass" style="padding: 0 14px; gap: 10px; transform: scale(1.04); background: rgba(60,40,72,.55); box-shadow: inset 0 1px 0 rgba(255,255,255,.32), 0 14px 38px rgba(0,0,0,.42)"><span style="color: #E2D6EA">Tue 20 Oct</span><b style="font-weight: 600">06:47</b></div>Hover · lighter, +4 %, 120 ms</div>
+  <div class="st"><div class="pl glass" style="padding: 0 14px; gap: 10px; transform: scale(.95); background: rgba(14,8,20,.6)"><span style="color: #CDBFD6">Tue 20 Oct</span><b style="font-weight: 600">06:47</b></div>Press · squish to 95 %</div>
+  <div class="st"><div class="pl lit" style="padding: 0 14px; gap: 10px"><span style="color: #E8DCEF">Tue 20 Oct</span><b style="font-weight: 600">06:47</b></div>Open · its panel is showing</div>
+  <div class="st"><div class="pl glass" style="padding: 0 14px; gap: 10px; box-shadow: 0 0 0 2px #E6B6FF, 0 0 0 6px rgba(230,182,255,.2)"><span style="color: #CDBFD6">Tue 20 Oct</span><b style="font-weight: 600">06:47</b></div>Keyboard focus ring</div>
+  <div class="st"><div class="pl glass" style="padding: 0 14px; gap: 10px; opacity: .45"><span style="color: #CDBFD6">Tue 20 Oct</span><b style="font-weight: 600">06:47</b></div>Disabled</div>
+</div>
+<div style="position: absolute; left: 24px; top: 720px; width: 1100px; font-size: 12.5px; line-height: 19px; color: #CDBFD6">On hover the specular top edge brightens and follows the cursor horizontally (Liquid Glass highlight). On release the pill springs back past 100 % to about 102 % before settling. Toggles in Control Center use the same states; a toggled-on tile is "Open" coloured. Popovers grow out of their pill in 200 ms and close on Esc, on a click outside, or when another popover opens.</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"showKeys":{"editor":"boolean","default":false},"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const on = s.keys !== undefined ? s.keys : !!this.props.showKeys;
+    return { keysCls: on ? 'keys' : 'nokeys', toggle: () => this.setState({ keys: !on }) };
+  }
+}
+</script>
+</body>
+</html>

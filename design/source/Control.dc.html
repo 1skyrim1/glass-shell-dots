@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Control Center</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.bl{position:absolute;top:10px;left:12px;display:flex;gap:8px}
+.bc{position:absolute;top:10px;left:0;right:0;display:flex;justify-content:center;pointer-events:none}
+.br{position:absolute;top:10px;right:12px;display:flex;gap:8px}
+.pl{position:relative;height:38px;border-radius:19px;box-sizing:border-box;display:flex;align-items:center;font-size:13px;flex:none}
+.bi{width:15px;height:15px;flex:none}
+.ws{display:flex;align-items:center;gap:5px}
+.wa{width:18px;height:8px;border-radius:4px;background:#E6B6FF}
+.wo{width:8px;height:8px;border-radius:4px;background:rgba(238,230,242,.62)}
+.we{width:8px;height:8px;border-radius:4px;box-sizing:border-box;border:1.5px solid rgba(238,230,242,.32)}
+.ttl{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+.vsep{width:1px;height:16px;background:rgba(255,255,255,.16)}
+.lit{background:rgba(94,56,118,.6);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(230,182,255,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 10px 34px rgba(0,0,0,.38)}
+.nokeys .kbd,.nokeys .hint,.nokeys .num,.nokeys .key{display:none !important}
+.glass{background:rgba(22,14,30,.44);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.20),inset 0 -1px 0 rgba(255,255,255,.04),0 10px 34px rgba(0,0,0,.38)}
+.panel{position:absolute;background:rgba(24,15,32,.50);backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 30px 80px rgba(0,0,0,.5);border-radius:26px;padding:14px;box-sizing:border-box}
+.ic{width:16px;height:16px;flex:none}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+.kbd{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:#E4DAEA}
+.num{position:absolute;top:7px;right:8px;font-family:'Geist Mono',ui-monospace,monospace;font-size:10px;opacity:.7}
+.on{background:#E6B6FF;color:#3a1a4d}
+.off{background:rgba(255,255,255,.08);color:#EEE6F2}
+.wide{position:relative;flex:1;height:62px;border-radius:18px;display:flex;align-items:center;gap:10px;padding:0 14px;box-sizing:border-box}
+.sm{position:relative;height:64px;border-radius:18px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;gap:4px;padding:10px 12px;box-sizing:border-box;font-size:11.5px;font-weight:500}
+.sl{display:flex;align-items:center;gap:12px;height:40px;padding:0 14px;border-radius:20px;background:rgba(255,255,255,.08)}
+.track{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.14)}
+.sec{font-size:11.5px;letter-spacing:.6px;text-transform:uppercase;color:#B9AEC2;padding:12px 4px 6px}
+.net{display:flex;align-items:center;gap:12px;height:44px;padding:0 12px;border-radius:12px;font-size:13px}
+.win{position:absolute;border-radius:14px;background:rgba(27,20,33,.92);border:1px solid rgba(255,255,255,.08)}
+.hint{display:flex;align-items:center;gap:7px;padding:12px 4px 0;font-size:11.5px;color:#B9AEC2;flex-wrap:wrap}
+</style>
+</helmet>
+<div class="{{keysCls}}" onClick="{{toggle}}" style="position: relative; width: 1600px; height: 900px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #EEE6F2; background: #140b1a">
+<img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+<div class="win" style="left: 12px; top: 60px; width: 860px; height: 828px"></div>
+<div class="win" style="left: 882px; top: 60px; width: 706px; height: 466px; background: #f0ebf3"></div>
+<div class="win" style="left: 882px; top: 536px; width: 706px; height: 352px"></div>
+
+<!-- pill with status cluster active -->
+<div class="bl">
+  <div class="pl glass" style="padding: 0 14px 0 13px; gap: 12px">
+    <div class="ws"><div class="wa"></div><div class="wo"></div><div class="wo"></div><div class="we"></div><div class="we"></div></div>
+    <div class="vsep"></div>
+    <div style="display: flex; align-items: center; gap: 7px"><svg class="bi" style="width: 14px; height: 14px; color: #E6B6FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6M12 19h8"></path></svg><span class="ttl">Bar.qml — nvim</span></div>
+  </div>
+  <div class="pl glass" style="padding: 0 13px 0 6px; gap: 8px; font-size: 12.5px">
+    <div style="width: 26px; height: 26px; border-radius: 13px; background: #5E3876; display: flex; align-items: center; justify-content: center; gap: 2px"><div style="width: 2.5px; height: 7px; border-radius: 1px; background: #F6D9FF"></div><div style="width: 2.5px; height: 11px; border-radius: 1px; background: #F6D9FF"></div><div style="width: 2.5px; height: 5px; border-radius: 1px; background: #F6D9FF"></div></div>
+    <span class="ttl" style="max-width: 110px">Late Night Coding</span>
+  </div>
+</div>
+<div class="bc"><div class="pl glass" style="padding: 0 14px; gap: 10px"><span style="color: #CDBFD6">Tue 20 Oct</span><span style="font-weight: 600; font-size: 14px">06:47</span></div></div>
+<div class="br">
+  <div class="pl lit" style="padding: 0 12px 0 9px; gap: 10px">
+    <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; padding: 3px 7px; border-radius: 8px; background: rgba(255,255,255,.1)">DE</div>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M2 8.82a15 15 0 0 1 20 0"></path><path d="M5 12.86a10 10 0 0 1 14 0"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path></svg>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 7 10 10-5 5V2l5 5L7 17"></path></svg>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+    <div style="display: flex; align-items: center; gap: 5px"><svg class="bi" style="width: 20px" viewBox="0 0 28 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3"></rect><path d="M25 10v4"></path><rect x="5" y="9" width="11" height="6" rx="1" fill="currentColor" stroke="none"></rect></svg><span style="font-size: 12px">78%</span></div>
+  </div>
+  <div class="pl glass" style="width: 38px; justify-content: center"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
+</div>
+<div style="position: absolute; inset: 56px 0 0 0; background: rgba(10,5,14,.22)"></div>
+
+<!-- Main Control Center panel -->
+<div class="panel" style="left: 1178px; top: 58px; width: 410px">
+  <div style="display: flex; align-items: center; gap: 10px; padding: 2px 4px 12px">
+    <svg class="ic" style="width: 22px" viewBox="0 0 28 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3"></rect><path d="M25 10v4"></path><rect x="5" y="9" width="11" height="6" rx="1" fill="currentColor" stroke="none"></rect></svg>
+    <div style="flex: 1"><div style="font-size: 14px; font-weight: 600">78 %</div><div style="font-size: 11.5px; color: #B9AEC2">about 3 h 40 min left</div></div>
+    <div style="display: flex; gap: 6px">
+      <div style="width: 34px; height: 34px; border-radius: 17px; background: rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"></path></svg></div>
+      <div style="width: 34px; height: 34px; border-radius: 17px; background: rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 2v10"></path><path d="M18.4 6.6a9 9 0 1 1-12.77.04"></path></svg></div>
+    </div>
+  </div>
+
+  <div style="display: flex; gap: 8px">
+    <div class="wide on" style="box-shadow: 0 0 0 3px rgba(230,182,255,.35)">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M2 8.82a15 15 0 0 1 20 0"></path><path d="M5 12.86a10 10 0 0 1 14 0"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path></svg>
+      <div style="flex: 1; min-width: 0"><div style="font-size: 13px; font-weight: 600">Wi-Fi</div><div style="font-size: 11.5px">eduroam</div></div>
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+      <span class="num">1</span>
+    </div>
+    <div class="wide on">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 7 10 10-5 5V2l5 5L7 17"></path></svg>
+      <div style="flex: 1; min-width: 0"><div style="font-size: 13px; font-weight: 600">Bluetooth</div><div style="font-size: 11.5px">Headphones · 80 %</div></div>
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+      <span class="num">2</span>
+    </div>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 8px">
+    <div class="sm off"><span class="num">3</span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>Night light</div>
+    <div class="sm off"><span class="num">4</span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.73 21a2 2 0 0 1-3.46 0"></path><path d="M18.63 13A17.89 17.89 0 0 1 18 8"></path><path d="M6.26 6.26A5.86 5.86 0 0 0 6 8c0 7-3 9-3 9h14"></path><path d="M18 8a6 6 0 0 0-9.33-5"></path><path d="m1 1 22 22"></path></svg>Do not disturb</div>
+    <div class="sm off"><span class="num">5</span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="4"></rect><path d="M6 12h4M8 10v4M15 11h.01M18 13h.01"></path></svg>Game mode</div>
+    <div class="sm off"><span class="num">6</span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 8h1a4 4 0 1 1 0 8h-1"></path><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"></path><path d="M6 2v2M10 2v2M14 2v2"></path></svg>Keep awake</div>
+    <div class="sm on"><span class="num">7</span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"></rect><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"></path></svg>Microphone</div>
+    <div class="sm off"><span class="num">8</span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"></path></svg>Airplane</div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px">
+    <div class="sl">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+      <div class="track"><div style="width: 64%; height: 6px; border-radius: 3px; background: #E6B6FF"></div></div>
+      <span style="font-size: 11.5px; color: #CDBFD6">Headphones</span>
+    </div>
+    <div class="sl">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+      <div class="track"><div style="width: 40%; height: 6px; border-radius: 3px; background: #FFB59C"></div></div>
+      <span class="mono" style="font-size: 11.5px; color: #CDBFD6">40</span>
+    </div>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 12px; margin-top: 10px; padding: 10px; border-radius: 18px; background: rgba(255,255,255,.07)">
+    <div style="width: 48px; height: 48px; border-radius: 12px; background: #5E3876; display: flex; align-items: center; justify-content: center"><svg class="ic" style="width: 22px; height: 22px; color: #F6D9FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg></div>
+    <div style="flex: 1; min-width: 0">
+      <div style="font-size: 13px; font-weight: 600">Late Night Coding</div>
+      <div style="font-size: 11.5px; color: #B9AEC2">Spotify · playlist</div>
+      <div style="height: 4px; border-radius: 2px; background: rgba(255,255,255,.14); margin-top: 7px"><div style="width: 35%; height: 4px; border-radius: 2px; background: #EEE6F2"></div></div>
+    </div>
+    <div style="display: flex; gap: 2px; align-items: center">
+      <svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 20 9 12l10-8v16zM5 19V5h2v14H5z"></path></svg>
+      <div style="width: 34px; height: 34px; border-radius: 17px; background: #EEE6F2; color: #1d1424; display: flex; align-items: center; justify-content: center"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"></path></svg></div>
+      <svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m5 4 10 8-10 8V4zM17 5h2v14h-2V5z"></path></svg>
+    </div>
+  </div>
+
+  <div class="sec">Power profile <span class="kbd" style="margin-left: 6px; text-transform: none">P</span></div>
+  <div style="display: flex; padding: 3px; border-radius: 14px; background: rgba(255,255,255,.07); font-size: 12.5px">
+    <div style="flex: 1; text-align: center; padding: 7px 0; border-radius: 11px; color: #CDBFD6">Saver</div>
+    <div style="flex: 1; text-align: center; padding: 7px 0; border-radius: 11px; background: rgba(255,255,255,.16); font-weight: 600; box-shadow: inset 0 1px 0 rgba(255,255,255,.2)">Balanced</div>
+    <div style="flex: 1; text-align: center; padding: 7px 0; border-radius: 11px; color: #CDBFD6">Performance</div>
+  </div>
+
+  <div class="sec">Background apps</div>
+  <div style="display: flex; align-items: center; gap: 8px; padding: 0 2px">
+    <div style="width: 34px; height: 34px; border-radius: 10px; background: #262b45; display: flex; align-items: center; justify-content: center"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#B9C6FF" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"></path></svg></div>
+    <div style="width: 34px; height: 34px; border-radius: 10px; background: #2e2a1c; display: flex; align-items: center; justify-content: center"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#FFD59C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="4"></rect><path d="M6 12h4M8 10v4M15 11h.01M18 13h.01"></path></svg></div>
+    <div style="width: 34px; height: 34px; border-radius: 10px; background: #1f3328; display: flex; align-items: center; justify-content: center"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#B8E3C4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M3 21v-5h5"></path></svg></div>
+    <span style="font-size: 12px; color: #B9AEC2; margin-left: 4px">Discord, Steam, Syncthing · Enter opens menu</span>
+  </div>
+  <div class="hint"><span class="kbd">1–8</span><span>toggle</span><span class="kbd" style="margin-left: 4px">Tab</span><span>next row</span><span class="kbd" style="margin-left: 4px">← →</span><span>slider</span><span class="kbd" style="margin-left: 4px">Esc</span></div>
+</div>
+
+<!-- Wi-Fi & Bluetooth detail page -->
+<div style="position: absolute; left: 770px; top: 76px; font-size: 12.5px; color: #F4EEF7; display: flex; align-items: center; gap: 6px; font-weight: 600">Shared page: › on Wi-Fi or on Bluetooth (tile body toggles)</div>
+<div class="panel" style="left: 770px; top: 104px; width: 390px">
+  <div style="display: flex; align-items: center; gap: 10px; padding: 2px 4px 8px">
+    <div style="width: 30px; height: 30px; border-radius: 15px; background: rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></div>
+    <div style="flex: 1; font-size: 15px; font-weight: 600">Wi-Fi &amp; Bluetooth</div>
+    <div style="width: 40px; height: 24px; border-radius: 12px; background: #E6B6FF; position: relative"><div style="position: absolute; right: 3px; top: 3px; width: 18px; height: 18px; border-radius: 9px; background: #3a1a4d"></div></div>
+  </div>
+  <div class="sec">Networks</div>
+  <div class="net" style="background: rgba(230,182,255,.16); box-shadow: inset 0 0 0 1px rgba(230,182,255,.35)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M2 8.82a15 15 0 0 1 20 0"></path><path d="M5 12.86a10 10 0 0 1 14 0"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path></svg><span style="flex: 1">eduroam</span><span style="font-size: 11.5px; color: #E6B6FF">Connected</span></div>
+  <div class="net"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M5 12.86a10 10 0 0 1 14 0"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path></svg><span style="flex: 1">Home-5G</span><svg class="ic" style="width: 13px; color: #B9AEC2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+  <div class="net"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path></svg><span style="flex: 1">Library-Guest</span></div>
+  <div class="net"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M5 12.86a10 10 0 0 1 14 0"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path></svg><span style="flex: 1">iPhone hotspot</span><svg class="ic" style="width: 13px; color: #B9AEC2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+  <div class="sec" style="display: flex; align-items: center"><span style="flex: 1">Bluetooth</span><span class="kbd" style="text-transform: none">S scan</span></div>
+  <div class="net"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg><span style="flex: 1">Headphones</span><span style="font-size: 11.5px; color: #E6B6FF">Connected · 80 %</span></div>
+  <div class="net"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"></path></svg><span style="flex: 1">RK68 keyboard</span><span style="font-size: 11.5px; color: #B9AEC2">Paired</span></div>
+  <div class="net"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="7"></rect><path d="M12 6v4"></path></svg><span style="flex: 1">Mouse</span><span style="font-size: 11.5px; color: #B9AEC2">Paired</span></div>
+  <div class="hint"><span class="kbd">J K</span><span>move</span><span class="kbd" style="margin-left: 4px">Enter</span><span>connect</span><span class="kbd" style="margin-left: 4px">F</span><span>forget</span><span class="kbd" style="margin-left: 4px">Esc</span><span>back</span></div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"showKeys":{"editor":"boolean","default":false},"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const on = s.keys !== undefined ? s.keys : !!this.props.showKeys;
+    return { keysCls: on ? 'keys' : 'nokeys', toggle: () => this.setState({ keys: !on }) };
+  }
+}
+</script>
+</body>
+</html>

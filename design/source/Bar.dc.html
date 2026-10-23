@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pill states and OSDs</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.bl{position:absolute;left:12px;display:flex;gap:8px}
+.bc{position:absolute;left:0;right:0;display:flex;justify-content:center;pointer-events:none}
+.br{position:absolute;right:12px;display:flex;gap:8px}
+.pl{position:relative;height:38px;border-radius:19px;box-sizing:border-box;display:flex;align-items:center;font-size:13px;flex:none}
+.bi{width:15px;height:15px;flex:none}
+.ws{display:flex;align-items:center;gap:5px}
+.wa{width:18px;height:8px;border-radius:4px;background:#E6B6FF}
+.wo{width:8px;height:8px;border-radius:4px;background:rgba(238,230,242,.62)}
+.we{width:8px;height:8px;border-radius:4px;box-sizing:border-box;border:1.5px solid rgba(238,230,242,.32)}
+.wu{width:8px;height:8px;border-radius:4px;background:#FFB59C;box-shadow:0 0 0 3px rgba(255,181,156,.25)}
+.ttl{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+.vsep{width:1px;height:16px;background:rgba(255,255,255,.16)}
+.glass{background:rgba(22,14,30,.44);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.20),inset 0 -1px 0 rgba(255,255,255,.04),0 10px 34px rgba(0,0,0,.38)}
+.kbd,.kc{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:#E4DAEA}
+.nokeys .kbd,.nokeys .hint,.nokeys .num,.nokeys .key{display:none !important}
+.lbl{position:absolute;left:24px;font-size:12.5px;color:#CDBFD6}
+.lbl b{font-weight:600;color:#F4EEF7;font-size:13.5px;margin-right:6px}
+.de{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;padding:3px 7px;border-radius:8px;background:rgba(255,255,255,.08);color:#D9CEE0}
+.osd{width:290px;height:46px;border-radius:23px;box-sizing:border-box;padding:0 16px;display:flex;align-items:center;gap:12px}
+.track{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.14)}
+.lg{display:flex;align-items:center;gap:10px;font-size:12.5px;color:#D9CEE0}
+.lg > span:first-child{width:26px;display:flex;justify-content:center}
+</style>
+</helmet>
+<div class="{{keysCls}}" onClick="{{toggle}}" style="position: relative; width: 1600px; height: 900px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #EEE6F2; background: #140b1a">
+<img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+<div style="position: absolute; inset: 0; background: rgba(12,6,16,.36)"></div>
+
+<!-- 1 default -->
+<div class="lbl" style="top: 22px"><b>Default</b>workspaces + focused window · media · clock · status · notifications. Every pill hugs its content.</div>
+<div class="bl" style="top: 46px">
+  <div class="pl glass" style="padding: 0 14px 0 13px; gap: 12px">
+    <div class="ws"><div class="wa"></div><div class="wo"></div><div class="wo"></div><div class="we"></div><div class="we"></div></div>
+    <div class="vsep"></div>
+    <div style="display: flex; align-items: center; gap: 7px"><svg class="bi" style="width: 14px; height: 14px; color: #E6B6FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6M12 19h8"></path></svg><span class="ttl">Bar.qml — nvim</span></div>
+  </div>
+  <div class="pl glass" style="padding: 0 13px 0 6px; gap: 8px; font-size: 12.5px">
+    <div style="width: 26px; height: 26px; border-radius: 13px; background: #5E3876; display: flex; align-items: center; justify-content: center; gap: 2px"><div style="width: 2.5px; height: 7px; border-radius: 1px; background: #F6D9FF"></div><div style="width: 2.5px; height: 11px; border-radius: 1px; background: #F6D9FF"></div><div style="width: 2.5px; height: 5px; border-radius: 1px; background: #F6D9FF"></div></div>
+    <span class="ttl" style="max-width: 110px">Late Night Coding</span>
+  </div>
+</div>
+<div class="bc" style="top: 46px"><div class="pl glass" style="padding: 0 14px; gap: 10px"><span style="color: #CDBFD6">Tue 20 Oct</span><span style="font-weight: 600; font-size: 14px">06:47</span></div></div>
+<div class="br" style="top: 46px">
+  <div class="pl glass" style="padding: 0 12px 0 9px; gap: 10px">
+    <div class="de">DE</div>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M2 8.82a15 15 0 0 1 20 0"></path><path d="M5 12.86a10 10 0 0 1 14 0"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path></svg>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 7 10 10-5 5V2l5 5L7 17"></path></svg>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+    <div style="display: flex; align-items: center; gap: 5px"><svg class="bi" style="width: 20px" viewBox="0 0 28 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3"></rect><path d="M25 10v4"></path><rect x="5" y="9" width="11" height="6" rx="1" fill="currentColor" stroke="none"></rect></svg><span style="font-size: 12px">78%</span></div>
+  </div>
+  <div class="pl glass" style="width: 38px; justify-content: center"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><div style="position: absolute; top: 8px; right: 9px; width: 7px; height: 7px; border-radius: 4px; background: #FFB59C"></div></div>
+</div>
+
+<!-- 2 empty workspace, nothing playing -->
+<div class="lbl" style="top: 112px"><b>Empty workspace, nothing playing</b>the window title collapses and the media pill disappears, so the left side shrinks to just the dots.</div>
+<div class="bl" style="top: 136px">
+  <div class="pl glass" style="padding: 0 15px">
+    <div class="ws"><div class="wo"></div><div class="wo"></div><div class="wo"></div><div class="wa"></div><div class="we"></div></div>
+  </div>
+</div>
+<div class="bc" style="top: 136px"><div class="pl glass" style="padding: 0 14px; gap: 10px"><span style="color: #CDBFD6">Tue 20 Oct</span><span style="font-weight: 600; font-size: 14px">06:47</span></div></div>
+<div class="br" style="top: 136px">
+  <div class="pl glass" style="padding: 0 12px 0 9px; gap: 10px">
+    <div class="de">DE</div>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M2 8.82a15 15 0 0 1 20 0"></path><path d="M5 12.86a10 10 0 0 1 14 0"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path></svg>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 7 10 10-5 5V2l5 5L7 17"></path></svg>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+    <div style="display: flex; align-items: center; gap: 5px"><svg class="bi" style="width: 20px" viewBox="0 0 28 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3"></rect><path d="M25 10v4"></path><rect x="5" y="9" width="11" height="6" rx="1" fill="currentColor" stroke="none"></rect></svg><span style="font-size: 12px">78%</span></div>
+  </div>
+  <div class="pl glass" style="width: 38px; justify-content: center"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
+</div>
+
+<!-- 3 recording -->
+<div class="lbl" style="top: 202px"><b>Recording</b>a red pill splits off the clock and shows the timer. Click it, or press the same bind, to stop.</div>
+<div class="bl" style="top: 226px">
+  <div class="pl glass" style="padding: 0 14px 0 13px; gap: 12px">
+    <div class="ws"><div class="wo"></div><div class="wo"></div><div class="wa"></div><div class="we"></div><div class="we"></div></div>
+    <div class="vsep"></div>
+    <div style="display: flex; align-items: center; gap: 7px"><svg class="bi" style="width: 14px; height: 14px; color: #E6B6FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"></path></svg><span class="ttl">#quickshell · dotfiles club</span></div>
+  </div>
+</div>
+<div class="bc" style="top: 226px">
+  <div style="position: relative; pointer-events: auto">
+    <div class="pl glass" style="padding: 0 14px; gap: 10px"><span style="color: #CDBFD6">Tue 20 Oct</span><span style="font-weight: 600; font-size: 14px">06:47</span></div>
+    <div class="pl" style="position: absolute; top: 0; left: calc(100% + 8px); padding: 0 14px 0 13px; gap: 10px; background: rgba(120,20,24,.42); backdrop-filter: blur(26px) saturate(170%); -webkit-backdrop-filter: blur(26px) saturate(170%); border: 1px solid rgba(255,138,128,.45); box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 10px 34px rgba(0,0,0,.38)">
+      <div style="width: 10px; height: 10px; border-radius: 5px; background: #FF6B6B; box-shadow: 0 0 0 4px rgba(255,107,107,.25)"></div>
+      <span style="font-family: 'Geist Mono', ui-monospace, monospace; font-weight: 500; color: #FFE1DE">01:24</span><span class="kbd">Super Shift R</span>
+    </div>
+  </div>
+</div>
+<div class="br" style="top: 226px">
+  <div class="pl glass" style="padding: 0 12px 0 9px; gap: 10px">
+    <div class="de">DE</div>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M2 8.82a15 15 0 0 1 20 0"></path><path d="M5 12.86a10 10 0 0 1 14 0"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path></svg>
+    <svg class="bi" style="color: #FF8A80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"></rect><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"></path></svg>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+    <div style="display: flex; align-items: center; gap: 5px"><svg class="bi" style="width: 20px" viewBox="0 0 28 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3"></rect><path d="M25 10v4"></path><rect x="5" y="9" width="11" height="6" rx="1" fill="currentColor" stroke="none"></rect></svg><span style="font-size: 12px">77%</span></div>
+  </div>
+  <div class="pl glass" style="width: 38px; justify-content: center"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
+</div>
+
+<!-- 4 key mode -->
+<div class="lbl" style="top: 292px"><b>Key mode (Hyprland submap)</b>Super+R = resize mode: H J K L resize the focused window until Esc. The pill tells you why keys don't type.</div>
+<div class="bl" style="top: 316px">
+  <div class="pl glass" style="padding: 0 14px 0 13px; gap: 12px">
+    <div class="ws"><div class="wa"></div><div class="wo"></div><div class="wo"></div><div class="we"></div><div class="we"></div></div>
+    <div class="vsep"></div>
+    <div style="display: flex; align-items: center; gap: 7px"><svg class="bi" style="width: 14px; height: 14px; color: #E6B6FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6M12 19h8"></path></svg><span class="ttl">Bar.qml — nvim</span></div>
+  </div>
+</div>
+<div class="bc" style="top: 316px">
+  <div style="position: relative; pointer-events: auto">
+    <div class="pl" style="position: absolute; top: 0; right: calc(100% + 8px); padding: 0 10px 0 14px; gap: 8px; background: rgba(94,56,118,.62); backdrop-filter: blur(26px) saturate(170%); -webkit-backdrop-filter: blur(26px) saturate(170%); border: 1px solid rgba(230,182,255,.4); box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 10px 34px rgba(0,0,0,.38); color: #F6D9FF">
+      <span style="font-weight: 600; font-size: 12px; letter-spacing: .8px">RESIZE</span>
+      <span class="kc">H</span><span class="kc">J</span><span class="kc">K</span><span class="kc">L</span><span class="kc">Esc</span>
+    </div>
+    <div class="pl glass" style="padding: 0 14px; gap: 10px"><span style="color: #CDBFD6">Tue 20 Oct</span><span style="font-weight: 600; font-size: 14px">06:47</span></div>
+  </div>
+</div>
+<div class="br" style="top: 316px">
+  <div class="pl glass" style="padding: 0 12px 0 9px; gap: 10px">
+    <div class="de">DE</div>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M2 8.82a15 15 0 0 1 20 0"></path><path d="M5 12.86a10 10 0 0 1 14 0"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path></svg>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 7 10 10-5 5V2l5 5L7 17"></path></svg>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+    <div style="display: flex; align-items: center; gap: 5px"><svg class="bi" style="width: 20px" viewBox="0 0 28 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3"></rect><path d="M25 10v4"></path><rect x="5" y="9" width="11" height="6" rx="1" fill="currentColor" stroke="none"></rect></svg><span style="font-size: 12px">78%</span></div>
+  </div>
+  <div class="pl glass" style="width: 38px; justify-content: center"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
+</div>
+
+<!-- 5 low battery -->
+<div class="lbl" style="top: 382px"><b>Low battery</b>the status pill stretches leftwards and turns amber at 15 %, then shrinks back after 5 s.</div>
+<div class="bl" style="top: 406px">
+  <div class="pl glass" style="padding: 0 14px 0 13px; gap: 12px">
+    <div class="ws"><div class="wo"></div><div class="wa"></div><div class="wo"></div><div class="we"></div><div class="we"></div></div>
+    <div class="vsep"></div>
+    <div style="display: flex; align-items: center; gap: 7px"><svg class="bi" style="width: 14px; height: 14px; color: #E6B6FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg><span class="ttl">Hyprland · ArchWiki — Mozilla Firefox</span></div>
+  </div>
+</div>
+<div class="bc" style="top: 406px"><div class="pl glass" style="padding: 0 14px; gap: 10px"><span style="color: #CDBFD6">Tue 20 Oct</span><span style="font-weight: 600; font-size: 14px">18:02</span></div></div>
+<div class="br" style="top: 406px">
+  <div class="pl" style="padding: 0 13px; gap: 10px; background: rgba(110,60,16,.45); backdrop-filter: blur(26px) saturate(170%); -webkit-backdrop-filter: blur(26px) saturate(170%); border: 1px solid rgba(255,190,120,.45); box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 10px 34px rgba(0,0,0,.38); color: #FFE2C7">
+    <svg class="bi" style="width: 20px" viewBox="0 0 28 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3"></rect><path d="M25 10v4"></path><rect x="5" y="9" width="3" height="6" rx="1" fill="#FFB36B" stroke="none"></rect></svg>
+    <span style="font-weight: 600">12 %</span><span style="font-size: 12.5px">about 25 min left · plug in</span>
+    <div style="width: 1px; height: 16px; background: rgba(255,226,199,.3)"></div>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M2 8.82a15 15 0 0 1 20 0"></path><path d="M5 12.86a10 10 0 0 1 14 0"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path></svg>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+  </div>
+  <div class="pl glass" style="width: 38px; justify-content: center"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
+</div>
+
+<!-- 6 dnd + game -->
+<div class="lbl" style="top: 472px"><b>Do not disturb · Game mode · Keep awake</b>active modes become accent icons in the status pill; the bell pill shows the crossed-out bell.</div>
+<div class="bl" style="top: 496px">
+  <div class="pl glass" style="padding: 0 14px 0 13px; gap: 12px">
+    <div class="ws"><div class="wo"></div><div class="wo"></div><div class="wo"></div><div class="wa"></div><div class="we"></div></div>
+    <div class="vsep"></div>
+    <div style="display: flex; align-items: center; gap: 7px"><svg class="bi" style="width: 14px; height: 14px; color: #E6B6FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="4"></rect><path d="M6 12h4M8 10v4M15 11h.01M18 13h.01"></path></svg><span class="ttl">Hollow Knight</span></div>
+  </div>
+</div>
+<div class="bc" style="top: 496px"><div class="pl glass" style="padding: 0 14px; gap: 10px"><span style="color: #CDBFD6">Tue 20 Oct</span><span style="font-weight: 600; font-size: 14px">21:12</span></div></div>
+<div class="br" style="top: 496px">
+  <div class="pl glass" style="padding: 0 12px 0 6px; gap: 10px">
+    <div style="display: flex; gap: 4px">
+      <div style="width: 26px; height: 26px; border-radius: 13px; background: rgba(230,182,255,.22); color: #E6B6FF; display: flex; align-items: center; justify-content: center"><svg class="bi" style="width: 14px; height: 14px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="4"></rect><path d="M6 12h4M8 10v4M15 11h.01M18 13h.01"></path></svg></div>
+      <div style="width: 26px; height: 26px; border-radius: 13px; background: rgba(230,182,255,.22); color: #E6B6FF; display: flex; align-items: center; justify-content: center"><svg class="bi" style="width: 14px; height: 14px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 8h1a4 4 0 1 1 0 8h-1"></path><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"></path><path d="M6 2v2M10 2v2M14 2v2"></path></svg></div>
+    </div>
+    <div class="de">DE</div>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h.01"></path><path d="M2 8.82a15 15 0 0 1 20 0"></path><path d="M5 12.86a10 10 0 0 1 14 0"></path><path d="M8.5 16.43a5 5 0 0 1 7 0"></path></svg>
+    <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+    <span style="font-size: 12px">64%</span>
+  </div>
+  <div class="pl" style="width: 38px; justify-content: center; background: rgba(94,56,118,.62); backdrop-filter: blur(26px); -webkit-backdrop-filter: blur(26px); border: 1px solid rgba(230,182,255,.4); box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 10px 34px rgba(0,0,0,.38); color: #E6B6FF"><svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.73 21a2 2 0 0 1-3.46 0"></path><path d="M18.63 13A17.89 17.89 0 0 1 18 8"></path><path d="M6.26 6.26A5.86 5.86 0 0 0 6 8c0 7-3 9-3 9h14"></path><path d="M18 8a6 6 0 0 0-9.33-5"></path><path d="m1 1 22 22"></path></svg></div>
+</div>
+
+<div style="position: absolute; left: 24px; right: 24px; top: 566px; height: 1px; background: rgba(255,255,255,.14)"></div>
+
+<!-- Workspace pill up close -->
+<div class="lbl" style="top: 584px"><b>Workspace pill up close</b></div>
+<div style="position: absolute; left: 24px; top: 618px; transform: scale(1.6); transform-origin: left top">
+  <div class="pl glass" style="padding: 0 14px 0 13px; gap: 12px">
+    <div class="ws"><div class="wa"></div><div class="wo"></div><div class="wu"></div><div class="we"></div><div class="we"></div></div>
+    <div class="vsep"></div>
+    <div style="display: flex; align-items: center; gap: 7px"><svg class="bi" style="width: 14px; height: 14px; color: #E6B6FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 17 6-6-6-6M12 19h8"></path></svg><span class="ttl">Bar.qml — nvim</span></div>
+  </div>
+</div>
+<div style="position: absolute; left: 24px; top: 696px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 24px; width: 560px">
+  <div class="lg"><span><span class="wa" style="display: block"></span></span>Active: where you are</div>
+  <div class="lg"><span><span class="wo" style="display: block"></span></span>Has windows</div>
+  <div class="lg"><span><span class="we" style="display: block"></span></span>Empty</div>
+  <div class="lg"><span><span class="wu" style="display: block"></span></span>Urgent, e.g. a Discord mention</div>
+</div>
+<div style="position: absolute; left: 24px; top: 766px; width: 600px; font-size: 12.5px; line-height: 19px; color: #CDBFD6">Next to the dots: the focused app's icon in the accent colour plus its window title. It's cut at 220 px with …, crossfades when focus changes and collapses on empty workspaces. The active capsule slides between dots when you switch. Click a dot to jump; scroll over the pill to cycle.</div>
+
+<!-- OSDs -->
+<div class="lbl" style="top: 584px; left: 760px"><b>On-screen displays</b>drop out of the clock pill, fade after 1.2 s</div>
+<div style="position: absolute; left: 760px; top: 618px; display: flex; flex-direction: column; gap: 12px">
+  <div style="display: flex; align-items: center; gap: 18px">
+    <div class="osd glass">
+      <svg class="bi" style="width: 17px; height: 17px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+      <div class="track"><div style="width: 64%; height: 6px; border-radius: 3px; background: #E6B6FF"></div></div>
+      <span style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; width: 22px; text-align: right">64</span>
+    </div>
+    <span style="font-size: 12.5px; color: #CDBFD6">Volume · muted turns the fill grey</span>
+  </div>
+  <div style="display: flex; align-items: center; gap: 18px">
+    <div class="osd glass">
+      <svg class="bi" style="width: 17px; height: 17px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+      <div class="track"><div style="width: 40%; height: 6px; border-radius: 3px; background: #FFB59C"></div></div>
+      <span style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; width: 22px; text-align: right">40</span>
+    </div>
+    <span style="font-size: 12.5px; color: #CDBFD6">Brightness · night light tints it amber</span>
+  </div>
+  <div style="display: flex; align-items: center; gap: 18px">
+    <div class="osd glass">
+      <svg class="bi" style="width: 17px; height: 17px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"></path></svg>
+      <span style="font-size: 13px; font-weight: 500; flex: 1">NeoQwertz</span>
+      <span class="kbd">Super Ctrl Space</span>
+    </div>
+    <span style="font-size: 12.5px; color: #CDBFD6">Keyboard layout switch</span>
+  </div>
+</div>
+
+<div style="position: absolute; left: 24px; right: 24px; top: 852px; display: flex; gap: 14px; align-items: center; font-size: 12.5px; color: #CDBFD6; flex-wrap: wrap">
+  <span style="font-weight: 600; color: #F4EEF7">Click targets</span>
+  <span>dot → workspace</span><span>·</span>
+  <span>media → media popover, scroll skips track</span><span>·</span>
+  <span>clock → notifications &amp; calendar</span><span>·</span>
+  <span>status → Control Center</span><span>·</span>
+  <span>bell → notifications</span><span>·</span>
+  <span>red pill → stop recording</span>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"showKeys":{"editor":"boolean","default":false},"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const on = s.keys !== undefined ? s.keys : !!this.props.showKeys;
+    return { keysCls: on ? 'keys' : 'nokeys', toggle: () => this.setState({ keys: !on }) };
+  }
+}
+</script>
+</body>
+</html>

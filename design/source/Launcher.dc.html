@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>App launcher</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.nokeys .kbd,.nokeys .hint,.nokeys .num,.nokeys .key{display:none !important}
+.glass{background:rgba(22,14,30,.44);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.20),inset 0 -1px 0 rgba(255,255,255,.04),0 10px 34px rgba(0,0,0,.38)}
+.sheet{background:rgba(24,15,32,.52);backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(255,255,255,.05),0 30px 80px rgba(0,0,0,.55)}
+.ic{width:15px;height:15px;flex:none}
+.kbd{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:#E4DAEA}
+.win{position:absolute;border-radius:14px;background:rgba(27,20,33,.92);border:1px solid rgba(255,255,255,.08)}
+.bar{height:8px;border-radius:4px;background:rgba(255,255,255,.08);margin-bottom:11px}
+.row{display:flex;align-items:center;gap:14px;height:58px;padding:0 14px;border-radius:14px}
+.tile{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex:none}
+.t{font-size:14.5px;font-weight:500}
+.s{font-size:12px;color:#B9AEC2;margin-top:2px}
+.hl{color:#E6B6FF;font-weight:700}
+.chip{display:flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:14px;font-size:12px;color:#D9CEE0;background:rgba(255,255,255,.06)}
+.chip code{font-family:'Geist Mono',ui-monospace,monospace;color:#FFB59C;font-size:12px}
+</style>
+</helmet>
+<div class="{{keysCls}}" onClick="{{toggle}}" style="position: relative; width: 1600px; height: 900px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #EEE6F2; background: #140b1a">
+<img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+<div class="win" style="left: 12px; top: 60px; width: 860px; height: 828px; padding: 40px 30px; box-sizing: border-box">
+  <div class="bar" style="width: 30%"></div><div class="bar" style="width: 52%"></div><div class="bar" style="width: 44%"></div><div class="bar" style="width: 61%"></div><div class="bar" style="width: 25%"></div><div class="bar" style="width: 70%"></div><div class="bar" style="width: 48%"></div><div class="bar" style="width: 36%"></div><div class="bar" style="width: 58%"></div><div class="bar" style="width: 41%"></div>
+</div>
+<div class="win" style="left: 882px; top: 60px; width: 706px; height: 466px; background: #f0ebf3"></div>
+<div class="win" style="left: 882px; top: 536px; width: 706px; height: 352px"></div>
+<div class="glass" style="position: absolute; top: 10px; left: 12px; width: 238px; height: 38px; border-radius: 19px"></div>
+<div class="glass" style="position: absolute; top: 10px; left: 258px; width: 162px; height: 38px; border-radius: 19px"></div>
+<div class="glass" style="position: absolute; top: 10px; left: 728px; width: 144px; height: 38px; border-radius: 19px; background: rgba(230,182,255,.3)"></div>
+<div class="glass" style="position: absolute; top: 10px; left: 1360px; width: 182px; height: 38px; border-radius: 19px"></div>
+<div class="glass" style="position: absolute; top: 10px; left: 1550px; width: 38px; height: 38px; border-radius: 19px"></div>
+<div style="position: absolute; inset: 0; background: rgba(10,5,14,.34)"></div>
+
+<!-- Launcher sheet -->
+<div class="sheet" style="position: absolute; left: 470px; top: 150px; width: 660px; border-radius: 28px; padding: 14px; box-sizing: border-box">
+  <div style="display: flex; align-items: center; gap: 14px; height: 56px; padding: 0 12px 0 16px; border-radius: 18px; background: rgba(255,255,255,.07); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08)">
+    <svg class="ic" style="width: 20px; height: 20px; color: #E6B6FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+    <div style="flex: 1; font-size: 19px; display: flex; align-items: center">fir<span style="width: 2px; height: 22px; background: #E6B6FF; margin-left: 2px; border-radius: 1px"></span></div>
+    <div class="chip" style="background: #E6B6FF; color: #3a1a4d; font-weight: 600">Apps</div>
+  </div>
+
+  <div style="padding: 12px 2px 4px; font-size: 11.5px; letter-spacing: .6px; color: #B9AEC2; text-transform: uppercase">Best match</div>
+  <div class="row" style="background: rgba(230,182,255,.16); box-shadow: inset 0 0 0 1px rgba(230,182,255,.35)">
+    <div class="tile" style="background: #3a2a1f"><svg style="width: 22px; height: 22px" viewBox="0 0 24 24" fill="none" stroke="#FFB59C" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div>
+    <div style="flex: 1"><div class="t"><span class="hl">Fir</span>efox</div><div class="s">Web browser · opened 12 times this week</div></div>
+    <span class="kbd">Enter</span>
+  </div>
+  <div class="row">
+    <div class="tile" style="background: rgba(255,255,255,.06)"><svg style="width: 20px; height: 20px" viewBox="0 0 24 24" fill="none" stroke="#D9CEE0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><path d="m3 3 18 18"></path></svg></div>
+    <div style="flex: 1"><div class="t"><span class="hl">Fir</span>efox · New private window</div><div class="s">App action</div></div>
+    <span class="kbd">Shift Enter</span>
+  </div>
+
+  <div style="padding: 10px 2px 4px; font-size: 11.5px; letter-spacing: .6px; color: #B9AEC2; text-transform: uppercase">Apps</div>
+  <div class="row">
+    <div class="tile" style="background: #1f3328"><svg style="width: 20px; height: 20px" viewBox="0 0 24 24" fill="none" stroke="#B8E3C4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+    <div style="flex: 1"><div class="t"><span class="hl">Fir</span>ewall</div><div class="s">firewalld settings · asks for your password</div></div>
+    <span class="kbd">Alt 3</span>
+  </div>
+  <div class="row">
+    <div class="tile" style="background: #262b45"><svg style="width: 20px; height: 20px" viewBox="0 0 24 24" fill="none" stroke="#B9C6FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"></path></svg></div>
+    <div style="flex: 1"><div class="t"><span class="hl">Fir</span>mware updates</div><div class="s">fwupd · 1 update available</div></div>
+    <span class="kbd">Alt 4</span>
+  </div>
+  <div class="row">
+    <div class="tile" style="background: rgba(255,255,255,.06)"><svg style="width: 20px; height: 20px" viewBox="0 0 24 24" fill="none" stroke="#D9CEE0" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg></div>
+    <div style="flex: 1"><div class="t">Search the web for “fir”</div><div class="s">Opens in Firefox</div></div>
+    <span class="kbd">Alt 5</span>
+  </div>
+
+  <div style="height: 1px; background: rgba(255,255,255,.10); margin: 12px 4px"></div>
+  <div style="display: flex; flex-wrap: wrap; gap: 6px; padding: 0 2px">
+    <div class="chip" style="background: rgba(230,182,255,.22); color: #F6D9FF">Apps</div>
+    <div class="chip"><code>=</code>Calculator</div>
+    <div class="chip"><code>;</code>Clipboard</div>
+    <div class="chip"><code>:</code>Emoji</div>
+    <div class="chip"><code>&gt;</code>Command</div>
+    <div class="chip"><code>/</code>Files</div>
+    <div class="chip"><code>?</code>Shortcuts</div>
+  </div>
+  <div class="hint" style="display: flex; align-items: center; gap: 8px; padding: 14px 4px 2px; font-size: 12px; color: #B9AEC2">
+    <span class="kbd">↑↓</span><span>select</span>
+    <span class="kbd" style="margin-left: 8px">Enter</span><span>open</span>
+    <span class="kbd" style="margin-left: 8px">Tab</span><span>next mode</span>
+    <span style="flex: 1"></span>
+    <span class="kbd">Esc</span><span>close</span>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"showKeys":{"editor":"boolean","default":false},"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const on = s.keys !== undefined ? s.keys : !!this.props.showKeys;
+    return { keysCls: on ? 'keys' : 'nokeys', toggle: () => this.setState({ keys: !on }) };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Polkit password prompt</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.nokeys .kbd,.nokeys .hint,.nokeys .num,.nokeys .key{display:none !important}
+.glass{background:rgba(22,14,30,.44);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.20),inset 0 -1px 0 rgba(255,255,255,.04),0 10px 34px rgba(0,0,0,.38)}
+.dlg{background:rgba(26,16,34,.58);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 40px 100px rgba(0,0,0,.6)}
+.ic{width:16px;height:16px;flex:none}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+.kbd{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:#E4DAEA}
+.win{position:absolute;border-radius:14px;background:rgba(27,20,33,.92);border:1px solid rgba(255,255,255,.08)}
+.kv{display:flex;gap:10px;font-size:12px;line-height:20px}
+.kv span:first-child{width:72px;color:#B9AEC2;flex:none}
+</style>
+</helmet>
+<div class="{{keysCls}}" onClick="{{toggle}}" style="position: relative; width: 1600px; height: 900px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #EEE6F2; background: #140b1a">
+<img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+<div class="win" style="left: 12px; top: 60px; width: 860px; height: 828px"></div>
+<div class="win" style="left: 882px; top: 60px; width: 706px; height: 466px; background: #262030"></div>
+<div class="win" style="left: 882px; top: 536px; width: 706px; height: 352px"></div>
+<div class="glass" style="position: absolute; top: 10px; left: 12px; width: 238px; height: 38px; border-radius: 19px"></div>
+<div class="glass" style="position: absolute; top: 10px; left: 258px; width: 162px; height: 38px; border-radius: 19px"></div>
+<div class="glass" style="position: absolute; top: 10px; left: 728px; width: 144px; height: 38px; border-radius: 19px"></div>
+<div class="glass" style="position: absolute; top: 10px; left: 1360px; width: 182px; height: 38px; border-radius: 19px"></div>
+<div class="glass" style="position: absolute; top: 10px; left: 1550px; width: 38px; height: 38px; border-radius: 19px"></div>
+<div style="position: absolute; inset: 0; background: rgba(8,4,12,.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px)"></div>
+
+<div class="dlg" style="position: absolute; left: 570px; top: 210px; width: 460px; border-radius: 30px; padding: 26px; box-sizing: border-box">
+  <div style="display: flex; align-items: center; gap: 16px">
+    <div style="position: relative; width: 58px; height: 58px; flex: none">
+      <div style="width: 58px; height: 58px; border-radius: 18px; background: #5E3876; display: flex; align-items: center; justify-content: center"><svg style="width: 28px; height: 28px; color: #F6D9FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg></div>
+      <div style="position: absolute; right: -6px; bottom: -6px; width: 26px; height: 26px; border-radius: 9px; background: #1f3328; border: 2px solid rgba(26,16,34,1); display: flex; align-items: center; justify-content: center"><svg style="width: 13px; height: 13px" viewBox="0 0 24 24" fill="none" stroke="#B8E3C4" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+    </div>
+    <div>
+      <div style="font-size: 18px; font-weight: 600">Authentication required</div>
+      <div style="font-size: 13px; color: #CDBFD6; margin-top: 3px">Firewall wants to change the firewall configuration.</div>
+    </div>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 10px; margin-top: 22px; font-size: 13px">
+    <div style="width: 28px; height: 28px; border-radius: 14px; background: rgba(230,182,255,.25); display: flex; align-items: center; justify-content: center"><svg class="ic" style="width: 15px; color: #F6D9FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
+    <span style="font-weight: 500">[username]</span><span style="color: #B9AEC2">· wheel</span>
+  </div>
+
+  <label style="display: block; margin-top: 12px">
+    <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Password</span>
+    <div style="height: 50px; border-radius: 16px; background: rgba(255,255,255,.08); box-shadow: inset 0 0 0 1.5px #E6B6FF, 0 0 0 4px rgba(230,182,255,.18); display: flex; align-items: center; padding: 0 16px; gap: 7px">
+      <svg class="ic" style="color: #E6B6FF; margin-right: 6px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+      <div style="width: 9px; height: 9px; border-radius: 5px; background: #EEE6F2"></div><div style="width: 9px; height: 9px; border-radius: 5px; background: #EEE6F2"></div><div style="width: 9px; height: 9px; border-radius: 5px; background: #EEE6F2"></div><div style="width: 9px; height: 9px; border-radius: 5px; background: #EEE6F2"></div>
+      <div style="width: 2px; height: 20px; background: #E6B6FF"></div>
+    </div>
+  </label>
+
+  <div style="margin-top: 14px; border-radius: 16px; background: rgba(10,6,14,.35); padding: 12px 14px">
+    <div style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 500; margin-bottom: 6px"><svg class="ic" style="width: 13px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>Details <span class="kbd" style="margin-left: auto">Tab</span></div>
+    <div class="kv"><span>Program</span><span class="mono">/usr/bin/firewall-config</span></div>
+    <div class="kv"><span>Action</span><span class="mono">org.fedoraproject.FirewallD1.config</span></div>
+    <div class="kv"><span>Requested</span><span>06:58 · PID 4211</span></div>
+  </div>
+
+  <div style="display: flex; gap: 10px; margin-top: 20px">
+    <button style="flex: 1; height: 46px; border-radius: 23px; border: 0; background: rgba(255,255,255,.10); color: #EEE6F2; font: inherit; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px">Cancel <span class="kbd">Esc</span></button>
+    <button style="flex: 1; height: 46px; border-radius: 23px; border: 0; background: #E6B6FF; color: #3a1a4d; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px">Authenticate <span class="kbd" style="background: rgba(58,26,77,.15); border-color: rgba(58,26,77,.25); color: #3a1a4d">Enter</span></button>
+  </div>
+</div>
+
+<div style="position: absolute; left: 570px; top: 650px; width: 460px; text-align: center; font-size: 12.5px; color: #D9CEE0; line-height: 19px">Only one prompt at a time, always centred, always on the dimmed layer. Three wrong attempts close it and send a notification.</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"showKeys":{"editor":"boolean","default":false},"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const on = s.keys !== undefined ? s.keys : !!this.props.showKeys;
+    return { keysCls: on ? 'keys' : 'nokeys', toggle: () => this.setState({ keys: !on }) };
+  }
+}
+</script>
+</body>
+</html>

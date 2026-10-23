@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Motion: wallpaper and theme change</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.glass{background:rgba(22,14,30,.44);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.20),inset 0 -1px 0 rgba(255,255,255,.04),0 10px 34px rgba(0,0,0,.38)}
+.win{position:absolute;border-radius:14px;background:rgba(20,18,24,.9);border:2px solid transparent}
+.reveal{position:absolute;inset:0;animation:reveal 10s infinite}
+@keyframes reveal{0%,45%{clip-path:circle(0px at 800px 721px);opacity:1}60%,92%{clip-path:circle(1900px at 800px 721px);opacity:1}99%{clip-path:circle(1900px at 800px 721px);opacity:0}100%{clip-path:circle(0px at 800px 721px);opacity:0}}
+.acc{animation:acc 10s infinite}
+@keyframes acc{0%,18%{background:#E6B6FF}24%,30%{background:#F2A7B8}36%,92%{background:#9ECAFF}100%{background:#E6B6FF}}
+.bord{animation:bord 10s infinite}
+@keyframes bord{0%,18%{border-color:#E6B6FF}24%,30%{border-color:#F2A7B8}36%,92%{border-color:#9ECAFF}100%{border-color:#E6B6FF}}
+.ptint{animation:ptint 10s infinite}
+@keyframes ptint{0%,18%{background:rgba(22,14,30,.44)}24%,30%{background:rgba(38,16,28,.44)}36%,92%{background:rgba(12,18,28,.44)}100%{background:rgba(22,14,30,.44)}}
+.sheet{position:absolute;left:279px;width:1042px;border-radius:30px;padding:18px;box-sizing:border-box;display:flex;gap:14px;justify-content:center;background:rgba(22,14,30,.5);backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 30px 80px rgba(0,0,0,.5);animation:sheet 10s infinite}
+@keyframes sheet{0%,4%{top:920px;opacity:0}12%{top:640px;opacity:1}14%,44%{top:650px;opacity:1}54%,100%{top:920px;opacity:0}}
+.th{position:relative;width:190px;height:107px;border-radius:14px;overflow:hidden;flex:none;border:1px solid rgba(255,255,255,.14)}
+.th img{width:100%;height:100%;object-fit:cover;display:block}
+.tl{position:absolute;left:10px;bottom:7px;font-size:12px;font-weight:600;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.ring{position:absolute;top:18px;width:190px;height:107px;border-radius:15px;box-sizing:border-box;animation:ring 10s infinite}
+@keyframes ring{0%,16%{left:18px;box-shadow:0 0 0 3px #E6B6FF}22%,30%{left:222px;box-shadow:0 0 0 3px #F2A7B8}36%,44%{left:426px;box-shadow:0 0 0 3px #9ECAFF}46%{left:426px;box-shadow:0 0 0 3px #9ECAFF;transform:scale(.94)}50%,100%{left:426px;transform:scale(1);box-shadow:0 0 0 3px #9ECAFF}}
+.kk{position:absolute;font-family:'Geist Mono',ui-monospace,monospace;font-size:13px;padding:6px 12px;border-radius:10px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.22);opacity:.3}
+.k1{animation:k1 10s infinite}@keyframes k1{0%,1%{opacity:.3}3%{opacity:1}8%,100%{opacity:.3}}
+.k2{animation:k2 10s infinite}@keyframes k2{0%,19%{opacity:.3}21%{opacity:1}26%,31%{opacity:.3}33%{opacity:1}38%,100%{opacity:.3}}
+.k3{animation:k3 10s infinite}@keyframes k3{0%,43%{opacity:.3}45%{opacity:1}50%,100%{opacity:.3}}
+.play{position:absolute;top:-4px;bottom:-4px;width:2px;background:#FFB59C;box-shadow:0 0 8px #FFB59C;animation:play 10s linear infinite}
+@keyframes play{from{left:0}to{left:100%}}
+.ph{position:absolute;top:0;height:30px;border-radius:8px;font-size:11.5px;display:flex;align-items:center;padding-left:8px;box-sizing:border-box;white-space:nowrap;overflow:hidden}
+</style>
+</helmet>
+<div style="position: relative; width: 1600px; height: 1000px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #EEE6F2; background: #100a14">
+<div style="position: absolute; left: 0; top: 0; width: 1600px; height: 900px; overflow: hidden">
+  <img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+  <div class="reveal"><img src="/_blob/5d13b8ea91e18aad79d366a211e483c8" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover"></div>
+
+  <div class="win bord" style="left: 12px; top: 60px; width: 860px; height: 560px"></div>
+  <div class="win" style="left: 882px; top: 60px; width: 706px; height: 560px; border-color: rgba(255,255,255,.08)"></div>
+  <div style="position: absolute; left: 40px; top: 96px; display: flex; flex-direction: column; gap: 12px">
+    <div class="acc" style="width: 220px; height: 10px; border-radius: 5px; opacity: .8"></div>
+    <div style="width: 420px; height: 10px; border-radius: 5px; background: rgba(255,255,255,.14)"></div>
+    <div class="acc" style="width: 300px; height: 10px; border-radius: 5px; opacity: .45"></div>
+    <div style="width: 360px; height: 10px; border-radius: 5px; background: rgba(255,255,255,.14)"></div>
+  </div>
+
+  <!-- pills -->
+  <div style="position: absolute; top: 10px; left: 12px; display: flex; gap: 8px">
+    <div class="glass ptint" style="height: 38px; border-radius: 19px; display: flex; align-items: center; gap: 5px; padding: 0 16px; box-sizing: border-box; font-size: 13px"><div class="acc" style="width: 18px; height: 8px; border-radius: 4px"></div><div style="width: 8px; height: 8px; border-radius: 4px; background: rgba(238,230,242,.62)"></div><div style="width: 8px; height: 8px; border-radius: 4px; background: rgba(238,230,242,.62)"></div><div style="width: 8px; height: 8px; border-radius: 4px; box-shadow: inset 0 0 0 1.5px rgba(238,230,242,.32)"></div><div style="width: 8px; height: 8px; border-radius: 4px; box-shadow: inset 0 0 0 1.5px rgba(238,230,242,.32)"></div><span style="margin-left: 12px; font-weight: 500">Bar.qml — nvim</span></div>
+  </div>
+  <div style="position: absolute; top: 10px; left: 0; right: 0; display: flex; justify-content: center"><div class="glass ptint" style="height: 38px; border-radius: 19px; padding: 0 14px; display: flex; align-items: center; gap: 10px; font-size: 13px"><span style="color: #CDBFD6">Tue 20 Oct</span><b style="font-weight: 600">06:48</b></div></div>
+  <div style="position: absolute; top: 10px; right: 12px; display: flex; gap: 8px"><div class="glass ptint" style="width: 182px; height: 38px; border-radius: 19px"></div><div class="glass ptint" style="width: 38px; height: 38px; border-radius: 19px; position: relative"><div class="acc" style="position: absolute; top: 8px; right: 9px; width: 7px; height: 7px; border-radius: 4px"></div></div></div>
+
+  <!-- switcher -->
+  <div class="sheet">
+    <div class="th"><img src="/_blob/77a47c8dc400aae36435c9fb0d99ad03" alt=""><span class="tl">Dusk</span></div>
+    <div class="th"><img src="/_blob/0449b84263dd9d25f2d7f330244d6abd" alt=""><span class="tl">Sakura</span></div>
+    <div class="th"><img src="/_blob/20c6cf8a754edfc10f89255a0a9c7f45" alt=""><span class="tl">Fjord</span></div>
+    <div class="th"><img src="/_blob/d5fc6511c4ecf56ebd9879711f20b287" alt=""><span class="tl">Ember</span></div>
+    <div class="th"><img src="/_blob/98ed5ca4e2836b0cfda224a293e71b68" alt=""><span class="tl">Moss</span></div>
+    <div class="ring"></div>
+  </div>
+  <div class="kk k1" style="left: 1240px; top: 560px">Super W</div>
+  <div class="kk k2" style="left: 1360px; top: 560px">→</div>
+  <div class="kk k3" style="left: 1420px; top: 560px">Enter</div>
+</div>
+
+<div style="position: absolute; left: 40px; right: 40px; top: 924px">
+  <div style="position: relative; height: 30px">
+    <div class="ph" style="left: 0%; width: 13.6%; background: #E6B6FF; color: #3a1a4d; font-weight: 600">Sheet rises</div>
+    <div class="ph" style="left: 14%; width: 29.6%; background: rgba(230,182,255,.18)">Browse: accents preview live, wallpaper stays</div>
+    <div class="ph" style="left: 44%; width: 15.6%; background: #9ECAFF; color: #0A305F; font-weight: 600">Enter: ripple from thumbnail</div>
+    <div class="ph" style="left: 60%; width: 31.6%; background: rgba(255,255,255,.07)">New theme everywhere</div>
+    <div class="ph" style="left: 92%; width: 8%; background: rgba(255,255,255,.05)">(reset)</div>
+    <div class="play"></div>
+  </div>
+  <div style="font-size: 12px; color: #8f8499; margin-top: 12px">10 s loop at half speed. Real: sheet 320 ms · accent cross-fade 240 ms per step · ripple 700 ms (InOutCubic) · kitty, GTK and Qt reload in the background while the ripple runs.</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

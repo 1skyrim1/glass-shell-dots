@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Shortcut cheatsheet</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.nokeys .hint{display:none !important}
+.sheet{background:rgba(24,15,32,.52);backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(255,255,255,.05),0 30px 80px rgba(0,0,0,.55)}
+.ic{width:15px;height:15px;flex:none}
+.kbd{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:#E4DAEA}
+.col{flex:1;min-width:0;display:flex;flex-direction:column}
+.grp{display:flex;align-items:center;gap:8px;font-size:11.5px;letter-spacing:.6px;text-transform:uppercase;color:#FFB59C;padding:14px 10px 6px}
+.r{display:flex;align-items:center;justify-content:space-between;height:31px;padding:0 10px;border-radius:9px;font-size:13px}
+.k{display:flex;gap:4px}
+.tab{height:28px;padding:0 12px;border-radius:14px;display:flex;align-items:center;font-size:12.5px;color:#CDBFD6}
+</style>
+</helmet>
+<div class="{{keysCls}}" onClick="{{toggle}}" style="position: relative; width: 1600px; height: 900px; overflow: hidden; font-family: 'Geist', system-ui, sans-serif; color: #EEE6F2; background: #140b1a">
+<img src="/_blob/e2d4fb1e43be60fddcfcb845b76df437" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+<div style="position: absolute; inset: 0; background: rgba(10,5,14,.42)"></div>
+
+<div class="sheet" style="position: absolute; left: 170px; top: 92px; width: 1260px; border-radius: 30px; padding: 14px; box-sizing: border-box">
+  <div style="display: flex; align-items: center; gap: 14px; height: 56px; padding: 0 12px 0 16px; border-radius: 18px; background: rgba(255,255,255,.07); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08)">
+    <svg class="ic" style="width: 20px; height: 20px; color: #E6B6FF" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"></path></svg>
+    <div style="flex: 1; font-size: 18px; color: #9a8fa3">Search shortcuts, e.g. “record” or “workspace”</div>
+    <div style="font-size: 12px; font-weight: 600; height: 28px; padding: 0 12px; border-radius: 14px; display: flex; align-items: center; background: #E6B6FF; color: #3a1a4d">Shortcuts</div>
+  </div>
+  <div style="display: flex; gap: 4px; padding: 12px 6px 2px">
+    <div class="tab" style="background: rgba(255,255,255,.12); color: #F4EEF7">All</div>
+    <div class="tab">Shell</div><div class="tab">Capture</div><div class="tab">Windows</div><div class="tab">Workspaces</div><div class="tab">Apps &amp; system</div><div class="tab">Inside surfaces</div>
+  </div>
+
+  <div style="display: flex; gap: 18px; padding: 0 2px">
+    <div class="col">
+      <div class="grp">Shell</div>
+      <div class="r" style="background: rgba(230,182,255,.16); box-shadow: inset 0 0 0 1px rgba(230,182,255,.35)"><span>App launcher</span><span class="k"><span class="kbd">Super</span><span class="kbd">Space</span></span></div>
+      <div class="r"><span>This cheatsheet</span><span class="k"><span class="kbd">Super</span><span class="kbd">Shift</span><span class="kbd">Space</span></span></div>
+      <div class="r"><span>Control Center</span><span class="k"><span class="kbd">Super</span><span class="kbd">A</span></span></div>
+      <div class="r"><span>Notifications &amp; calendar</span><span class="k"><span class="kbd">Super</span><span class="kbd">N</span></span></div>
+      <div class="r"><span>Wallpaper &amp; theme</span><span class="k"><span class="kbd">Super</span><span class="kbd">W</span></span></div>
+      <div class="r"><span>Clipboard history</span><span class="k"><span class="kbd">Super</span><span class="kbd">V</span></span></div>
+      <div class="r"><span>Emoji picker</span><span class="k"><span class="kbd">Super</span><span class="kbd">.</span></span></div>
+      <div class="r"><span>Power menu</span><span class="k"><span class="kbd">Super</span><span class="kbd">Esc</span></span></div>
+      <div class="r"><span>Lock</span><span class="k"><span class="kbd">Super</span><span class="kbd">L</span></span></div>
+      <div class="grp">Capture</div>
+      <div class="r"><span>Capture tool</span><span class="k"><span class="kbd">Super</span><span class="kbd">Shift</span><span class="kbd">S</span></span></div>
+      <div class="r"><span>Start / stop recording</span><span class="k"><span class="kbd">Super</span><span class="kbd">Shift</span><span class="kbd">R</span></span></div>
+      <div class="r"><span>Colour picker</span><span class="k"><span class="kbd">Super</span><span class="kbd">Shift</span><span class="kbd">C</span></span></div>
+      <div class="r"><span>Full screen to clipboard</span><span class="k"><span class="kbd">Print</span></span></div>
+    </div>
+
+    <div style="width: 1px; background: rgba(255,255,255,.08); margin-top: 16px"></div>
+
+    <div class="col">
+      <div class="grp">Windows</div>
+      <div class="r"><span>Move focus</span><span class="k"><span class="kbd">Super</span><span class="kbd">H J K L</span></span></div>
+      <div class="r"><span>Move window</span><span class="k"><span class="kbd">Super</span><span class="kbd">Shift</span><span class="kbd">H J K L</span></span></div>
+      <div class="r"><span>Resize mode</span><span class="k"><span class="kbd">Super</span><span class="kbd">R</span></span></div>
+      <div class="r"><span>Close window</span><span class="k"><span class="kbd">Super</span><span class="kbd">Q</span></span></div>
+      <div class="r"><span>Fullscreen</span><span class="k"><span class="kbd">Super</span><span class="kbd">F</span></span></div>
+      <div class="r"><span>Toggle floating</span><span class="k"><span class="kbd">Super</span><span class="kbd">T</span></span></div>
+      <div class="r"><span>Scratchpad terminal</span><span class="k"><span class="kbd">Super</span><span class="kbd">S</span></span></div>
+      <div class="grp">Workspaces</div>
+      <div class="r"><span>Go to workspace</span><span class="k"><span class="kbd">Super</span><span class="kbd">1 – 9</span></span></div>
+      <div class="r"><span>Send window to workspace</span><span class="k"><span class="kbd">Super</span><span class="kbd">Shift</span><span class="kbd">1 – 9</span></span></div>
+      <div class="r"><span>Previous / next workspace</span><span class="k"><span class="kbd">Super</span><span class="kbd">[</span><span class="kbd">]</span></span></div>
+      <div class="r"><span>Overview</span><span class="k"><span class="kbd">Super</span><span class="kbd">Tab</span></span></div>
+      <div class="r"><span>Window switcher</span><span class="k"><span class="kbd">Alt</span><span class="kbd">Tab</span></span></div>
+    </div>
+
+    <div style="width: 1px; background: rgba(255,255,255,.08); margin-top: 16px"></div>
+
+    <div class="col">
+      <div class="grp">Apps &amp; system</div>
+      <div class="r"><span>Terminal (kitty)</span><span class="k"><span class="kbd">Super</span><span class="kbd">Return</span></span></div>
+      <div class="r"><span>Browser</span><span class="k"><span class="kbd">Super</span><span class="kbd">B</span></span></div>
+      <div class="r"><span>Files</span><span class="k"><span class="kbd">Super</span><span class="kbd">E</span></span></div>
+      <div class="r"><span>Game mode</span><span class="k"><span class="kbd">Super</span><span class="kbd">G</span></span></div>
+      <div class="r"><span>Do not disturb</span><span class="k"><span class="kbd">Super</span><span class="kbd">Shift</span><span class="kbd">N</span></span></div>
+      <div class="r"><span>Switch keyboard layout</span><span class="k"><span class="kbd">Super</span><span class="kbd">Ctrl</span><span class="kbd">Space</span></span></div>
+      <div class="grp">Inside any surface</div>
+      <div class="r"><span>Move</span><span class="k"><span class="kbd">↑ ↓ ← →</span><span class="kbd">H J K L</span></span></div>
+      <div class="r"><span>Act / open</span><span class="k"><span class="kbd">Enter</span></span></div>
+      <div class="r"><span>Next section or mode</span><span class="k"><span class="kbd">Tab</span></span></div>
+      <div class="r"><span>Jump to item n</span><span class="k"><span class="kbd">Alt</span><span class="kbd">1 – 9</span></span></div>
+      <div class="r"><span>Close</span><span class="k"><span class="kbd">Esc</span></span></div>
+    </div>
+  </div>
+
+  <div style="height: 1px; background: rgba(255,255,255,.10); margin: 14px 6px 0"></div>
+  <div style="display: flex; align-items: center; gap: 8px; padding: 12px 8px 2px; font-size: 12px; color: #B9AEC2">
+    <span>Read live from hyprland.lua · 46 binds</span>
+    <span style="flex: 1"></span>
+    <span class="hint" style="display: flex; align-items: center; gap: 8px">
+    <span class="kbd">↑↓</span><span>select</span>
+    <span class="kbd" style="margin-left: 8px">Enter</span><span>run action</span>
+    <span class="kbd" style="margin-left: 8px">Tab</span><span>next group</span>
+    <span class="kbd" style="margin-left: 8px">Esc</span><span>close</span>
+    </span>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"showKeys":{"editor":"boolean","default":false},"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const on = s.keys !== undefined ? s.keys : !!this.props.showKeys;
+    return { keysCls: on ? 'keys' : 'nokeys', toggle: () => this.setState({ keys: !on }) };
+  }
+}
+</script>
+</body>
+</html>
