@@ -1,0 +1,10 @@
+{
+    "glass": "balanced",
+    "idle": {
+        "dimCountdown": 10,
+        "lock": 300,
+        "screenOff": 420,
+        "suspendOnBattery": 900
+    },
+    "reducedMotion": false
+}

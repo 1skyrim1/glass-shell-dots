@@ -29,6 +29,14 @@ A keyboard-first Hyprland + Quickshell desktop (Liquid Glass look), built from s
 
 ```sh
 cd ~/glass-shell
-./install.sh   # packages (pacman + paru/AUR), system/ files, services, stow home/*; asks before every sudo step
-Hyprland       # start it from the TTY; Super+Return = kitty
+./install.sh   # packages (pacman + paru/AUR), system/ files, services, stow home/*, first matugen theme;
+               # asks before every sudo step
+Hyprland       # start it from the TTY; Super+Return = kitty; Quickshell (qs) starts with it
 ```
+
+## Glass Shell basics (Phase 1)
+
+- Settings: `home/quickshell/.config/quickshell/config.json` (glass strength, reduced motion, idle times), reloads live.
+- Colours: `matugen image ~/.local/share/wallpapers/dusk.png -m dark --prefer darkness` (Quickshell recolours live).
+- IPC: `qs ipc show` lists every target; `qs ipc call test toggle` shows the glass test surface,
+  `qs ipc call glass set heavy` switches glass strength (QML and Hyprland blur together).

@@ -1,0 +1,16 @@
+{
+  "wallpaper": "",
+  "primary": "#e7b6f0",
+  "on_primary": "#462151",
+  "primary_container": "#5f3869",
+  "on_primary_container": "#fbd7ff",
+  "on_surface": "#eae0e7",
+  "on_surface_variant": "#cfc3cd",
+  "outline": "#988e97",
+  "tertiary": "#f5b7b1",
+  "surface": "#161217",
+  "surface_dim": "#161217",
+  "error": "#ffb4ab",
+  "error_container": "#93000a",
+  "on_error_container": "#ffdad6"
+}

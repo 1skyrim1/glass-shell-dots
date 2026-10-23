@@ -1,0 +1,8 @@
+pragma Singleton
+import QtQuick
+import Quickshell
+
+// True while Alt is held. Set by the Alt press/release binds in hyprland.lua (via the keyhints IPC target).
+Singleton {
+    property bool held: false
+}

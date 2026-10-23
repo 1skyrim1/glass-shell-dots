@@ -1,0 +1,10 @@
+# matugen: wallpaper -> colour roles for every app.
+# Run: matugen image <wallpaper> -m dark --prefer darkness
+# (--prefer darkness picks the dusk sky over the pink haze; the result matches DESIGN.md §1.1.)
+# Phase 7 adds Hyprland borders, kitty, GTK, Qt and the greeter here.
+[config]
+
+# Quickshell reads this file and reloads when it changes (qs/Theme.qml).
+[templates.quickshell]
+input_path = "~/.config/matugen/templates/quickshell.json"
+output_path = "~/.local/state/glass-shell/colors.json"

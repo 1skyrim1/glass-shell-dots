@@ -71,4 +71,9 @@ for pkg in home/*/; do
   stow -d home -t "$HOME" --no-folding --restow "$(basename "$pkg")"
 done
 
+# 8. First colour theme (matugen -> ~/.local/state/glass-shell/colors.json, read by Quickshell).
+if [[ ! -f $HOME/.local/state/glass-shell/colors.json ]]; then
+  matugen image "$HOME/.local/share/wallpapers/dusk.png" -m dark --prefer darkness -q
+fi
+
 echo; echo "Done. Start the desktop with: Hyprland"
