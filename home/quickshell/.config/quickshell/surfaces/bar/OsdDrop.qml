@@ -27,6 +27,7 @@ Item {
         function onShownChanged() {
             if (Motion.reduced) {
                 anim.stop()
+                if (Osd.shown && root.p < 1) root.fade = 0   // fade in from nothing, not from the last shape
                 root.p = 1
                 fadeAnim.to = Osd.shown ? 1 : 0
                 fadeAnim.restart()

@@ -43,6 +43,16 @@ const icons = {
     // OSDs
     "sun": { d: circle(12, 12, 4) + "M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" },
     "keyboard": { d: box(2, 4, 20, 16, 2) + "M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10" },
+
+    // Popovers
+    "check": { d: "M20 6 9 17l-5-5" },
+    "music": { d: "M9 18V5l12-2v13" + circle(6, 18, 3) + circle(18, 16, 3) },
+    "shuffle": { d: "M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5" },
+    "repeat": { d: "m17 2 4 4-4 4M3 11v-1a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v1a4 4 0 0 1-4 4H3" },
+    "skip-back": { fill: true, d: "M19 20 9 12l10-8v16zM5 19V5h2v14H5z" },
+    "skip-forward": { fill: true, d: "m5 4 10 8-10 8V4zM17 5h2v14h-2V5z" },
+    "pause": { fill: true, d: "M6 4h4v16H6zM14 4h4v16h-4z" },
+    "play": { fill: true, d: "M7 4v16l13-8z" },
 }
 
 function get(name) { return icons[name] ?? icons["app-window"] }

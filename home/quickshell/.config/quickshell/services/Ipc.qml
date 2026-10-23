@@ -26,6 +26,8 @@ Item {
         target: "notifications"
         function toggle(): void { Shell.toggle("notifications") }
         function dnd(): void { Modes.dnd = !Modes.dnd }
+        // The bell's right-click menu (DND for a while, clear all).
+        function menu(): void { Shell.togglePopover("bell", "") }
     }
 
     IpcHandler {
@@ -92,6 +94,8 @@ Item {
     IpcHandler {
         target: "layout"
         function next(): void { Keyboard.next() }
+        // The layout badge's right-click menu.
+        function menu(): void { Shell.togglePopover("layout", "") }
     }
 
     IpcHandler {
@@ -99,6 +103,18 @@ Item {
         function toggle(): void { Media.toggle() }
         function next(): void { Media.next() }
         function prev(): void { Media.previous() }
+        function popover(): void { if (Media.player) Shell.togglePopover("media", "") }
+    }
+
+    IpcHandler {
+        target: "workspaces"
+        // Peek at a workspace without hovering its dot (closes with `popover close`).
+        function peek(id: int): void { Shell.peekId = id; Shell.openPopover("peek", "") }
+    }
+
+    IpcHandler {
+        target: "popover"
+        function close(): void { Shell.closePopover() }
     }
 
     IpcHandler {

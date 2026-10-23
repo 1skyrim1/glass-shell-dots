@@ -4,11 +4,12 @@ import Quickshell
 import Quickshell.Hyprland
 import qs.services
 import qs.components
+import "../../components/apps.js" as Apps
 
 // Workspace pill (DESIGN.md §2.1, 09-Bar "Workspace pill up close"): five dots, then the focused window's
 // icon + title. Dots: active = accent capsule 18 × 8, has windows = filled, empty = ring, urgent = tertiary
 // with a halo. The title hides on empty workspaces and the pill shrinks to just the dots.
-// Click a dot = go there, scroll = cycle. (Hover-peek comes with the popovers in Phase 3.)
+// Click a dot = go there, scroll = cycle, hover a dot 400 ms = workspace peek (WorkspacePeek).
 Pill {
     id: root
 
@@ -40,6 +41,38 @@ Pill {
         onTriggered: root.window = root.focusedWindow
     }
     readonly property bool hasTitle: window !== null
+
+    // --- Peek: hovering a dot for 400 ms opens it; once open it follows the hovered dot right away.
+    //     Bar closes it a moment after the mouse has left both the dots and the peek.
+    property int hoverId: 0
+    readonly property bool dotHovered: hoverId !== 0
+    property bool peekByHover: false   // opened by hovering (not over IPC), so leaving closes it
+    function hoverDot(id: int, on: bool) {
+        if (on) {
+            hoverId = id
+            if (Shell.popover === "peek") Shell.peekId = id
+            else peekDelay.restart()
+        } else if (hoverId === id) {
+            hoverId = 0
+            peekDelay.stop()
+        }
+    }
+    Timer {
+        id: peekDelay
+        interval: Motion.peekDelay
+        onTriggered: {
+            if (!root.hoverId || Shell.popoverModal || Shell.panel !== "") return
+            Shell.peekId = root.hoverId
+            Shell.openPopover("peek", root.screenName)
+            root.peekByHover = true
+        }
+    }
+    Connections {
+        target: Shell
+        function onPopoverChanged() { if (Shell.popover !== "peek") root.peekByHover = false }
+    }
+    // The dot for workspace `id` (where the peek points), or the pill if it isn't one of the five.
+    function dotItem(id: int): Item { return slotRepeater.itemAt(id - firstId) ?? root }
 
     function workspace(id: int): HyprlandWorkspace {
         return Hyprland.workspaces.values.find(w => w.id === id) ?? null
@@ -81,6 +114,7 @@ Pill {
             spacing: dots.slotGap
 
             Repeater {
+                id: slotRepeater
                 model: root.count
                 Item {
                     id: slot
@@ -124,7 +158,14 @@ Pill {
                         anchors.centerIn: parent
                         width: parent.width + dots.slotGap
                         height: root.height
-                        onClicked: root.go(slot.wsId)
+                        onClicked: {
+                            Shell.closePopoverIf("peek")
+                            root.go(slot.wsId)
+                        }
+                        // Passive, so the pill keeps its own hover state.
+                        HoverHandler {
+                            onHoveredChanged: root.hoverDot(slot.wsId, hovered)
+                        }
                     }
                 }
             }
@@ -228,18 +269,6 @@ Pill {
         TitleLine { id: b; opacity: 0 }
     }
 
-    // App icon by window class (the design's Lucide set); anything unknown gets a generic window.
-    function iconFor(cls: string): string {
-        cls = cls.toLowerCase()
-        if (/kitty|foot|alacritty|wezterm|ghostty|terminal/.test(cls)) return "terminal"
-        if (/discord|vesktop|webcord|element|telegram|signal|slack/.test(cls)) return "message-circle"
-        if (/firefox|chrom|zen|librewolf|brave|vivaldi|browser/.test(cls)) return "globe"
-        if (/steam|lutris|heroic|gamescope|^steam_app/.test(cls)) return "gamepad"
-        if (/nautilus|thunar|dolphin|nemo|pcmanfm|files/.test(cls)) return "folder"
-        if (/code|codium|zed/.test(cls)) return "code"
-        return "app-window"
-    }
-
     component TitleLine: Item {
         id: line
         property string text
@@ -251,7 +280,7 @@ Pill {
 
         function set(w: HyprlandToplevel) {
             text = w.title
-            icon = root.iconFor(w.wayland?.appId || w.lastIpcObject?.class || "")
+            icon = Apps.iconFor(Apps.classOf(w))
         }
         function enter() { leaveAnim.stop(); enterAnim.restart() }
         function leave() { enterAnim.stop(); leaveAnim.restart() }

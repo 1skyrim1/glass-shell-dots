@@ -44,6 +44,7 @@ Item {
     onShownChanged: {
         if (Motion.reduced) {
             anim.stop()
+            if (shown && p < 1) fade = 0   // fade in from nothing, not from the last shape
             p = 1
             fadeAnim.to = shown ? 1 : 0
             fadeAnim.restart()

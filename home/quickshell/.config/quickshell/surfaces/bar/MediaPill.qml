@@ -5,7 +5,7 @@ import qs.components
 // Media pill (DESIGN.md §2.2): only while something plays. 26 px accent-container circle with three
 // equalizer bars + track title (max 110 px). It slides out from behind the workspace pill with a small
 // overshoot and tucks back 10 s after playback stops (03-MotionPills lane 2).
-// Click = media popover (Phase 3), scroll = previous / next track.
+// Click = media popover (lit while it's open), scroll = previous / next track.
 Pill {
     id: root
 
@@ -43,7 +43,8 @@ Pill {
         }
     ]
 
-    onClicked: Shell.openPopover("media")   // TODO Phase 3: media popover
+    lit: Shell.popover === "media"
+    onClicked: Shell.togglePopover("media", screenName)
     onScrolled: step => step > 0 ? Media.next() : Media.previous()
 
     Item {
@@ -62,7 +63,9 @@ Pill {
                 width: Theme.px(26)
                 height: width
                 radius: width / 2
-                color: Theme.accentContainer
+                // Lit (popover open): an accent circle with dark bars, like Popovers.dc.html.
+                color: root.lit ? Theme.accent : Theme.accentContainer
+                Behavior on color { ColorAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
 
                 Row {
                     anchors.centerIn: parent
@@ -75,7 +78,7 @@ Pill {
                             anchors.verticalCenter: parent.verticalCenter
                             width: Theme.px(2.5)
                             radius: Theme.px(1)
-                            color: Theme.textOnContainer
+                            color: root.lit ? Theme.textOnAccent : Theme.textOnContainer
                             height: Theme.px(Media.playing
                                 ? 8 - 4 * Math.cos(2 * Math.PI * (root.eqPhase + modelData.phase))
                                 : modelData.rest)

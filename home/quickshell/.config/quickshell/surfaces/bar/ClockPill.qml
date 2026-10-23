@@ -8,7 +8,7 @@ import qs.components
 Pill {
     id: root
 
-    lit: Shell.isOpen("notifications")
+    lit: Shell.isOpen("notifications") && Shell.panelFrom !== "bell"   // opened from the bell → the bell lights
     implicitWidth: row.implicitWidth + Theme.px(28)
     onClicked: Shell.toggle("notifications")
 

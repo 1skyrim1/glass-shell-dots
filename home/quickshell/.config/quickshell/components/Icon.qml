@@ -28,9 +28,9 @@ Item {
         transform: Scale { xScale: root.size / 24; yScale: root.size / 24 }
 
         ShapePath {
-            strokeColor: root.color
-            strokeWidth: root.strokeWidth
-            fillColor: "transparent"
+            strokeColor: root.icon.fill ? "transparent" : root.color
+            strokeWidth: root.icon.fill ? 0 : root.strokeWidth
+            fillColor: root.icon.fill ? root.color : "transparent"
             capStyle: ShapePath.RoundCap
             joinStyle: ShapePath.RoundJoin
             PathSvg { path: root.icon.d }

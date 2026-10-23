@@ -7,7 +7,8 @@ import qs.components
 // Status pill (DESIGN.md §2.4): layout badge, Wi-Fi, Bluetooth, microphone in use, volume, battery.
 // Game mode / keep awake add accent circles at the start. Low battery stretches it leftwards in amber for
 // 5 s (09-Bar "Low battery"). Click = Control Center (Phase 5), scroll = volume; left-click on the badge =
-// next layout, right-click = layout menu (Phase 3).
+// next layout, right-click = layout menu (LayoutMenu; the badge is lit while it's open).
+// Icons whose state isn't readable at a glance have tooltips (TipArea).
 Pill {
     id: root
 
@@ -20,6 +21,25 @@ Pill {
     readonly property int wifiBars: !Networking.wifiEnabled || !wifiNetwork ? 0
         : Math.max(1, Math.ceil((wifiNetwork.signalStrength ?? 1) * 4))
     readonly property bool bluetooth: Bluetooth.defaultAdapter?.enabled ?? false
+    readonly property Item badge: badge   // the layout menu opens under it
+
+    // Tooltip texts (10-Popovers "Tooltips").
+    function duration(min: int): string {
+        return min >= 60 ? Math.floor(min / 60) + " h " + (min % 60) + " min" : min + " min"
+    }
+    readonly property string wifiTip: wifiBars > 0
+        ? (wifiNetwork?.name ?? "Wi-Fi") + " · " + ["weak", "fair", "good", "strong"][wifiBars - 1] + " signal"
+        : Networking.wifiEnabled ? "Wi-Fi · not connected" : "Wi-Fi off"
+    readonly property string bluetoothTip: {
+        const names = Bluetooth.devices.values.filter(d => d.connected).map(d => d.name)
+        return names.length > 0 ? names.join(", ") : "Bluetooth · nothing connected"
+    }
+    readonly property string volumeTip: (Audio.sink?.description || Audio.sink?.nickname || "Speakers")
+        + " · " + (Audio.muted ? "muted" : "volume " + Audio.percent + " %")
+    readonly property string batteryTip: "Battery " + Battery.percent + " % · "
+        + (Battery.charging ? "charging"
+           : Battery.pluggedIn ? "plugged in"
+           : Battery.minutesLeft > 0 ? duration(Battery.minutesLeft) + " left" : "on battery")
 
     lit: Shell.isOpen("control")
     tone: warn ? "warning" : ""
@@ -48,10 +68,12 @@ Pill {
             visible: root.wifiBars > 0 && root.wifiBars < 4
             name: "wifi-" + root.wifiBars
         }
+        TipArea { text: root.wifiTip; icon: root.wifiBars > 0 ? "wifi" : "wifi-off" }
     }
 
     component VolumeIcon: StatusIcon {
         name: Audio.muted ? "volume-x" : "volume-1"
+        TipArea { text: root.volumeTip }
     }
 
     // Battery outline (viewBox 28 × 24 in a 20 px slot) with the charge level as a bar inside.
@@ -98,7 +120,8 @@ Pill {
                 visible: root.modes
                 spacing: Theme.px(4)
                 Repeater {
-                    model: [{ on: Modes.gameMode, icon: "gamepad" }, { on: Modes.keepAwake, icon: "coffee" }]
+                    model: [{ on: Modes.gameMode, icon: "gamepad", tip: "Game mode on" },
+                            { on: Modes.keepAwake, icon: "coffee", tip: "Keep awake on" }]
                     Rectangle {
                         required property var modelData
                         visible: modelData.on
@@ -112,24 +135,29 @@ Pill {
                             size: Theme.px(14)
                             color: Theme.accent
                         }
+                        TipArea { text: parent.modelData.tip }
                     }
                 }
             }
 
             // Layout badge: Geist Mono 11 on a white 8 % chip.
+            // Lit (accent 30 %) while its layout menu is open.
             Rectangle {
+                id: badge
+                readonly property bool lit: Shell.popover === "layout"
                 visible: Keyboard.short !== ""
                 anchors.verticalCenter: parent.verticalCenter
-                width: badge.implicitWidth + Theme.px(14)
-                height: badge.implicitHeight + Theme.px(6)
+                width: badgeText.implicitWidth + Theme.px(14)
+                height: badgeText.implicitHeight + Theme.px(6)
                 radius: Theme.px(8)
-                color: Theme.white(badgeMouse.containsMouse ? 0.14 : 0.08)
+                color: lit ? Theme.alpha(Theme.accent, 0.3) : Theme.white(badgeMouse.containsMouse ? 0.14 : 0.08)
                 Behavior on color { ColorAnimation { duration: Motion.micro } }
+                Behavior on width { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
                 Text {
-                    id: badge
+                    id: badgeText
                     anchors.centerIn: parent
                     text: Keyboard.short
-                    color: Theme.textMuted
+                    color: badge.lit ? Theme.textOnContainer : Theme.textMuted
                     font.family: Theme.fontMono
                     font.pixelSize: Theme.px(11)
                 }
@@ -138,25 +166,31 @@ Pill {
                     anchors.fill: parent
                     hoverEnabled: true
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
-                    onClicked: e => e.button === Qt.RightButton ? Shell.openPopover("layout") : Keyboard.next()   // TODO Phase 3: layout menu
+                    onClicked: e => e.button === Qt.RightButton ? Shell.togglePopover("layout", root.screenName) : Keyboard.next()
                 }
             }
 
             WifiIcon {}
-            StatusIcon { visible: root.bluetooth; name: "bluetooth" }
-            StatusIcon { visible: Audio.micInUse; name: "mic"; color: Theme.error }
+            StatusIcon { visible: root.bluetooth; name: "bluetooth"; TipArea { text: root.bluetoothTip } }
+            StatusIcon { visible: Audio.micInUse; name: "mic"; color: Theme.error; TipArea { text: "Microphone in use" } }
             VolumeIcon {}
 
-            Row {
+            Item {
                 visible: Battery.present
                 anchors.verticalCenter: parent.verticalCenter
-                spacing: Theme.px(5)
-                BatteryIcon { fill: Battery.charging ? Theme.good : Theme.text }
-                BarText {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: Battery.percent + "%"
-                    font.pixelSize: Theme.px(12)
+                implicitWidth: batteryRow.implicitWidth
+                implicitHeight: batteryRow.implicitHeight
+                Row {
+                    id: batteryRow
+                    spacing: Theme.px(5)
+                    BatteryIcon { fill: Battery.charging ? Theme.good : Theme.text }
+                    BarText {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: Battery.percent + "%"
+                        font.pixelSize: Theme.px(12)
+                    }
                 }
+                TipArea { text: root.batteryTip }
             }
         }
 

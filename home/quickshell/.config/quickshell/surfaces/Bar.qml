@@ -7,8 +7,11 @@ import qs.surfaces.bar
 
 // The bar on one screen (DESIGN.md §2, 08-Main / 09-Bar): five separate glass islands that hug their
 // content, the temporary pills that bud off the clock and the OSDs that drop out of it. It all lives on one
-// transparent full-screen layer so shapes can morph between pills (§7); later phases add the panels here.
-// The input mask covers only the pills, so the rest of the screen clicks through to the windows.
+// transparent full-screen layer so shapes can morph between pills (§7), with the pill popovers and the
+// tooltip (§3.1) growing out of them; later phases add the panels here.
+// The input mask covers only the pills and whatever is open, so the rest of the screen clicks through to
+// the windows. The media, layout and bell popovers take the keyboard while open and close on Esc or a
+// click outside (the catcher below); the workspace peek and tooltips are hover-only.
 Scope {
     id: root
 
@@ -35,7 +38,16 @@ Scope {
         exclusionMode: ExclusionMode.Ignore
         anchors { top: true; bottom: true; left: true; right: true }
         color: "transparent"
+
+        readonly property bool modalHere: Shell.popoverModal
+            && (Shell.popoverScreen === "" || Shell.popoverScreen === root.screen.name)
+        WlrLayershell.keyboardFocus: modalHere ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
         mask: Region {
+            Region { item: win.modalHere ? catcher : null }
+            Region { item: peek.visible ? peek.body : null }
+            Region { item: mediaPopover.visible ? mediaPopover.body : null }
+            Region { item: layoutMenu.visible ? layoutMenu.body : null }
+            Region { item: bellMenu.visible ? bellMenu.body : null }
             Region { item: workspaces }
             Region { item: media.visible ? media : null }
             Region { item: clock }
@@ -48,6 +60,17 @@ Scope {
         readonly property real inset: Theme.px(12)
         readonly property real top: Theme.px(10)
         readonly property real gap: Theme.px(8)
+
+        // Click outside: while a menu popover is open the input mask covers the whole screen and a press
+        // anywhere but a pill or the popover lands here and closes it (that click doesn't reach the window
+        // below). Hyprland's focus grab doesn't fire while this layer holds the keyboard exclusively.
+        MouseArea {
+            id: catcher
+            anchors.fill: parent
+            enabled: win.modalHere
+            acceptedButtons: Qt.AllButtons
+            onPressed: Shell.closePopover()
+        }
 
         // --- Left: workspaces, and the media pill sliding out from behind them.
         MediaPill {
@@ -156,5 +179,36 @@ Scope {
             StatusPill { id: status }
             BellPill { id: bell }
         }
+
+        // --- Popovers, above the pills so the droplet grows over its pill.
+        WorkspacePeek {
+            id: peek
+            pill: workspaces
+            target: workspaces.dotItem(Shell.peekId)
+            screenName: root.screen.name
+        }
+        // A hover-opened peek closes shortly after the mouse leaves both the dots and the peek.
+        Timer {
+            running: Shell.popover === "peek" && workspaces.peekByHover && !workspaces.dotHovered && !peek.hovered
+            interval: Motion.peekGrace
+            onTriggered: Shell.closePopoverIf("peek")
+        }
+        MediaPopover {
+            id: mediaPopover
+            pill: media
+            screenName: root.screen.name
+        }
+        LayoutMenu {
+            id: layoutMenu
+            pill: status
+            target: status.badge
+            screenName: root.screen.name
+        }
+        BellMenu {
+            id: bellMenu
+            pill: bell
+            screenName: root.screen.name
+        }
+        BarTooltip {}
     }
 }

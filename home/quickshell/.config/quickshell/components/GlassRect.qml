@@ -12,12 +12,14 @@ import qs.services
 Item {
     id: root
 
-    property string variant: "pill"          // "pill" | "panel" | "dialog"
+    property string variant: "pill"          // "pill" | "popover" | "panel" | "dialog"
     property string strength: Config.glass   // "subtle" | "balanced" | "heavy"
     property bool lit: false
     property bool hovered: false
     property bool pressed: false
     property bool focused: false
+    // Cursor x while hovered (Pill sets it): the specular top edge brightens around it (Liquid Glass).
+    property real hoverX: width / 2
     // Tinted pills (§2): "accent" (same as lit) | "error" (recording) | "warning" (low battery) | "success" (sharing).
     // toneMix blends from plain glass into the tone; the split pills animate it while they bud off the clock.
     property string tone: ""
@@ -25,6 +27,7 @@ Item {
     property bool smoothColor: true   // off while toneMix animates the colour every frame
 
     property real radius: variant === "pill" ? height / 2
+                        : variant === "popover" ? Theme.px(22)
                         : variant === "dialog" ? Theme.px(30) : Theme.px(26)
 
     default property alias content: inner.data
@@ -40,9 +43,10 @@ Item {
     // Panels and dialogs are denser than pills and cast a bigger shadow. Fill scales relative to the
     // balanced recipe (44 % → 55 % / 58 %); border and highlight add on top. Shadow values are design px.
     readonly property var variants: ({
-        pill:   { fill: 1.00,      border: 0.00, highlight: 0.00, shadowY: 10, shadowBlur: 34,  shadow: 0.38 },
-        panel:  { fill: 0.55 / 0.44, border: 0.03, highlight: 0.04, shadowY: 30, shadowBlur: 80,  shadow: 0.50 },
-        dialog: { fill: 0.58 / 0.44, border: 0.03, highlight: 0.04, shadowY: 40, shadowBlur: 100, shadow: 0.60 }
+        pill:    { fill: 1.00,      border: 0.00, highlight: 0.00, shadowY: 10, shadowBlur: 34,  shadow: 0.38 },
+        popover: { fill: 0.55 / 0.44, border: 0.03, highlight: 0.04, shadowY: 24, shadowBlur: 60,  shadow: 0.45 },
+        panel:   { fill: 0.55 / 0.44, border: 0.03, highlight: 0.04, shadowY: 30, shadowBlur: 80,  shadow: 0.50 },
+        dialog:  { fill: 0.58 / 0.44, border: 0.03, highlight: 0.04, shadowY: 40, shadowBlur: 100, shadow: 0.60 }
     })
     readonly property var r: recipes[strength] ?? recipes.balanced
     readonly property var v: variants[variant] ?? variants.pill
@@ -68,9 +72,13 @@ Item {
         : mix(glassFill, Qt.lighter(tones[activeTone].fill, hovered && !pressed ? 1.25 : 1), toneMix)
     readonly property color borderColor: activeTone === "" ? glassBorder : mix(glassBorder, tones[activeTone].border, toneMix)
     readonly property real highlightAlpha: r.highlight === 0 ? 0
-        : tinted ? 0.22 : r.highlight + v.highlight + (hovered && !pressed ? 0.12 : 0)
+        : tinted ? 0.22 : r.highlight + v.highlight + (hovered && !pressed ? 0.06 : 0)
 
-    opacity: enabled ? 1 : 0.45
+    // Disabled = 45 %. The animation sits on `dim`, not on opacity: surfaces that drive opacity every frame
+    // (fades, grows) would restart an opacity Behavior each frame and it would never move.
+    property real dim: enabled ? 1 : 0.45
+    Behavior on dim { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
+    opacity: dim
     scale: pressed ? 0.95 : hovered ? 1.04 : 1
     // Press squishes quickly; release springs back past the target (~102 % on the way to 100 %).
     Behavior on scale {
@@ -80,7 +88,6 @@ Item {
             easing.overshoot: 2.2
         }
     }
-    Behavior on opacity { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
 
     // --- Shadow, cut out under the shape so it doesn't darken the translucent glass (like CSS box-shadow).
     readonly property real shadowPad: Theme.px(v.shadowBlur + v.shadowY)
@@ -117,25 +124,10 @@ Item {
         maskSpreadAtMin: 1
     }
 
-    // --- Keyboard focus: 2 px accent ring + 4 px accent halo at 20 % outside the border.
-    Rectangle {
-        anchors.fill: parent
-        anchors.margins: -Theme.px(6)
-        radius: root.radius + Theme.px(6)
-        color: "transparent"
-        border.width: Theme.px(4)
-        border.color: Theme.alpha(Theme.accent, 0.2)
-        visible: opacity > 0
-        opacity: root.focused ? 1 : 0
-        Behavior on opacity { NumberAnimation { duration: Motion.micro } }
-        Rectangle {
-            anchors.fill: parent
-            anchors.margins: Theme.px(4)
-            radius: root.radius + Theme.px(2)
-            color: "transparent"
-            border.width: Theme.px(2)
-            border.color: Theme.accent
-        }
+    // --- Keyboard focus
+    FocusRing {
+        shown: root.focused
+        shapeRadius: root.radius
     }
 
     // --- Fill + 1 px border
@@ -167,6 +159,7 @@ Item {
     component EdgeLight: Item {
         id: light
         property real shift: 1   // +1 = top edge, -1 = bottom edge
+        property bool spot: false   // only around hoverX, fading out to the sides
         anchors { left: parent.left; right: parent.right }
         height: root.height / 2
         y: shift > 0 ? 0 : root.height / 2
@@ -179,6 +172,7 @@ Item {
             ShapePath {
                 fillRule: ShapePath.OddEvenFill
                 fillColor: "white"
+                fillGradient: light.spot ? spotGradient : null
                 strokeColor: "transparent"
                 PathRectangle { x: 1; y: 1; width: root.width - 2; height: root.height - 2; radius: Math.max(0, root.radius - 1) }
                 PathRectangle { x: 1; y: 1 + light.shift; width: root.width - 2; height: root.height - 2; radius: Math.max(0, root.radius - 1) }
@@ -188,6 +182,21 @@ Item {
     EdgeLight {
         shift: 1
         opacity: root.highlightAlpha
+        Behavior on opacity { NumberAnimation { duration: Motion.micro } }
+    }
+    // Hover: a brighter spot on the top edge that follows the cursor.
+    RadialGradient {
+        id: spotGradient
+        centerX: root.hoverX; centerY: 0
+        focalX: root.hoverX; focalY: 0
+        centerRadius: Math.max(root.height * 2, root.width * 0.35)
+        GradientStop { position: 0; color: "white" }
+        GradientStop { position: 1; color: "transparent" }
+    }
+    EdgeLight {
+        spot: true
+        visible: root.r.highlight > 0 && !root.tinted
+        opacity: root.hovered && !root.pressed ? 0.5 : 0
         Behavior on opacity { NumberAnimation { duration: Motion.micro } }
     }
     EdgeLight {
