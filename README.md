@@ -40,3 +40,13 @@ Hyprland       # start it from the TTY; Super+Return = kitty; Quickshell (qs) st
 - Colours: `matugen image ~/.local/share/wallpapers/dusk.png -m dark --prefer darkness` (Quickshell recolours live).
 - IPC: `qs ipc show` lists every target; `qs ipc call test toggle` shows the glass test surface,
   `qs ipc call glass set heavy` switches glass strength (QML and Hyprland blur together).
+
+## The bar (Phase 2)
+
+- Five pills (`surfaces/Bar.qml`, `surfaces/bar/`): workspaces + focused window, media (while playing), clock,
+  status, bell. Recording and Hyprland submaps split off the clock; volume / brightness / layout OSDs drop out of it.
+- All binds from DESIGN.md §6 are in `hyprland.lua`; ones whose surface comes later call a `qs ipc` target
+  that only logs a TODO for now. `Super+R` = resize mode (H J K L, Esc).
+- Try states by hand: `qs ipc call capture record` (red pill), `qs ipc call notifications dnd`,
+  `qs ipc call gamemode toggle`, `qs ipc call keepawake toggle`, `qs ipc call battery simulate 12`
+  (`-- -1` for the real battery), `qs ipc call volume up`, `qs ipc call brightness down`.

@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Effects
+import QtQuick.Shapes
 import qs.services
 
 // The one glass material (DESIGN.md §1.2). Fill, border, highlights and shadow are drawn here; the blur
@@ -17,6 +18,11 @@ Item {
     property bool hovered: false
     property bool pressed: false
     property bool focused: false
+    // Tinted pills (§2): "accent" (same as lit) | "error" (recording) | "warning" (low battery) | "success" (sharing).
+    // toneMix blends from plain glass into the tone; the split pills animate it while they bud off the clock.
+    property string tone: ""
+    property real toneMix: 1
+    property bool smoothColor: true   // off while toneMix animates the colour every frame
 
     property real radius: variant === "pill" ? height / 2
                         : variant === "dialog" ? Theme.px(30) : Theme.px(26)
@@ -41,14 +47,28 @@ Item {
     readonly property var r: recipes[strength] ?? recipes.balanced
     readonly property var v: variants[variant] ?? variants.pill
 
+    readonly property string activeTone: tone !== "" ? tone : lit ? "accent" : ""
+    readonly property bool tinted: activeTone !== "" && toneMix > 0.5
+    readonly property var tones: ({
+        accent:  { fill: Theme.alpha(Theme.accentContainer, 0.6), border: Theme.alpha(Theme.accent, 0.5) },
+        error:   { fill: Theme.alpha(Theme.errorContainer, 0.45), border: Theme.alpha(Theme.error, 0.45) },
+        warning: { fill: Theme.warningContainer, border: Theme.alpha(Theme.warning, 0.45) },
+        success: { fill: Theme.successContainer, border: Theme.successBorder }
+    })
+    function mix(a: color, b: color, t: real): color {
+        return Qt.rgba(a.r + (b.r - a.r) * t, a.g + (b.g - a.g) * t, a.b + (b.b - a.b) * t, a.a + (b.a - a.a) * t)
+    }
+
     // Hover lightens toward the accent container, press darkens (values from Popovers.dc.html).
-    readonly property color fillColor: lit ? Theme.alpha(Theme.accentContainer, 0.6)
-        : pressed ? Theme.alpha(Qt.darker(Theme.glassTint, 1.6), Math.min(1, r.fill * v.fill + 0.16))
+    readonly property color glassFill: pressed ? Theme.alpha(Qt.darker(Theme.glassTint, 1.6), Math.min(1, r.fill * v.fill + 0.16))
         : hovered ? Theme.alpha(Qt.tint(Theme.glassTint, Theme.alpha(Theme.accentContainer, 0.55)), Math.min(1, r.fill * v.fill + 0.11))
         : Theme.alpha(Theme.glassTint, Math.min(0.92, r.fill * v.fill))
-    readonly property color borderColor: lit ? Theme.alpha(Theme.accent, 0.5) : Theme.white(r.border + v.border)
+    readonly property color glassBorder: Theme.white(r.border + v.border)
+    readonly property color fillColor: activeTone === "" ? glassFill
+        : mix(glassFill, Qt.lighter(tones[activeTone].fill, hovered && !pressed ? 1.25 : 1), toneMix)
+    readonly property color borderColor: activeTone === "" ? glassBorder : mix(glassBorder, tones[activeTone].border, toneMix)
     readonly property real highlightAlpha: r.highlight === 0 ? 0
-        : lit ? 0.22 : r.highlight + v.highlight + (hovered && !pressed ? 0.12 : 0)
+        : tinted ? 0.22 : r.highlight + v.highlight + (hovered && !pressed ? 0.12 : 0)
 
     opacity: enabled ? 1 : 0.45
     scale: pressed ? 0.95 : hovered ? 1.04 : 1
@@ -126,50 +146,53 @@ Item {
         color: root.fillColor
         border.width: 1
         border.color: root.focused ? "transparent" : root.borderColor
-        Behavior on color { ColorAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
-        Behavior on border.color { ColorAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
+        Behavior on color { enabled: root.smoothColor; ColorAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
+        Behavior on border.color { enabled: root.smoothColor; ColorAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
     }
 
     // --- Heavy: faint accent glow along the bottom.
     Rectangle {
         anchors.fill: parent
         radius: root.radius
-        visible: root.strength === "heavy" && !root.lit
+        visible: root.strength === "heavy" && !root.tinted
         gradient: Gradient {
             GradientStop { position: 0.55; color: "transparent" }
             GradientStop { position: 1.0; color: Theme.alpha(Theme.accent, 0.14) }
         }
     }
 
-    // --- Inset highlights: 1 px white line just inside the top edge (fades out along the curve), and a
-    //     faint one at the bottom for depth. Drawn as a bordered shape clipped to a band at each edge.
-    Item {
-        anchors { left: parent.left; right: parent.right; top: parent.top; margins: 1 }
-        height: Math.max(2, root.radius * 0.45)
+    // --- Inset highlights, like CSS `inset 0 ±1px 0 white`: only the sliver between the inner shape and
+    //     the same shape moved 1 px, so it's a hairline at the top (bottom) centre that thins out to nothing
+    //     along the curve. Drawn as two rounded rects filled even-odd, clipped to that half of the shape.
+    component EdgeLight: Item {
+        id: light
+        property real shift: 1   // +1 = top edge, -1 = bottom edge
+        anchors { left: parent.left; right: parent.right }
+        height: root.height / 2
+        y: shift > 0 ? 0 : root.height / 2
         clip: true
-        opacity: root.highlightAlpha
-        Behavior on opacity { NumberAnimation { duration: Motion.micro } }
-        Rectangle {
-            width: parent.width; height: root.height - 2
-            radius: root.radius - 1
-            color: "transparent"
-            border.width: 1
-            border.color: "white"
+        Shape {
+            y: -light.y
+            width: root.width
+            height: root.height
+            preferredRendererType: Shape.CurveRenderer
+            ShapePath {
+                fillRule: ShapePath.OddEvenFill
+                fillColor: "white"
+                strokeColor: "transparent"
+                PathRectangle { x: 1; y: 1; width: root.width - 2; height: root.height - 2; radius: Math.max(0, root.radius - 1) }
+                PathRectangle { x: 1; y: 1 + light.shift; width: root.width - 2; height: root.height - 2; radius: Math.max(0, root.radius - 1) }
+            }
         }
     }
-    Item {
-        anchors { left: parent.left; right: parent.right; bottom: parent.bottom; margins: 1 }
-        height: Math.max(2, root.radius * 0.45)
-        clip: true
-        opacity: root.lit ? 0 : root.r.bottom
-        Rectangle {
-            anchors.bottom: parent.bottom
-            width: parent.width; height: root.height - 2
-            radius: root.radius - 1
-            color: "transparent"
-            border.width: 1
-            border.color: "white"
-        }
+    EdgeLight {
+        shift: 1
+        opacity: root.highlightAlpha
+        Behavior on opacity { NumberAnimation { duration: Motion.micro } }
+    }
+    EdgeLight {
+        shift: -1
+        opacity: root.tinted ? 0 : root.r.bottom
     }
 
     Item {

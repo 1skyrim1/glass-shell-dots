@@ -25,7 +25,7 @@ Item {
     IpcHandler {
         target: "notifications"
         function toggle(): void { Shell.toggle("notifications") }
-        function dnd(): void { console.log("TODO toggle do not disturb") }
+        function dnd(): void { Modes.dnd = !Modes.dnd }
     }
 
     IpcHandler {
@@ -51,20 +51,60 @@ Item {
 
     IpcHandler {
         target: "lock"
-        function lock(): void { Shell.lock() }
+        // TODO Phase 9: Shell.lock() + the lock screen. Until then locking would only block every panel.
+        function lock(): void { console.log("TODO lock screen") }
     }
 
     IpcHandler {
         target: "capture"
         function region(): void { console.log("TODO capture region") }
-        function record(): void { console.log("TODO start/stop recording") }
+        // Placeholder until Phase 8: only the red pill and its timer.
+        function record(): void { Modes.toggleRecording() }
         function colorpicker(): void { console.log("TODO colour picker") }
         function screen(): void { console.log("TODO full screen to clipboard") }
     }
 
     IpcHandler {
         target: "gamemode"
-        function toggle(): void { console.log("TODO game mode") }
+        function toggle(): void { Modes.gameMode = !Modes.gameMode }
+    }
+
+    IpcHandler {
+        target: "keepawake"
+        function toggle(): void { Modes.keepAwake = !Modes.keepAwake }
+    }
+
+    // Volume, brightness and layout keys: change the value and drop the OSD out of the clock.
+    IpcHandler {
+        target: "volume"
+        function up(): void { Audio.up() }
+        function down(): void { Audio.down() }
+        function mute(): void { Audio.toggleMute() }
+        function micmute(): void { Audio.toggleMicMute() }
+    }
+
+    IpcHandler {
+        target: "brightness"
+        function up(): void { Brightness.up() }
+        function down(): void { Brightness.down() }
+    }
+
+    IpcHandler {
+        target: "layout"
+        function next(): void { Keyboard.next() }
+    }
+
+    IpcHandler {
+        target: "media"
+        function toggle(): void { Media.toggle() }
+        function next(): void { Media.next() }
+        function prev(): void { Media.previous() }
+    }
+
+    IpcHandler {
+        target: "battery"
+        // Fake a charge level (e.g. 12) to try the low-battery tint; -1 goes back to the real battery.
+        function simulate(percent: int): void { Battery.simulated = percent }
     }
 
     IpcHandler {

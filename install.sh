@@ -16,6 +16,11 @@ sudo_ask() {
 # Package list without comments and blank lines.
 pkgs() { sed -e 's/#.*//' -e '/^\s*$/d' "$1"; }
 
+# 0. Mirror: Omarchy's stable mirror (a tested snapshot of Arch). First, so every install below comes
+#    from it; mixing it with packages from a newer regular mirror makes installs fail with 404s.
+mirrorlist=system/etc/pacman.d/mirrorlist
+cmp -s "$mirrorlist" /etc/pacman.d/mirrorlist || sudo_ask install -Dm644 "$mirrorlist" /etc/pacman.d/mirrorlist
+
 # 1. Official packages
 mapfile -t pacman_pkgs < <(pkgs packages/pacman.txt)
 sudo_ask pacman -Syu --needed "${pacman_pkgs[@]}"

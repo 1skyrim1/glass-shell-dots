@@ -52,6 +52,8 @@ gpu-screen-recorder
 libqalculate
 fd
 lazygit
+nautilus
+librewolf
 
 # Login (enabled in Phase 9)
 greetd
