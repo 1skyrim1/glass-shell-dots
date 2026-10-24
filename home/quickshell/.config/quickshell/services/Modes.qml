@@ -4,8 +4,8 @@ import Quickshell
 import Quickshell.Hyprland
 
 // Modes the bar shows (DESIGN.md §2): do not disturb, game mode, keep awake and the active Hyprland submap
-// (the screen recording lives in Recorder). For now these are only state + indicators; keep awake gets its
-// idle inhibitor in Phase 9. Notifs holds toasts back during DND / game mode.
+// (the screen recording lives in Recorder). Keep awake is an idle inhibitor on the bar (Bar.qml), which the idle
+// chain respects (Idle.qml). Notifs holds toasts back during DND / game mode.
 Singleton {
     id: root
 

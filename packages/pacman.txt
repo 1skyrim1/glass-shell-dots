@@ -10,9 +10,8 @@ hyprland
 xdg-desktop-portal-hyprland
 xdg-desktop-portal-gtk
 qt6-wayland
+# the polkit agent is Quickshell's (services/Polkit.qml)
 polkit
-# temporary polkit agent until the Quickshell one is in place (DESIGN.md §7)
-hyprpolkitagent
 
 # Shell
 quickshell
@@ -68,7 +67,7 @@ librewolf
 fastfetch
 btop
 
-# Login (enabled in Phase 9)
+# Login: greetd runs the Quickshell greeter (system/etc/greetd/); agreety is its text fallback
 greetd
 
 # Fallback fonts

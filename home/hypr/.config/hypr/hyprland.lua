@@ -71,7 +71,8 @@ end
 glass_apply("balanced")
 
 hl.on("hyprland.start", function()
-    hl.exec_cmd("qs")
+    -- GLASS_SHELL_LOGIN: this is a fresh log in, so the pills drop in (the second half of the greeter's motion).
+    hl.exec_cmd("GLASS_SHELL_LOGIN=1 qs")
     -- Clipboard history (launcher ; mode): cliphist stores every copy, then tells the shell when and
     -- where from it was copied.
     hl.exec_cmd("wl-paste --watch sh -c 'cliphist store; qs ipc call clipboard stored'")
@@ -93,6 +94,18 @@ function border_apply(hex)
     hl.config({ general = { col = { active_border = "rgb(" .. hex .. ")", inactive_border = "rgba(ffffff14)" } } })
 end
 pcall(dofile, (os.getenv("HOME") or "") .. "/.local/state/glass-shell/hypr-colors.lua")
+
+-- Session (DESIGN.md §3.8, §4): the lock and the idle chain live in Quickshell (no hyprlock / hypridle).
+-- allow_session_lock_restore: if qs dies while locked, the session stays locked and a restarted qs takes the
+-- lock over (from a TTY: HYPRLAND_INSTANCE_SIGNATURE=$(ls /run/user/$UID/hypr) hyprctl dispatch 'hl.dsp.exec_cmd("qs")').
+-- Input wakes a screen the idle chain turned off.
+hl.config({
+    misc = {
+        allow_session_lock_restore = true,
+        key_press_enables_dpms     = true,
+        mouse_move_enables_dpms    = true,
+    },
+})
 
 -- Qt apps take their colours from qt6ct, which reads matugen's scheme (~/.config/qt6ct/colors/matugen.conf).
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
@@ -130,8 +143,8 @@ bind(mainMod .. " + N",         ipc("notifications toggle"),     "Shell: Notific
 bind(mainMod .. " + W",         ipc("wallpaper toggle"),         "Shell: Wallpaper & theme")
 bind(mainMod .. " + V",         ipc("launcher mode clipboard"),  "Shell: Clipboard history")
 bind(mainMod .. " + period",    ipc("launcher mode emoji"),      "Shell: Emoji picker")
-bind(mainMod .. " + Escape",    ipc("power toggle"),             "Shell: Power menu")            -- TODO Phase 9
-bind(mainMod .. " + L",         ipc("lock lock"),                "Shell: Lock")                  -- TODO Phase 9
+bind(mainMod .. " + Escape",    ipc("power toggle"),             "Shell: Power menu")
+bind(mainMod .. " + L",         ipc("lock lock"),                "Shell: Lock")
 -- Keyboard layout: no bind; click the layout badge in the status pill.
 
 -- Capture
@@ -212,7 +225,7 @@ hl.bind("XF86AudioPause",        ipc("media toggle"),    { locked = true })
 hl.bind("XF86AudioNext",         ipc("media next"),      { locked = true })
 hl.bind("XF86AudioPrev",         ipc("media prev"),      { locked = true })
 
--- Greeter / lock screen keys (Alt+U users, Alt+P power options) are handled inside those surfaces (Phase 9).
+-- Greeter / lock screen keys (Alt+U users, Alt+P power options) are handled inside those surfaces.
 
 -- Key hints appear only while Alt is held (DESIGN.md §4). Non-consuming, so Alt+… binds and apps still get it.
 hl.bind("ALT_L", hl.dsp.exec_cmd("qs ipc call keyhints press"), { non_consuming = true })

@@ -57,7 +57,7 @@ Singleton {
     readonly property color textOnError: role("on_error_container")
     // On a solid error fill (record Start); colors.json from before Phase 8 has no on_error yet.
     readonly property color textOnErrorStrong: target.on_error ? role("on_error") : errorContainer
-    readonly property string wallpaper: roles.wallpaper ?? ""
+    readonly property string wallpaper: greeter ? stateDir + "/wallpaper" : (roles.wallpaper ?? "")
 
     // Fixed status colours (not from matugen)
     readonly property color warning: "#FFB36B"
@@ -88,9 +88,15 @@ Singleton {
 
     function reload() { generated.reload() }
 
+    // Where matugen's colours live. The greeter runs as another user and can't read $HOME: its Hyprland
+    // config sets GLASS_SHELL_STATE to /var/lib/glass-shell/greeter, where matugen's hook copies colors.json
+    // and the wallpaper (home/matugen/.config/matugen/config.toml).
+    readonly property string stateDir: Quickshell.env("GLASS_SHELL_STATE") || Quickshell.env("HOME") + "/.local/state/glass-shell"
+    readonly property bool greeter: (Quickshell.env("GLASS_SHELL_STATE") ?? "") !== ""
+
     FileView {
         id: generated
-        path: Quickshell.env("HOME") + "/.local/state/glass-shell/colors.json"
+        path: root.stateDir + "/colors.json"
         watchChanges: true
         printErrors: false
         onFileChanged: reload()

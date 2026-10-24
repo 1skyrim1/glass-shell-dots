@@ -42,15 +42,27 @@ if command -v paru >/dev/null; then
   if [[ $answer == [yY] ]]; then paru -S --needed "${aur_pkgs[@]}"; fi
 fi
 
-# 4. System files: system/<path> -> /<path>
+# 4. System files: system/<path> -> /<path> (scripts keep their exec bit): greetd + its Hyprland, the lock
+#    screen's PAM file, faillock, NetworkManager, the mirror.
 while IFS= read -r -d '' file; do
   target="/${file#system/}"
-  cmp -s "$file" "$target" 2>/dev/null || sudo_ask install -Dm644 "$file" "$target"
+  mode=644; [[ -x $file ]] && mode=755
+  cmp -s "$file" "$target" 2>/dev/null && [[ $(stat -c %a "$target") == "$mode" ]] || sudo_ask install -Dm$mode "$file" "$target"
 done < <(find system -type f -print0)
 
 # The greeter (Phase 9) can't read $HOME; matugen's hook copies the theme and wallpaper here on every
 # wallpaper change (home/matugen/.config/matugen/config.toml).
 [[ -d /var/lib/glass-shell/greeter ]] || sudo_ask install -d -o "$USER" -g "$USER" -m 755 /var/lib/glass-shell/greeter
+
+# The greeter runs this repo's Quickshell config (greeter.qml) as the greeter user, who can't read $HOME:
+# copy it next to the theme. No sudo needed (the folder is ours); re-run after changing the shell.
+if [[ -w /var/lib/glass-shell/greeter ]]; then
+  rm -rf /var/lib/glass-shell/greeter/shell
+  cp -r home/quickshell/.config/quickshell /var/lib/glass-shell/greeter/shell
+  # The user's picture for the greeter (the lock screen reads ~/.face itself).
+  mkdir -p /var/lib/glass-shell/greeter/faces
+  if [[ -f $HOME/.face ]]; then cp -f "$HOME/.face" "/var/lib/glass-shell/greeter/faces/$USER"; fi
+fi
 
 # 5. Services
 systemctl --user enable pipewire.socket pipewire-pulse.socket wireplumber.service
@@ -99,4 +111,12 @@ if [[ ! -f $HOME/.local/state/glass-shell/colors.json || ! -f $HOME/.config/kitt
   matugen image "$HOME/.local/share/wallpapers/dusk.png" -m dark --prefer darkness --continue-on-error -q
 fi
 
-echo; echo "Done. Start the desktop with: Hyprland"
+# 9. Log in with the Glass Shell greeter (greetd) instead of the text login on tty1.
+#    If the greeter fails it falls back to a text login by itself; Ctrl+Alt+F2 always has a normal login.
+#    To switch back: sudo systemctl disable greetd (getty@tty1 takes tty1 again after a reboot).
+if ! systemctl is-enabled -q greetd; then
+  echo; echo "greetd replaces the text login on tty1 from the next boot (fallback: Ctrl+Alt+F2)."
+  sudo_ask systemctl enable greetd
+fi
+
+echo; echo "Done. Reboot to get the greeter, or start the desktop from a TTY with: start-hyprland"

@@ -23,6 +23,23 @@ Singleton {
     })
     readonly property string short: entries[index]?.code ?? ""
 
+    // Caps Lock on the main keyboard. Hyprland sends no event for it: password fields call refreshCaps()
+    // on every key press (the lock screen's and greeter's Caps Lock chip, 30-SessionStates).
+    property bool capsLock: false
+    function refreshCaps() { if (!caps.running) caps.running = true }
+    Process {
+        id: caps
+        command: ["hyprctl", "devices", "-j"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                try {
+                    const kbs = JSON.parse(text).keyboards
+                    root.capsLock = (kbs.find(k => k.main) ?? kbs[0])?.capsLock ?? false
+                } catch (e) {}
+            }
+        }
+    }
+
     function next() { switcher.exec(["hyprctl", "switchxkblayout", "all", "next"]) }
     function select(i: int) { switcher.exec(["hyprctl", "switchxkblayout", "all", String(i)]) }
 

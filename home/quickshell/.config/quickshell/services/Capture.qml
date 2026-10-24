@@ -95,7 +95,7 @@ Singleton {
     // --- Open / close
     // mode "" keeps the last one; kind "photo" | "video" | "" (keep).
     function open(m: string, k: string) {
-        if (Recorder.recording) return
+        if (Recorder.recording || Shell.locked || Shell.promptOpen) return
         if (phase === "open" && tool === "capture") {
             setMode(m)
             if (k !== "") kind = k
@@ -108,7 +108,7 @@ Singleton {
         freeze()
     }
     function openPicker() {
-        if (phase !== "") return
+        if (phase !== "" || Shell.locked || Shell.promptOpen) return
         tool = "color"
         pickFormat = "hex"
         freeze()

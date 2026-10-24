@@ -1,0 +1,12 @@
+# greetd: the Glass Shell greeter on tty1 (DESIGN.md §3.8 "Login"). Installed by install.sh.
+# Switch back to the plain text login:  sudo systemctl disable greetd  (getty@tty1 stays enabled and takes tty1
+# again after a reboot; or right away: sudo systemctl stop greetd && sudo systemctl start getty@tty1).
+# Other TTYs (Ctrl+Alt+F2 …) always have a normal login.
+
+[terminal]
+vt = 1
+
+[default_session]
+# Runs Hyprland with the Quickshell greeter; falls back to agreety (text login) if that fails.
+command = "/etc/greetd/glass-greeter.sh"
+user = "greeter"

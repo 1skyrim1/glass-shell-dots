@@ -60,6 +60,32 @@ ShellRoot {
         }
     }
 
+    // Power menu (Super+Esc) and the polkit password prompt, above the capture tool.
+    Variants {
+        model: Quickshell.screens
+        PowerMenu {
+            required property var modelData
+            screen: modelData
+        }
+    }
+    Variants {
+        model: Quickshell.screens
+        AuthDialog {
+            required property var modelData
+            screen: modelData
+        }
+    }
+
+    // Shutting-down screen (log out / reboot / power off) and the session lock, on top of everything.
+    Variants {
+        model: Quickshell.screens
+        Ending {
+            required property var modelData
+            screen: modelData
+        }
+    }
+    Lock {}
+
     LazyLoader {
         active: Shell.panel === "test"
         GlassTest {}

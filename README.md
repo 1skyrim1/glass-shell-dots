@@ -62,3 +62,35 @@ Hyprland       # start it from the TTY; Super+Return = kitty; Quickshell (qs) st
   GTK `~/.config/gtk-{3,4}.0/gtk.css`, Qt `~/.config/qt6ct/colors/matugen.conf`, greeter `/var/lib/glass-shell/greeter/`.
   `preview.toml` is the kitty-only run used while browsing.
 - IPC: `qs ipc call wallpaper list`, `… set fjord`, `… next` / `prev` / `random` / `apply`.
+
+## Session: lock, greeter, polkit, power, idle (Phase 9)
+
+- **Lock** `Super+L` (or `loginctl lock-session`; it also locks before every suspend). Alt+P = power options
+  (Reboot / Power off arm first: press the key again within 3 s). 3 wrong passwords → 10 s wait.
+  `qs ipc call lock preview` shows the lock screen without locking (fake auth: `wrong` fails, anything else
+  unlocks, Esc leaves).
+- **Power menu** `Super+Esc`: L lock · S suspend · O log out · R reboot · P power off (R / P: press twice).
+  Log out / reboot / power off close every window first and name the app that's holding things up (e.g. kitty
+  asking "really close?"): Enter closes it anyway, Esc cancels so you can answer it yourself.
+  `qs ipc call session preview poweroff` shows that screen without doing anything.
+- **Idle** (times in `config.json` → `idle`): 10 s dim + countdown in the clock pill → lock at 5 min → screen off at
+  7 min → suspend at 15 min on battery. Skipped while a video plays or Keep awake is on.
+  `qs ipc call idle test 20` squeezes it to 20 s (with the preview lock), `… test 0` goes back.
+- **Polkit**: Quickshell is the polkit agent (hyprpolkitagent isn't needed). 3 wrong passwords cancel the request
+  and leave a notification. faillock (`system/etc/security/faillock.conf`): 3 failures → 30 s.
+- **Battery**: at 5 % a red toast that ignores DND; at 3 % the laptop suspends. Try with `qs ipc call battery simulate 5`.
+- **Greeter** (greetd on tty1, `system/etc/greetd/`): Alt+U users (only with several users), Alt+P power options.
+  It runs a copy of `home/quickshell/.config/quickshell` from `/var/lib/glass-shell/greeter/shell`: re-run
+  `install.sh` (or copy it) after changing the shell. Try it inside the session:
+  `GLASS_GREETER_TEST=1 qs -p ~/.config/quickshell/greeter.qml` (adds a Guest, fake auth; Enter on Guest quits).
+  Your picture: `~/.face` (install.sh copies it for the greeter).
+
+### If something goes wrong
+
+- **Greeter fails**: it falls back to the text login (agreety) on tty1 by itself; `Ctrl+Alt+Backspace` in the
+  greeter also drops to it. `Ctrl+Alt+F2` always gives a normal TTY login.
+- **Back to the plain text login**: `sudo systemctl disable greetd` and reboot
+  (or now: `sudo systemctl stop greetd && sudo systemctl start getty@tty1`). getty@tty1 stays enabled.
+- **Stuck lock screen** (qs crashed while locked, Hyprland shows "lockdead"): `Ctrl+Alt+F2`, log in, then
+  `HYPRLAND_INSTANCE_SIGNATURE=$(ls /run/user/$UID/hypr) hyprctl dispatch 'hl.dsp.exec_cmd("qs")'`, go back with
+  `Ctrl+Alt+F1` and unlock normally.

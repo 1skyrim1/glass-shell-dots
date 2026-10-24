@@ -97,8 +97,49 @@ Item {
 
     IpcHandler {
         target: "lock"
-        // TODO Phase 9: Shell.lock() + the lock screen. Until then locking would only block every panel.
-        function lock(): void { console.log("TODO lock screen") }
+        function lock(): void { Session.lock(false) }
+        // The lock screen on an ordinary layer with fake auth ("wrong" fails, anything else unlocks; Esc leaves).
+        function preview(): void { Session.startPreview() }
+        // Preview only: type into it without a keyboard.
+        function type(text: string): void { if (Session.preview) Session.submit(text) }
+        function state(): string {
+            return JSON.stringify({ phase: Session.phase, preview: Session.preview, status: Session.status,
+                                    failures: Session.failures, waitLeft: Session.waitLeft, barT: Session.barT })
+        }
+    }
+
+    IpcHandler {
+        target: "session"
+        // The power menu's actions without the menu (logout / reboot / poweroff show the shutting-down screen).
+        function suspend(): void { Session.suspend() }
+        function logout(): void { Session.end("logout") }
+        function reboot(): void { Session.end("reboot") }
+        function poweroff(): void { Session.end("poweroff") }
+        function cancel(): void { Session.cancelEnd() }
+        // Like Enter on that screen: close the apps that are still open anyway.
+        function force(): void { Session.forceEnd() }
+        // The shutting-down screen without closing or running anything (Esc or `cancel` ends it).
+        function preview(kind: string): void { Session.previewEnd(kind || "poweroff") }
+    }
+
+    IpcHandler {
+        target: "idle"
+        // Squeeze the idle chain so the lock comes `seconds` after the last input (0 = normal times again).
+        function test(seconds: int): void { Idle.factor = seconds > 0 ? seconds / Config.idle.lock : 1 }
+        function state(): string {
+            return JSON.stringify({ factor: Idle.factor, lockAfter: Idle.lockAfter, warnAfter: Idle.warnAfter, countdown: Idle.countdown })
+        }
+    }
+
+    IpcHandler {
+        target: "polkit"
+        function cancel(): void { Polkit.cancel() }
+        function state(): string {
+            const f = Polkit.flow
+            return JSON.stringify({ active: Polkit.active, status: Polkit.status, failures: Polkit.failures,
+                                    message: f?.message ?? "", action: f?.actionId ?? "", prompt: f?.inputPrompt ?? "",
+                                    identity: f?.selectedIdentity?.displayName ?? "", program: Polkit.program, pid: Polkit.pid })
+        }
     }
 
     IpcHandler {

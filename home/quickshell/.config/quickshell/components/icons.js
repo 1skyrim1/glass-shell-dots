@@ -106,6 +106,14 @@ const icons = {
     "pixelate": { d: "M3 3h6v6H3zM15 3h6v6h-6zM9 9h6v6H9zM3 15h6v6H3zM15 15h6v6h-6z" },
     "undo": { d: "M9 14 4 9l5-5M4 9h11a5 5 0 0 1 0 10h-3" },
     "redo": { d: "m15 14 5-5-5-5M20 9H9a5 5 0 0 0 0 10h3" },
+    // Session (greeter, lock, power menu, polkit)
+    "arrow-right": { d: "M5 12h14M13 6l6 6-6 6" },
+    "log-out": { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" },
+    "chevron-up": { d: "m18 15-6-6-6 6" },
+    "chevron-down": { d: "m6 9 6 6 6-6" },
+    "user": { d: circle(12, 8, 4) + "M4 21a8 8 0 0 1 16 0" },
+    "shield-check": { d: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10zM9 12l2 2 4-4" },
+    "caps-lock": { d: "m12 4-8 8h5v6h6v-6h5z" },
 }
 
 function get(name) { return icons[name] ?? icons["app-window"] }

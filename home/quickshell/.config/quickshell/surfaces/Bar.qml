@@ -54,6 +54,20 @@ Scope {
             opacity: Math.max(launcher.dimLevel, control.dimLevel, notifCenter.dimLevel * 0.22 / 0.34)
             visible: opacity > 0
         }
+        // 10 s before the idle lock the screen dims to 45 % (30-SessionStates "About to lock").
+        Rectangle {
+            anchors.fill: parent
+            color: Theme.alpha(Theme.scrim, 0.55)
+            opacity: Idle.warning ? 1 : 0
+            visible: opacity > 0
+            Behavior on opacity { NumberAnimation { duration: Motion.small; easing.type: Motion.easeSmall } }
+        }
+    }
+
+    // Keep awake (Control Center, Modes): holds the idle chain back (services/Idle.qml respects inhibitors).
+    IdleInhibitor {
+        window: win
+        enabled: Modes.keepAwake
     }
 
     PanelWindow {
@@ -90,6 +104,16 @@ Scope {
             Region { item: bell }
         }
 
+        // Lock / unlock / log in (06-MotionSession): the pills float up and fade, and drop back in from the top:
+        // the clock first, then the left pills, then the right ones (Session.barT 0 = gone, 1 = in place).
+        function bar(a: real, b: real): real {
+            const u = Math.max(0, Math.min(1, (Session.barT - a) / (b - a)))
+            return u * u * (3 - 2 * u)
+        }
+        readonly property real clockIn: bar(0, 0.35)
+        readonly property real leftIn: bar(0, 0.8)
+        readonly property real rightIn: bar(0.15, 1)
+
         readonly property real inset: Theme.px(12)
         readonly property real top: Theme.px(10)
         readonly property real gap: Theme.px(8)
@@ -105,180 +129,189 @@ Scope {
             onPressed: Shell.closeTop()
         }
 
-        // --- Left: workspaces, and the media pill sliding out from behind them.
-        MediaPill {
-            id: media
-            anchor: workspaces
-            gap: win.gap
-            y: win.top
+        PillGroup {
+            shown: win.leftIn
+            // --- Left: workspaces, and the media pill sliding out from behind them.
+            MediaPill {
+                id: media
+                anchor: workspaces
+                gap: win.gap
+                y: win.top
+            }
+            WorkspacePill {
+                id: workspaces
+                x: win.inset
+                y: win.top
+            }
         }
-        WorkspacePill {
-            id: workspaces
-            x: win.inset
-            y: win.top
-        }
 
-        // --- Centre: the clock, with the OSD and the temporary pills underneath it.
-        OsdDrop { clock: clock }
+        PillGroup {
+            shown: win.clockIn
+            // --- Centre: the clock, with the OSD and the temporary pills underneath it.
+            OsdDrop { clock: clock }
 
-        // Recording (22-CaptureWindow): red dot with a halo, "REC" + timer and a Stop chip; click or
-        // Super+Shift+R stops. When it merges back, the "Recording saved" card drops out of it.
-        SplitPill {
-            id: recording
-            clock: clock
-            side: "right"
-            tone: "error"
-            shown: Recorder.recording
-            padLeft: Theme.px(13)
-            padRight: Theme.px(8)
-            spacing: Theme.px(10)
-            onClicked: Recorder.stop()
+            // Recording (22-CaptureWindow): red dot with a halo, "REC" + timer and a Stop chip; click or
+            // Super+Shift+R stops. When it merges back, the "Recording saved" card drops out of it.
+            SplitPill {
+                id: recording
+                clock: clock
+                side: "right"
+                tone: "error"
+                shown: Recorder.recording
+                padLeft: Theme.px(13)
+                padRight: Theme.px(8)
+                spacing: Theme.px(10)
+                onClicked: Recorder.stop()
 
-            Item {
-                anchors.verticalCenter: parent.verticalCenter
-                width: Theme.px(10)
-                height: width
-                // 4 px halo around the dot; like the design's box-shadow it takes no space.
-                Rectangle {
-                    anchors.centerIn: parent
-                    width: Theme.px(18)
+                Item {
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: Theme.px(10)
                     height: width
-                    radius: width / 2
-                    color: Theme.alpha(Theme.error, 0.25)
+                    // 4 px halo around the dot; like the design's box-shadow it takes no space.
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: Theme.px(18)
+                        height: width
+                        radius: width / 2
+                        color: Theme.alpha(Theme.error, 0.25)
+                    }
+                    Rectangle {
+                        anchors.fill: parent
+                        radius: width / 2
+                        color: Theme.error
+                    }
+                }
+                BarText {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "REC " + Recorder.recordingTime
+                    color: Theme.textOnError
+                    font.family: Theme.fontMono
+                    font.weight: Font.Medium
+                }
+                // Stop chip: 28 px, error 22 %.
+                Rectangle {
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: stopRow.implicitWidth + Theme.px(20)
+                    height: Theme.px(28)
+                    radius: height / 2
+                    color: Theme.alpha(Theme.error, 0.22)
+                    Row {
+                        id: stopRow
+                        anchors.centerIn: parent
+                        spacing: Theme.px(6)
+                        BarText {
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: "Stop"
+                            color: Theme.textOnError
+                            font.pixelSize: Theme.px(12)
+                        }
+                        KeyHint {
+                            anchors.verticalCenter: parent.verticalCenter
+                            key: "Super Shift R"
+                        }
+                    }
+                }
+            }
+
+            // Sharing (25-SharePicker "While sharing"): green, "Sharing <what>" + Stop. Same motion as recording;
+            // buds off the red pill when both are up.
+            SplitPill {
+                id: sharing
+                clock: recording.visible ? recording.pill : clock
+                side: "right"
+                tone: "success"
+                shown: Share.sharing
+                padLeft: Theme.px(12)
+                padRight: Theme.px(6)
+                spacing: Theme.px(9)
+                onClicked: Share.stop()
+
+                // Keep the last label while the pill merges back.
+                property string label: ""
+                Connections {
+                    target: Share
+                    function onLabelChanged() { if (Share.label !== "") sharing.label = Share.label }
+                }
+
+                Icon {
+                    anchors.verticalCenter: parent.verticalCenter
+                    name: "monitor"
+                    size: Theme.px(15)
+                    color: Theme.textOnSuccess
+                }
+                BarText {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "Sharing " + sharing.label
+                    color: Theme.textOnSuccess
                 }
                 Rectangle {
-                    anchors.fill: parent
-                    radius: width / 2
-                    color: Theme.error
-                }
-            }
-            BarText {
-                anchors.verticalCenter: parent.verticalCenter
-                text: "REC " + Recorder.recordingTime
-                color: Theme.textOnError
-                font.family: Theme.fontMono
-                font.weight: Font.Medium
-            }
-            // Stop chip: 28 px, error 22 %.
-            Rectangle {
-                anchors.verticalCenter: parent.verticalCenter
-                width: stopRow.implicitWidth + Theme.px(20)
-                height: Theme.px(28)
-                radius: height / 2
-                color: Theme.alpha(Theme.error, 0.22)
-                Row {
-                    id: stopRow
-                    anchors.centerIn: parent
-                    spacing: Theme.px(6)
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: shareStop.implicitWidth + Theme.px(20)
+                    height: Theme.px(26)
+                    radius: height / 2
+                    color: Theme.white(0.14)
                     BarText {
-                        anchors.verticalCenter: parent.verticalCenter
+                        id: shareStop
+                        anchors.centerIn: parent
                         text: "Stop"
-                        color: Theme.textOnError
+                        color: Theme.textOnSuccess
                         font.pixelSize: Theme.px(12)
                     }
+                }
+            }
+
+            // Key mode: while a Hyprland submap is active, its name and keys (they're why typing doesn't work).
+            SplitPill {
+                id: keyMode
+                clock: clock
+                side: "left"
+                tone: "accent"
+                shown: Modes.submap !== ""
+                padRight: Theme.px(10)
+                spacing: Theme.px(8)
+
+                // Keep the last submap's content while the pill merges back.
+                property string name: ""
+                Connections {
+                    target: Modes
+                    function onSubmapChanged() { if (Modes.submap !== "") keyMode.name = Modes.submap }
+                }
+
+                BarText {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: keyMode.name.toUpperCase()
+                    color: Theme.textOnContainer
+                    font.pixelSize: Theme.px(12)
+                    font.weight: Font.DemiBold
+                    font.letterSpacing: Theme.px(0.8)
+                }
+                Repeater {
+                    model: Modes.submapKeys[keyMode.name] ?? []
                     KeyHint {
+                        required property string modelData
                         anchors.verticalCenter: parent.verticalCenter
-                        key: "Super Shift R"
+                        key: modelData
+                        alwaysVisible: true
                     }
                 }
             }
-        }
 
-        // Sharing (25-SharePicker "While sharing"): green, "Sharing <what>" + Stop. Same motion as recording;
-        // buds off the red pill when both are up.
-        SplitPill {
-            id: sharing
-            clock: recording.visible ? recording.pill : clock
-            side: "right"
-            tone: "success"
-            shown: Share.sharing
-            padLeft: Theme.px(12)
-            padRight: Theme.px(6)
-            spacing: Theme.px(9)
-            onClicked: Share.stop()
-
-            // Keep the last label while the pill merges back.
-            property string label: ""
-            Connections {
-                target: Share
-                function onLabelChanged() { if (Share.label !== "") sharing.label = Share.label }
-            }
-
-            Icon {
-                anchors.verticalCenter: parent.verticalCenter
-                name: "monitor"
-                size: Theme.px(15)
-                color: Theme.textOnSuccess
-            }
-            BarText {
-                anchors.verticalCenter: parent.verticalCenter
-                text: "Sharing " + sharing.label
-                color: Theme.textOnSuccess
-            }
-            Rectangle {
-                anchors.verticalCenter: parent.verticalCenter
-                width: shareStop.implicitWidth + Theme.px(20)
-                height: Theme.px(26)
-                radius: height / 2
-                color: Theme.white(0.14)
-                BarText {
-                    id: shareStop
-                    anchors.centerIn: parent
-                    text: "Stop"
-                    color: Theme.textOnSuccess
-                    font.pixelSize: Theme.px(12)
-                }
+            ClockPill {
+                id: clock
+                x: Math.round((win.width - width) / 2)
+                y: win.top
             }
         }
 
-        // Key mode: while a Hyprland submap is active, its name and keys (they're why typing doesn't work).
-        SplitPill {
-            id: keyMode
-            clock: clock
-            side: "left"
-            tone: "accent"
-            shown: Modes.submap !== ""
-            padRight: Theme.px(10)
-            spacing: Theme.px(8)
-
-            // Keep the last submap's content while the pill merges back.
-            property string name: ""
-            Connections {
-                target: Modes
-                function onSubmapChanged() { if (Modes.submap !== "") keyMode.name = Modes.submap }
+        PillGroup {
+            shown: win.rightIn
+            // --- Right: status and bell; the row is right-aligned so the status pill stretches leftwards.
+            Row {
+                anchors { right: parent.right; rightMargin: win.inset; top: parent.top; topMargin: win.top }
+                spacing: win.gap
+                StatusPill { id: status }
+                BellPill { id: bell }
             }
-
-            BarText {
-                anchors.verticalCenter: parent.verticalCenter
-                text: keyMode.name.toUpperCase()
-                color: Theme.textOnContainer
-                font.pixelSize: Theme.px(12)
-                font.weight: Font.DemiBold
-                font.letterSpacing: Theme.px(0.8)
-            }
-            Repeater {
-                model: Modes.submapKeys[keyMode.name] ?? []
-                KeyHint {
-                    required property string modelData
-                    anchors.verticalCenter: parent.verticalCenter
-                    key: modelData
-                    alwaysVisible: true
-                }
-            }
-        }
-
-        ClockPill {
-            id: clock
-            x: Math.round((win.width - width) / 2)
-            y: win.top
-        }
-
-        // --- Right: status and bell; the row is right-aligned so the status pill stretches leftwards.
-        Row {
-            anchors { right: parent.right; rightMargin: win.inset; top: parent.top; topMargin: win.top }
-            spacing: win.gap
-            StatusPill { id: status }
-            BellPill { id: bell }
         }
 
         // --- Toasts: above the pills (they drip out of the bell), under popovers and panels.
@@ -339,5 +372,15 @@ Scope {
             screenName: root.screen.name
         }
         BarTooltip {}
+    }
+
+    // A full-screen group of pills that floats up and fades together (coordinates stay the window's).
+    component PillGroup: Item {
+        id: group
+        property real shown: 1
+        anchors.fill: parent
+        opacity: shown
+        visible: shown > 0
+        transform: Translate { y: -Theme.px(16) * (1 - group.shown) }
     }
 }

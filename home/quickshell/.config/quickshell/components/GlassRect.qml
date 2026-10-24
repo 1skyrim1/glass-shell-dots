@@ -12,7 +12,7 @@ import qs.services
 Item {
     id: root
 
-    property string variant: "pill"          // "pill" | "popover" | "panel" | "dialog"
+    property string variant: "pill"          // "pill" | "chip" | "popover" | "panel" | "dialog"
     property string strength: Config.glass   // "subtle" | "balanced" | "heavy"
     property bool lit: false
     property bool hovered: false
@@ -27,7 +27,7 @@ Item {
     property real toneMix: 1
     property bool smoothColor: true   // off while toneMix animates the colour every frame
 
-    property real radius: variant === "pill" ? height / 2
+    property real radius: variant === "pill" || variant === "chip" ? height / 2
                         : variant === "popover" ? Theme.px(22)
                         : variant === "dialog" ? Theme.px(30) : Theme.px(26)
 
@@ -45,6 +45,8 @@ Item {
     // balanced recipe (44 % → 55 % / 58 %); border and highlight add on top. Shadow values are design px.
     readonly property var variants: ({
         pill:    { fill: 1.00,      border: 0.00, highlight: 0.00, shadowY: 10, shadowBlur: 34,  shadow: 0.38 },
+        // Greeter / lock chips and the password pill (Login.dc.html .glass): a little lighter, softer shadow.
+        chip:    { fill: 0.40 / 0.44, border: 0.01, highlight: 0.02, shadowY: 14, shadowBlur: 40,  shadow: 0.35 },
         popover: { fill: 0.55 / 0.44, border: 0.03, highlight: 0.04, shadowY: 24, shadowBlur: 60,  shadow: 0.45 },
         panel:   { fill: 0.55 / 0.44, border: 0.03, highlight: 0.04, shadowY: 30, shadowBlur: 80,  shadow: 0.50 },
         dialog:  { fill: 0.58 / 0.44, border: 0.03, highlight: 0.04, shadowY: 40, shadowBlur: 100, shadow: 0.60 }
@@ -60,6 +62,10 @@ Item {
         // Critical notifications (19-NotifStates): a denser red with a brighter edge.
         critical: { fill: Theme.alpha(Theme.errorContainer, 0.55), border: Theme.alpha(Theme.error, 0.6) },
         warning: { fill: Theme.warningContainer, border: Theme.alpha(Theme.warning, 0.45) },
+        // The greeter / lock password pill (Login.dc.html .pw): accent container 45 % + a strong accent edge.
+        field:   { fill: Theme.alpha(Theme.accentContainer, 0.45), border: Theme.alpha(Theme.accent, 0.65) },
+        // … and when the password was wrong (30-SessionStates).
+        wrong:   { fill: Theme.alpha(Theme.errorContainer, 0.55), border: Theme.alpha(Theme.error, 0.8) },
         success: { fill: Theme.successContainer, border: Theme.successBorder }
     })
     function mix(a: color, b: color, t: real): color {

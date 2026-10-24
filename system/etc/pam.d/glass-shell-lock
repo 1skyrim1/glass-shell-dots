@@ -1,0 +1,4 @@
+#%PAM-1.0
+# The Glass Shell lock screen (Quickshell PamContext, services/Session.qml). Runs as the user, so pam_faillock
+# can't count failures here; the lock screen adds its own wait instead.
+auth       include      system-auth

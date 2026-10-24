@@ -84,6 +84,27 @@ Singleton {
     readonly property int shotCardHold: 6000   // the thumbnail card waits this long
     readonly property int countdownTick: 1000  // one number of the countdown; its red ring drains meanwhile
 
+    // Session (§3.8, §5.3; 06-MotionSession: its keyframes are a 12 s loop at half speed, so each phase is
+    // stretched; the shapes below are its keyframes normalised to the real durations).
+    readonly property int login: 700          // greeter → desktop: avatar + field sink, clock flies into its pill
+    readonly property int lock: 500           // desktop blurs, clock grows out of its pill, avatar + field rise
+    readonly property int unlock: 450         // like log in, but only the blur clears
+    readonly property int preLock: 160        // pills float up before the screen is frozen for the lock
+    readonly property int arrive: 300         // pills drop back in after unlock / log in (staggered inside)
+    readonly property int blackFade: 400      // log out / reboot / power off fade to black
+    readonly property int powerDim: 200       // power menu: dim + blur first …
+    readonly property int powerTiles: 300     // … then the tiles rise with a small bounce
+    readonly property int tileStagger: 40
+    readonly property int dialogIn: 260       // polkit: dim, dialog scales in from 92 %
+    readonly property int arm: 3000           // reboot / power off stay armed this long (the ring drains)
+    readonly property int shakeTime: 300      // wrong password: ±8, ±8, ±5, ±4 px
+    readonly property var shakeKeys: [[0, 0], [0.125, -8], [0.25, 8], [0.375, -8], [0.5, 8], [0.625, -5], [0.75, 5], [0.875, -4], [1, 0]]
+    readonly property int wrongHold: 1400     // the red "Wrong password" pill, then it clears
+    readonly property int lockWait: 10        // s: the lock screen's own wait after every 3rd wrong password
+    readonly property int caretBlink: 530     // a password field's caret: on, off
+    readonly property int dotStep: 360        // "Powering off" dots: the light moves on
+    readonly property int dotFade: 300
+
     // Popovers (§3.1)
     readonly property int peekDelay: 400     // hover a workspace dot this long to peek
     readonly property int peekGrace: 250     // the mouse may leave dot + peek this long (to cross the gap)
