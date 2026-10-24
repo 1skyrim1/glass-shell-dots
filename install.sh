@@ -76,6 +76,9 @@ for pkg in home/*/; do
   stow -d home -t "$HOME" --no-folding --restow "$(basename "$pkg")"
 done
 
+# The notification center's local khal calendar (home/khal).
+mkdir -p "$HOME/.local/share/khal/calendars/personal"
+
 # 8. First colour theme (matugen -> ~/.local/state/glass-shell/colors.json, read by Quickshell).
 if [[ ! -f $HOME/.local/state/glass-shell/colors.json ]]; then
   matugen image "$HOME/.local/share/wallpapers/dusk.png" -m dark --prefer darkness -q

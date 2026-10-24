@@ -6,12 +6,13 @@ import qs.components
 import qs.surfaces.bar
 import qs.surfaces.launcher
 import qs.surfaces.control
+import qs.surfaces.notifications
 
 // The bar on one screen (DESIGN.md §2, 08-Main / 09-Bar): five separate glass islands that hug their
 // content, the temporary pills that bud off the clock and the OSDs that drop out of it. It all lives on one
 // transparent full-screen layer so shapes can morph between pills (§7), with the pill popovers and the
 // tooltip (§3.1) growing out of them, and the panels growing out of theirs (launcher: §3.3, Control
-// Center: §3.4).
+// Center: §3.4, notification center: §3.5). Toasts drip out of the bell, under popovers and panels (§4).
 // The input mask covers only the pills and whatever is open, so the rest of the screen clicks through to
 // the windows. Panels and the media, layout and bell popovers take the keyboard while open and close on
 // Esc or a click outside (the catcher below); the workspace peek and tooltips are hover-only.
@@ -32,7 +33,8 @@ Scope {
         mask: Region {}
     }
 
-    // The launcher dims the desktop 34 % (§3.3) and the Control Center reuses the same full-screen dim, so it
+    // The launcher dims the desktop 34 % (§3.3), the notification center 22 % (Notifications.dc.html) and
+    // the Control Center reuses the launcher's dim. It's a full-screen layer, so it
     // also covers the bar's strip between the pills. Not blurred: a layer of its own whose namespace isn't
     // "glass-shell-…" (the bar's layer blurs everything above its alpha threshold). Created before the bar's
     // layer and always mapped, so it stays under the pills and the panels.
@@ -47,7 +49,7 @@ Scope {
         Rectangle {
             anchors.fill: parent
             color: Theme.alpha(Theme.scrim, 0.34)
-            opacity: Math.max(launcher.dimLevel, control.dimLevel)
+            opacity: Math.max(launcher.dimLevel, control.dimLevel, notifCenter.dimLevel * 0.22 / 0.34)
             visible: opacity > 0
         }
     }
@@ -62,13 +64,15 @@ Scope {
         anchors { top: true; bottom: true; left: true; right: true }
         color: "transparent"
 
-        readonly property bool modalHere: launcher.shown || control.shown || Shell.popoverModal
+        readonly property bool modalHere: launcher.shown || control.shown || notifCenter.shown || Shell.popoverModal
             && (Shell.popoverScreen === "" || Shell.popoverScreen === root.screen.name)
         WlrLayershell.keyboardFocus: modalHere ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
         mask: Region {
             Region { item: win.modalHere ? catcher : null }
             Region { item: launcher.active ? launcher.body : null }
             Region { item: control.active ? control.body : null }
+            Region { item: notifCenter.active ? notifCenter.body : null }
+            Region { item: toasts }
             Region { item: peek.visible ? peek.body : null }
             Region { item: mediaPopover.visible ? mediaPopover.body : null }
             Region { item: layoutMenu.visible ? layoutMenu.body : null }
@@ -205,6 +209,12 @@ Scope {
             BellPill { id: bell }
         }
 
+        // --- Toasts: above the pills (they drip out of the bell), under popovers and panels.
+        ToastStack {
+            id: toasts
+            bell: bell
+        }
+
         // --- Popovers, above the pills so the droplet grows over its pill.
         WorkspacePeek {
             id: peek
@@ -244,6 +254,11 @@ Scope {
         ControlCenter {
             id: control
             pill: status
+            screenName: root.screen.name
+        }
+        NotificationCenter {
+            id: notifCenter
+            clock: clock
             screenName: root.screen.name
         }
         BarTooltip {}

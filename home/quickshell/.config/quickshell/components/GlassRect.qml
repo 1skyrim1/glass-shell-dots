@@ -20,7 +20,8 @@ Item {
     property bool focused: false
     // Cursor x while hovered (Pill sets it): the specular top edge brightens around it (Liquid Glass).
     property real hoverX: width / 2
-    // Tinted pills (§2): "accent" (same as lit) | "error" (recording) | "warning" (low battery) | "success" (sharing).
+    // Tinted pills (§2): "accent" (same as lit) | "error" (recording) | "warning" (low battery) | "success" (sharing)
+    // | "critical" (critical notifications).
     // toneMix blends from plain glass into the tone; the split pills animate it while they bud off the clock.
     property string tone: ""
     property real toneMix: 1
@@ -56,6 +57,8 @@ Item {
     readonly property var tones: ({
         accent:  { fill: Theme.alpha(Theme.accentContainer, 0.6), border: Theme.alpha(Theme.accent, 0.5) },
         error:   { fill: Theme.alpha(Theme.errorContainer, 0.45), border: Theme.alpha(Theme.error, 0.45) },
+        // Critical notifications (19-NotifStates): a denser red with a brighter edge.
+        critical: { fill: Theme.alpha(Theme.errorContainer, 0.55), border: Theme.alpha(Theme.error, 0.6) },
         warning: { fill: Theme.warningContainer, border: Theme.alpha(Theme.warning, 0.45) },
         success: { fill: Theme.successContainer, border: Theme.successBorder }
     })

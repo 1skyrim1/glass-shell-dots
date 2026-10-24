@@ -9,7 +9,8 @@ import qs.components
 Pill {
     id: root
 
-    property bool unread: false   // TODO Phase 6: from the notification server
+    // Unread notifications that aren't on screen as a toast (an expired toast leaves this dot).
+    readonly property bool unread: Notifs.unread > 0
 
     implicitWidth: implicitHeight
     lit: Modes.dnd || Shell.popover === "bell" || (Shell.isOpen("notifications") && Shell.panelFrom === "bell")
@@ -32,6 +33,6 @@ Pill {
         height: width
         radius: width / 2
         color: Theme.secondary
-        visible: root.unread && !Modes.dnd
+        visible: root.unread && !Modes.dnd && !Shell.isOpen("notifications")
     }
 }

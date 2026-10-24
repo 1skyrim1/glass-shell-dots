@@ -11,10 +11,10 @@ Popover {
     name: "bell"
     contentWidth: Theme.px(276)
 
-    // TODO Phase 6: true once the notification server has notifications to clear.
-    readonly property bool canClear: false
+    readonly property bool canClear: Notifs.list.length > 0
     function clearAll() {
         if (!canClear) return
+        Notifs.clearAll()
         Shell.closePopover()
     }
 

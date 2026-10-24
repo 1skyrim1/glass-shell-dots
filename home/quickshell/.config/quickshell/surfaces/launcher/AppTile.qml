@@ -17,6 +17,7 @@ Rectangle {
     property int tintIndex: -1      // force a tint (see apps.js tintFor), -1 = by name
     property real size: Theme.px(40)
     property real iconSize: size * 0.5
+    property var colors: null       // { fill, stroke } instead of the tint (critical / catch-up notifications)
 
     readonly property string lucide: icon !== "" ? icon : AppIcons.iconFor(`${app?.id ?? ""} ${app?.startupClass ?? ""} ${app?.name ?? ""}`)
     readonly property string themed: icon === "" && lucide === "app-window" && app ? Quickshell.iconPath(app.icon, true) : ""
@@ -27,14 +28,14 @@ Rectangle {
     width: size
     height: size
     radius: size * 0.3
-    color: neutral || themed !== "" ? Theme.white(0.06) : Theme.alpha(fills[tint], 0.6)
+    color: colors ? colors.fill : neutral || themed !== "" ? Theme.white(0.06) : Theme.alpha(fills[tint], 0.6)
 
     Icon {
         anchors.centerIn: parent
         visible: root.themed === ""
         name: root.lucide
         size: root.iconSize
-        color: root.neutral ? Theme.textMuted : root.strokes[root.tint]
+        color: root.colors ? root.colors.stroke : root.neutral ? Theme.textMuted : root.strokes[root.tint]
     }
     IconImage {
         anchors.centerIn: parent

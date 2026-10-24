@@ -58,6 +58,17 @@ Singleton {
     readonly property int push: 300          // sub-page slides in, panel height springs to fit
     readonly property int spinner: 900       // one turn of a "Searching…" spinner
 
+    // Notifications (§3.5, §5.3; 02-MotionLauncher toBlob, 04-MotionOverlays nc + toast fan)
+    readonly property int notifIn: 420       // center drips out of the clock, two columns fade up
+    readonly property int notifOut: 240      // … and is pulled back into it
+    readonly property int columnStagger: 40  // the list column fades up this much after the calendar
+    readonly property int toastIn: 300       // bell widens along the top, drops into the toast
+    readonly property int toastOut: 240      // … merges back into the bell, leaving a dot
+    readonly property int toastFan: 240      // hovering the stack fans it out / tucks it back
+    readonly property int toastShort: 5000   // a toast's timer
+    readonly property int toastLong: 10000   // … when it has actions (critical: never)
+    readonly property int replySent: 1000    // "Sent ✓" shows this long, then the card collapses
+
     // Popovers (§3.1)
     readonly property int peekDelay: 400     // hover a workspace dot this long to peek
     readonly property int peekGrace: 250     // the mouse may leave dot + peek this long (to cross the gap)

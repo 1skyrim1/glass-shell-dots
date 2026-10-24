@@ -53,6 +53,10 @@ gpu-screen-recorder
 wtype
 libqalculate
 fd
+# notification center calendar (local calendars; DESIGN.md §3.5)
+khal
+# notify-send, for scripts
+libnotify
 lazygit
 nautilus
 librewolf

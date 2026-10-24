@@ -5,7 +5,7 @@ import Quickshell.Hyprland
 
 // Modes the bar shows (DESIGN.md §2): do not disturb, game mode, keep awake, the active Hyprland submap
 // and the screen recording. For now these are only state + indicators; what they do comes with their own
-// phases (notifications hold-back in 6, the real recorder in 8, the idle inhibitor in 9).
+// phases (the real recorder in 8, the idle inhibitor in 9). Notifs holds toasts back during DND / game mode.
 Singleton {
     id: root
 

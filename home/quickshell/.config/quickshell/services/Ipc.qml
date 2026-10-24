@@ -52,9 +52,16 @@ Item {
     IpcHandler {
         target: "notifications"
         function toggle(): void { Shell.toggle("notifications") }
-        function dnd(): void { Modes.dnd = !Modes.dnd }
+        function dnd(): void { Modes.dnd ? (Modes.dnd = false) : Modes.setDnd("manual") }
         // The bell's right-click menu (DND for a while, clear all).
         function menu(): void { Shell.togglePopover("bell", "") }
+        function clear(): void { Notifs.clearAll() }
+    }
+
+    IpcHandler {
+        target: "calendar"
+        // Re-read khal (e.g. after `khal new`).
+        function refresh(): void { Calendar.refresh() }
     }
 
     IpcHandler {

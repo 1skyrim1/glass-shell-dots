@@ -11,6 +11,9 @@ function iconFor(cls) {
     if (/nautilus|thunar|dolphin|nemo|pcmanfm|files/.test(cls)) return "folder"
     if (/code|codium|zed|nvim|neovim/.test(cls)) return "code"
     if (/syncthing|nextcloud|dropbox/.test(cls)) return "refresh"
+    // Notification senders without a window (DESIGN.md §3.5 sample icons)
+    if (/battery|upower/.test(cls)) return "battery"
+    if (/^system\b|pacman|paru|update/.test(cls)) return "download"
     return "app-window"
 }
 

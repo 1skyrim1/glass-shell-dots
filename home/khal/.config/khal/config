@@ -1,0 +1,22 @@
+# khal: the notification center's calendar (DESIGN.md §3.5). Local only, no sync; the shell reads it with
+# `khal list --json …` (services/Calendar.qml). Add events with `khal new` or `ikhal`.
+# A synced calendar (vdirsyncer → CalDAV / .ics subscriptions) can be added later as another
+# [[name]] section without changing the shell.
+
+[calendars]
+
+[[personal]]
+path = ~/.local/share/khal/calendars/personal
+type = calendar
+
+[locale]
+# ISO dates and 24 h times: easy to parse in the shell and the same in khal's own output.
+timeformat = %H:%M
+dateformat = %Y-%m-%d
+longdateformat = %Y-%m-%d
+datetimeformat = %Y-%m-%d %H:%M
+longdatetimeformat = %Y-%m-%d %H:%M
+firstweekday = 0
+
+[default]
+default_calendar = personal
