@@ -113,7 +113,7 @@ end
 -- Shell surfaces
 bind(mainMod .. " + space",	ipc("launcher toggle"),          "Shell: App launcher")
 bind(mainMod .. " + K",		ipc("cheatsheet toggle"),        "Shell: This cheatsheet")
-bind(mainMod .. " + A",         ipc("control toggle"),           "Shell: Control Center")        -- TODO Phase 5
+bind(mainMod .. " + A",         ipc("control toggle"),           "Shell: Control Center")
 bind(mainMod .. " + N",         ipc("notifications toggle"),     "Shell: Notifications & calendar") -- TODO Phase 6
 bind(mainMod .. " + W",         ipc("wallpaper toggle"),         "Shell: Wallpaper & theme")     -- TODO Phase 7
 bind(mainMod .. " + V",         ipc("launcher mode clipboard"),  "Shell: Clipboard history")

@@ -6,6 +6,10 @@
         "screenOff": 420,
         "suspendOnBattery": 900
     },
+    "nightLight": {
+        "from": "20:00",
+        "to": "07:00"
+    },
     "reducedMotion": false,
     "searchUrl": "https://duckduckgo.com/?q="
 }

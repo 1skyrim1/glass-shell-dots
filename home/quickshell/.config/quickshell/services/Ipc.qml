@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import Quickshell.Services.SystemTray
 
 // One IpcHandler per surface; hyprland.lua binds call `qs ipc call <target> <function>` (DESIGN.md §6).
 // List everything with `qs ipc show`. Surfaces that don't exist yet only track state in Shell.
@@ -31,6 +32,21 @@ Item {
     IpcHandler {
         target: "control"
         function toggle(): void { Shell.toggle("control") }
+        // Open straight at a place: "sound", "network" (Wi-Fi), "bluetooth", "nightlight" (the card grown),
+        // "tray" (the first background app's menu) or "main".
+        function open(where: string): void {
+            if (!Shell.isOpen("control")) Shell.open("control")
+            Shell.controlExpand = where === "nightlight" ? "nightlight" : ""
+            Shell.controlSection = where === "bluetooth" ? "bluetooth" : "wifi"
+            Shell.controlPage = where === "sound" ? "sound" : where === "network" || where === "bluetooth" ? "network" : ""
+            Shell.controlTray = where === "tray" ? (SystemTray.items.values.find(i => i.hasMenu) ?? null) : null
+        }
+        function back(): void { Shell.controlTray ? (Shell.controlTray = null) : (Shell.controlPage = "") }
+    }
+
+    IpcHandler {
+        target: "nightlight"
+        function toggle(): void { NightLight.toggle() }
     }
 
     IpcHandler {

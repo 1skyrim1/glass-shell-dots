@@ -42,6 +42,11 @@ Singleton {
     readonly property color successBorder: Qt.rgba(140 / 255, 230 / 255, 180 / 255, 0.5)
     readonly property color textOnSuccess: "#D4F7E2"
     readonly property color good: "#C5E3B4"
+    // Night light (17-ControlPages): the card uses the warning colours, its slider runs warm → cool
+    // like the colour temperature itself, so these don't follow the wallpaper either.
+    readonly property color nightWarm: "#FF9E57"
+    readonly property color nightCool: "#FFE7C2"
+    readonly property color textOnNight: "#FFD6B3"
 
     readonly property string font: "Geist"
     readonly property string fontMono: "Geist Mono"

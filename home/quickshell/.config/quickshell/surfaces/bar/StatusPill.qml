@@ -1,12 +1,11 @@
 import QtQuick
-import Quickshell.Networking
 import Quickshell.Bluetooth
 import qs.services
 import qs.components
 
 // Status pill (DESIGN.md §2.4): layout badge, Wi-Fi, Bluetooth, microphone in use, volume, battery.
 // Game mode / keep awake add accent circles at the start. Low battery stretches it leftwards in amber for
-// 5 s (09-Bar "Low battery"). Click = Control Center (Phase 5), scroll = volume; left-click on the badge =
+// 5 s (09-Bar "Low battery"). Click = Control Center (stays lit while open), scroll = volume; left-click on the badge =
 // next layout, right-click = layout menu (LayoutMenu; the badge is lit while it's open).
 // Icons whose state isn't readable at a glance have tooltips (TipArea).
 Pill {
@@ -16,10 +15,7 @@ Pill {
     readonly property bool modes: Modes.gameMode || Modes.keepAwake
 
     // Wi-Fi signal: 0 = off / not connected, else 1–4 arcs.
-    readonly property var wifiDevice: Networking.devices.values.find(d => d.type === DeviceType.Wifi) ?? null
-    readonly property var wifiNetwork: wifiDevice?.networks.values.find(n => n.connected) ?? null
-    readonly property int wifiBars: !Networking.wifiEnabled || !wifiNetwork ? 0
-        : Math.max(1, Math.ceil((wifiNetwork.signalStrength ?? 1) * 4))
+    readonly property int wifiBars: Network.bars
     readonly property bool bluetooth: Bluetooth.defaultAdapter?.enabled ?? false
     readonly property Item badge: badge   // the layout menu opens under it
 
@@ -27,9 +23,7 @@ Pill {
     function duration(min: int): string {
         return min >= 60 ? Math.floor(min / 60) + " h " + (min % 60) + " min" : min + " min"
     }
-    readonly property string wifiTip: wifiBars > 0
-        ? (wifiNetwork?.name ?? "Wi-Fi") + " · " + ["weak", "fair", "good", "strong"][wifiBars - 1] + " signal"
-        : Networking.wifiEnabled ? "Wi-Fi · not connected" : "Wi-Fi off"
+    readonly property string wifiTip: Network.tip
     readonly property string bluetoothTip: {
         const names = Bluetooth.devices.values.filter(d => d.connected).map(d => d.name)
         return names.length > 0 ? names.join(", ") : "Bluetooth · nothing connected"
@@ -46,7 +40,7 @@ Pill {
     implicitWidth: warn ? warnRow.implicitWidth + 2 * Theme.px(13)
                         : normalRow.x + normalRow.implicitWidth + Theme.px(12)
 
-    onClicked: Shell.toggle("control")
+    onClicked: Shell.toggle("control", "status")
     onScrolled: step => step < 0 ? Audio.up() : Audio.down()
 
     component StatusIcon: Icon {

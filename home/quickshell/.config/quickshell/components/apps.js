@@ -10,6 +10,7 @@ function iconFor(cls) {
     if (/steam|lutris|heroic|gamescope|^steam_app/.test(cls)) return "gamepad"
     if (/nautilus|thunar|dolphin|nemo|pcmanfm|files/.test(cls)) return "folder"
     if (/code|codium|zed|nvim|neovim/.test(cls)) return "code"
+    if (/syncthing|nextcloud|dropbox/.test(cls)) return "refresh"
     return "app-window"
 }
 

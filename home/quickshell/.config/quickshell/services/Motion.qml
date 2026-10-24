@@ -52,6 +52,12 @@ Singleton {
     readonly property int sheetMorph: 300    // launcher ↔ cheatsheet, panel height following its content
     readonly property int stagger: 35        // rows arrive this far apart
 
+    // Control Center (§5.3, 01-MotionControl, 04-MotionOverlays "Control Center sub-page")
+    readonly property int controlIn: 400     // grows out of the status pill
+    readonly property int controlOut: 220    // … and snaps back into it
+    readonly property int push: 300          // sub-page slides in, panel height springs to fit
+    readonly property int spinner: 900       // one turn of a "Searching…" spinner
+
     // Popovers (§3.1)
     readonly property int peekDelay: 400     // hover a workspace dot this long to peek
     readonly property int peekGrace: 250     // the mouse may leave dot + peek this long (to cross the gap)

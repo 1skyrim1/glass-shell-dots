@@ -34,6 +34,15 @@ Singleton {
     property Item tip: null      // the TipArea whose tooltip shows
     property int peekId: 1       // the workspace the peek popover shows
     property bool locked: false
+    // Control Center sub-page: "" (main) | "sound" | "network"; the network page scrolls to controlSection
+    // ("wifi" | "bluetooth"). controlExpand = the tile grown in place ("nightlight"), controlTray = the tray
+    // item whose menu is open. The menu closes with the panel; page and card are reset once the panel has
+    // finished closing (ControlCenter), so it doesn't flip back to the main page while it shrinks.
+    property string controlPage: ""
+    property string controlSection: "wifi"
+    property string controlExpand: ""
+    property var controlTray: null
+    onPanelChanged: if (panel !== "control") controlTray = null
 
     function isOpen(name: string): bool { return panel === name }
 

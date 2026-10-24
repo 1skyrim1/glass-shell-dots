@@ -53,16 +53,32 @@ FocusScope {
     Behavior on targetR { enabled: root.opened && !Motion.reduced; NumberAnimation { duration: Motion.sheetMorph; easing.type: Easing.OutCubic } }
     Behavior on targetH { enabled: root.opened && !Motion.reduced; NumberAnimation { duration: Motion.sheetMorph; easing.type: Easing.OutCubic } }
 
-    // Keyframes from MotionLauncher.dc.html .la (5 % pill → 9 % droplet → 15 % overshoot → 18 % sheet),
-    // relative to the pill: droplet 112 × 70 hanging 26 px below the pill's top, overshoot 8 px wider and
-    // 6 px higher on each side.
+    // Keyframes: pill → droplet (at dropT) → a bit past the sheet (at overT) → sheet. The defaults are
+    // MotionLauncher.dc.html .la (5 % pill → 9 % droplet → 15 % overshoot → 18 % sheet), relative to the pill:
+    // droplet 112 × 70 hanging 26 px below the pill's top, overshoot 8 px wider and 6 px higher on each side.
+    // Other panels pass their own (Control Center: MotionControl's ccBlob).
+    property real dropT: 0.31
+    property real overT: 0.77
+    property real dropW: Theme.px(112)
+    property real dropH: Theme.px(70)
+    property real dropDy: Theme.px(26)   // droplet top below the pill's top
+    property real dropR: Theme.px(35)
+    // Overshoot relative to the final sheet: left / top edge moves (negative = out) and extra size.
+    property real overDx: -Theme.px(8)
+    property real overDy: -Theme.px(6)
+    property real overW: Theme.px(16)
+    property real overH: Theme.px(16)
+    property real overR: finalRadius + Theme.px(4)
+    property real neckWidth: Math.min(Theme.px(56), start.width * 0.4)
+
     readonly property real sc: start.x + start.width / 2
     readonly property real fc: targetX + targetW / 2
-    readonly property real shapeCx: Motion.frames(p, [[0, sc], [0.31, sc], [0.77, fc], [1, fc]])
-    readonly property real shapeW: Motion.frames(p, [[0, start.width], [0.31, Theme.px(112)], [0.77, targetW + Theme.px(16)], [1, targetW]])
-    readonly property real shapeY: Motion.frames(p, [[0, start.y], [0.31, start.y + Theme.px(26)], [0.77, targetY - Theme.px(6)], [1, targetY]])
-    readonly property real shapeH: Motion.frames(p, [[0, start.height], [0.31, Theme.px(70)], [0.77, targetH + Theme.px(16)], [1, targetH]])
-    readonly property real shapeR: Motion.frames(p, [[0, start.height / 2], [0.31, Theme.px(35)], [0.77, targetR + Theme.px(4)], [1, targetR]])
+    readonly property real oc: targetX + overDx + (targetW + overW) / 2
+    readonly property real shapeCx: Motion.frames(p, [[0, sc], [dropT, sc], [overT, oc], [1, fc]])
+    readonly property real shapeW: Motion.frames(p, [[0, start.width], [dropT, dropW], [overT, targetW + overW], [1, targetW]])
+    readonly property real shapeY: Motion.frames(p, [[0, start.y], [dropT, start.y + dropDy], [overT, targetY + overDy], [1, targetY]])
+    readonly property real shapeH: Motion.frames(p, [[0, start.height], [dropT, dropH], [overT, targetH + overH], [1, targetH]])
+    readonly property real shapeR: Motion.frames(p, [[0, start.height / 2], [dropT, dropR], [overT, overR], [1, targetR]])
     function clamp(v: real): real { return Math.max(0, Math.min(1, v)) }
 
     onShownChanged: {
@@ -100,7 +116,7 @@ FocusScope {
         readonly property real grow: Motion.frames(root.p, [[0.1, 0], [0.31, 1], [0.6, 0.5]])
         x: root.sc - width / 2
         y: root.start.y + root.start.height - Theme.px(10)
-        width: Math.min(Theme.px(56), root.start.width * 0.4)
+        width: root.neckWidth
         height: Math.max(0, root.shapeY - y + Theme.px(14)) * grow
         radius: Math.min(width, height) / 2
         color: Theme.alpha(glass.fillColor, 0.55)
