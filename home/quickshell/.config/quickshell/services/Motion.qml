@@ -69,6 +69,13 @@ Singleton {
     readonly property int toastLong: 10000   // … when it has actions (critical: never)
     readonly property int replySent: 1000    // "Sent ✓" shows this long, then the card collapses
 
+    // Wallpaper switcher (§3.6, §5.3; 07-MotionWallpaper)
+    readonly property int wallSheetIn: 320   // the strip rises from below the screen, 10 px past its place
+    readonly property int wallSheetOut: 190  // … and sinks away
+    readonly property int themeFade: 240     // every colour cross-fades to the next palette (browse, Esc)
+    readonly property int ripple: 700        // Enter: the new wallpaper spreads out from the thumbnail (InOutCubic)
+    readonly property int kittyPreview: 150  // browsing pauses this long before kitty is recoloured
+
     // Popovers (§3.1)
     readonly property int peekDelay: 400     // hover a workspace dot this long to peek
     readonly property int peekGrace: 250     // the mouse may leave dot + peek this long (to cross the gap)

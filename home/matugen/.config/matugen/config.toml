@@ -1,10 +1,50 @@
-# matugen: wallpaper -> colour roles for every app.
-# Run: matugen image <wallpaper> -m dark --prefer darkness
+# matugen: wallpaper -> colour roles for every app (DESIGN.md §1.1, §4 "changing the wallpaper recolours
+# everything at once"). Quickshell's wallpaper switcher (services/Wallpapers.qml) runs
+#   matugen image <wallpaper> -m dark --prefer darkness --continue-on-error
+# on Enter; while browsing it only runs preview.toml (kitty) and recolours itself from a --dry-run dump.
 # (--prefer darkness picks the dusk sky over the pink haze; the result matches DESIGN.md §1.1.)
-# Phase 7 adds Hyprland borders, kitty, GTK, Qt and the greeter here.
 [config]
 
-# Quickshell reads this file and reloads when it changes (qs/Theme.qml).
+# ANSI colours for kitty: these hues, tone-mapped into the scheme (blend = false keeps red red).
+[config.custom_colors]
+red = { color = "#E06C75", blend = false }
+green = { color = "#98C379", blend = false }
+yellow = { color = "#E5C07B", blend = false }
+cyan = { color = "#56B6C2", blend = false }
+
+# Quickshell reads this file and reloads when it changes (qs/services/Theme.qml).
+# The greeter (Phase 9) runs as another user and can't read $HOME: the hook copies these roles and the
+# wallpaper to /var/lib/glass-shell/greeter (created by install.sh, owned by this user). A hook, not a
+# template, so a missing folder doesn't stop the whole run.
 [templates.quickshell]
 input_path = "~/.config/matugen/templates/quickshell.json"
 output_path = "~/.local/state/glass-shell/colors.json"
+post_hook = "g=/var/lib/glass-shell/greeter; [ -w $g ] && cp -f ~/.local/state/glass-shell/colors.json $g/colors.json && cp -f '{{image}}' $g/wallpaper || true"
+
+# Window borders: hyprland.lua loads this at start; while running, Quickshell sets the border itself
+# (services/GlassSync.qml), so it can follow the live preview.
+[templates.hyprland]
+input_path = "~/.config/matugen/templates/hypr-colors.lua"
+output_path = "~/.local/state/glass-shell/hypr-colors.lua"
+
+# kitty.conf includes colors.conf; SIGUSR1 makes every kitty reload its config.
+[templates.kitty]
+input_path = "~/.config/matugen/templates/kitty-colors.conf"
+output_path = "~/.config/kitty/colors.conf"
+post_hook = "pkill -USR1 -x kitty || true"
+
+# GTK: libadwaita colours. GTK3 apps (adw-gtk3) reload when the theme name changes; GTK4 apps read
+# gtk.css when they start.
+[templates.gtk3]
+input_path = "~/.config/matugen/templates/gtk.css"
+output_path = "~/.config/gtk-3.0/gtk.css"
+post_hook = "gsettings set org.gnome.desktop.interface gtk-theme '' && gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark"
+
+[templates.gtk4]
+input_path = "~/.config/matugen/templates/gtk.css"
+output_path = "~/.config/gtk-4.0/gtk.css"
+
+# Qt: qt6ct's colour scheme (QT_QPA_PLATFORMTHEME=qt6ct in hyprland.lua; qt6ct.conf points here).
+[templates.qt6ct]
+input_path = "~/.config/matugen/templates/qt6ct-colors.conf"
+output_path = "~/.config/qt6ct/colors/matugen.conf"

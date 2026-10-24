@@ -79,11 +79,23 @@ end)
 
 -- Window geometry (DESIGN.md §1.4), design px × 0.8 for this 1280 × 720 logical screen: gaps_out 12,
 -- gaps_in 5, rounding 14, border 2. Quickshell reserves the 48 px above the pills (surfaces/Bar.qml), so
--- tiled windows start at y = 60. Border colours (matugen) and animations come in later phases.
+-- tiled windows start at y = 60. Animations come in Phase 10.
 hl.config({
     general    = { gaps_out = 10, gaps_in = 4, border_size = 2 },
     decoration = { rounding = 11 },
 })
+
+-- Border colours: the wallpaper's accent (matugen primary) on the active window, white 8 % on the others.
+-- matugen writes ~/.local/state/glass-shell/hypr-colors.lua (one border_apply call) for the colours at start;
+-- while running, Quickshell calls `hyprctl eval 'border_apply("<hex>")'` so the border follows the wallpaper
+-- switcher's live preview (qs services/GlassSync.qml). Global so `hyprctl eval` can reach it.
+function border_apply(hex)
+    hl.config({ general = { col = { active_border = "rgb(" .. hex .. ")", inactive_border = "rgba(ffffff14)" } } })
+end
+pcall(dofile, (os.getenv("HOME") or "") .. "/.local/state/glass-shell/hypr-colors.lua")
+
+-- Qt apps take their colours from qt6ct, which reads matugen's scheme (~/.config/qt6ct/colors/matugen.conf).
+hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 
 -- Keybinds (DESIGN.md §6). Shell surfaces are driven through `qs ipc call <target> <function>`
 -- (`qs ipc show` lists them). TODO = the surface arrives in a later phase; the IPC call already exists.
@@ -115,7 +127,7 @@ bind(mainMod .. " + space",	ipc("launcher toggle"),          "Shell: App launche
 bind(mainMod .. " + K",		ipc("cheatsheet toggle"),        "Shell: This cheatsheet")
 bind(mainMod .. " + A",         ipc("control toggle"),           "Shell: Control Center")
 bind(mainMod .. " + N",         ipc("notifications toggle"),     "Shell: Notifications & calendar")
-bind(mainMod .. " + W",         ipc("wallpaper toggle"),         "Shell: Wallpaper & theme")     -- TODO Phase 7
+bind(mainMod .. " + W",         ipc("wallpaper toggle"),         "Shell: Wallpaper & theme")
 bind(mainMod .. " + V",         ipc("launcher mode clipboard"),  "Shell: Clipboard history")
 bind(mainMod .. " + period",    ipc("launcher mode emoji"),      "Shell: Emoji picker")
 bind(mainMod .. " + Escape",    ipc("power toggle"),             "Shell: Power menu")            -- TODO Phase 9

@@ -1,0 +1,15 @@
+# matugen config for the wallpaper switcher's live preview (services/Wallpapers.qml): only kitty, which
+# can't read Quickshell's preview palette. Same template and target as config.toml, so Esc (preview of the
+# applied wallpaper) and Enter (the full run) both leave kitty matching the real theme.
+[config]
+
+[config.custom_colors]
+red = { color = "#E06C75", blend = false }
+green = { color = "#98C379", blend = false }
+yellow = { color = "#E5C07B", blend = false }
+cyan = { color = "#56B6C2", blend = false }
+
+[templates.kitty]
+input_path = "~/.config/matugen/templates/kitty-colors.conf"
+output_path = "~/.config/kitty/colors.conf"
+post_hook = "pkill -USR1 -x kitty || true"

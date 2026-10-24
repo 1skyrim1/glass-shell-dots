@@ -37,7 +37,7 @@ Hyprland       # start it from the TTY; Super+Return = kitty; Quickshell (qs) st
 ## Glass Shell basics (Phase 1)
 
 - Settings: `home/quickshell/.config/quickshell/config.json` (glass strength, reduced motion, idle times), reloads live.
-- Colours: `matugen image ~/.local/share/wallpapers/dusk.png -m dark --prefer darkness` (Quickshell recolours live).
+- Colours: chosen with the wallpaper switcher (Phase 7, `Super+W`).
 - IPC: `qs ipc show` lists every target; `qs ipc call test toggle` shows the glass test surface,
   `qs ipc call glass set heavy` switches glass strength (QML and Hyprland blur together).
 
@@ -50,3 +50,15 @@ Hyprland       # start it from the TTY; Super+Return = kitty; Quickshell (qs) st
 - Try states by hand: `qs ipc call capture record` (red pill), `qs ipc call notifications dnd`,
   `qs ipc call gamemode toggle`, `qs ipc call keepawake toggle`, `qs ipc call battery simulate 12`
   (`-- -1` for the real battery), `qs ipc call volume up`, `qs ipc call brightness down`.
+
+## Wallpaper and theme (Phase 7)
+
+- `Super+W`: ←/→ (H/L) preview a wallpaper's palette live (pills, panels, window border, kitty), Enter applies it
+  (ripple from the thumbnail), R random, Esc reverts. Click a thumbnail to preview, click again to apply.
+- Wallpapers: `home/wallpapers/.local/share/wallpapers/` (png / jpg / webp, listed by file name; restow after
+  adding one). Each wallpaper is one theme.
+- Applying runs `matugen image <wallpaper> -m dark --prefer darkness` with `home/matugen/.config/matugen/config.toml`:
+  Quickshell `~/.local/state/glass-shell/colors.json`, Hyprland border `hypr-colors.lua`, kitty `~/.config/kitty/colors.conf`,
+  GTK `~/.config/gtk-{3,4}.0/gtk.css`, Qt `~/.config/qt6ct/colors/matugen.conf`, greeter `/var/lib/glass-shell/greeter/`.
+  `preview.toml` is the kitty-only run used while browsing.
+- IPC: `qs ipc call wallpaper list`, `… set fjord`, `… next` / `prev` / `random` / `apply`.

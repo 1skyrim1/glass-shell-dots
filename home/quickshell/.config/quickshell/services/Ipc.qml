@@ -67,6 +67,16 @@ Item {
     IpcHandler {
         target: "wallpaper"
         function toggle(): void { Shell.toggle("wallpaper") }
+        // Browse like ←/→ and R (opening the switcher first), apply like Enter.
+        function next(): void { if (!Wallpapers.open) Shell.open("wallpaper"); Wallpapers.browse(1) }
+        function prev(): void { if (!Wallpapers.open) Shell.open("wallpaper"); Wallpapers.browse(-1) }
+        function random(): void { if (!Wallpapers.open) Shell.open("wallpaper"); Wallpapers.random() }
+        function apply(): void { if (Wallpapers.open) Wallpapers.applyRequested() }
+        // Apply one by name ("fjord"), without the switcher; `list` names them, the applied one marked *.
+        function set(name: string): string { return Wallpapers.applyNamed(name) ? "ok" : "no wallpaper " + name }
+        function list(): string {
+            return Wallpapers.items.map(i => (i.file === Wallpapers.appliedFile ? "* " : "  ") + i.name).join("\n")
+        }
     }
 
     IpcHandler {

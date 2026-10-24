@@ -36,6 +36,9 @@ hyprsunset
 
 # Theming
 matugen
+# Qt apps read matugen's colour scheme through qt6ct; adw-gtk3 lets GTK3 apps use the libadwaita colours
+qt6ct
+adw-gtk-theme
 
 # Apps and tools
 kitty
@@ -60,6 +63,8 @@ libnotify
 lazygit
 nautilus
 librewolf
+fastfetch
+btop
 
 # Login (enabled in Phase 9)
 greetd

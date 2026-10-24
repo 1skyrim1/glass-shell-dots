@@ -7,12 +7,14 @@ import qs.surfaces.bar
 import qs.surfaces.launcher
 import qs.surfaces.control
 import qs.surfaces.notifications
+import qs.surfaces.wallpaper
 
 // The bar on one screen (DESIGN.md §2, 08-Main / 09-Bar): five separate glass islands that hug their
 // content, the temporary pills that bud off the clock and the OSDs that drop out of it. It all lives on one
 // transparent full-screen layer so shapes can morph between pills (§7), with the pill popovers and the
 // tooltip (§3.1) growing out of them, and the panels growing out of theirs (launcher: §3.3, Control
-// Center: §3.4, notification center: §3.5). Toasts drip out of the bell, under popovers and panels (§4).
+// Center: §3.4, notification center: §3.5; the wallpaper switcher, §3.6, rises from the bottom edge).
+// Toasts drip out of the bell, under popovers and panels (§4).
 // The input mask covers only the pills and whatever is open, so the rest of the screen clicks through to
 // the windows. Panels and the media, layout and bell popovers take the keyboard while open and close on
 // Esc or a click outside (the catcher below); the workspace peek and tooltips are hover-only.
@@ -64,7 +66,7 @@ Scope {
         anchors { top: true; bottom: true; left: true; right: true }
         color: "transparent"
 
-        readonly property bool modalHere: launcher.shown || control.shown || notifCenter.shown || Shell.popoverModal
+        readonly property bool modalHere: launcher.shown || control.shown || notifCenter.shown || wallpaper.shown || Shell.popoverModal
             && (Shell.popoverScreen === "" || Shell.popoverScreen === root.screen.name)
         WlrLayershell.keyboardFocus: modalHere ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
         mask: Region {
@@ -72,6 +74,7 @@ Scope {
             Region { item: launcher.active ? launcher.body : null }
             Region { item: control.active ? control.body : null }
             Region { item: notifCenter.active ? notifCenter.body : null }
+            Region { item: wallpaper.active ? wallpaper.body : null }
             Region { item: toasts }
             Region { item: peek.visible ? peek.body : null }
             Region { item: mediaPopover.visible ? mediaPopover.body : null }
@@ -259,6 +262,11 @@ Scope {
         NotificationCenter {
             id: notifCenter
             clock: clock
+            screenName: root.screen.name
+        }
+        // Rises from the bottom edge rather than out of a pill; no dim (20-Wallpaper).
+        WallpaperSheet {
+            id: wallpaper
             screenName: root.screen.name
         }
         BarTooltip {}

@@ -48,6 +48,10 @@ while IFS= read -r -d '' file; do
   cmp -s "$file" "$target" 2>/dev/null || sudo_ask install -Dm644 "$file" "$target"
 done < <(find system -type f -print0)
 
+# The greeter (Phase 9) can't read $HOME; matugen's hook copies the theme and wallpaper here on every
+# wallpaper change (home/matugen/.config/matugen/config.toml).
+[[ -d /var/lib/glass-shell/greeter ]] || sudo_ask install -d -o "$USER" -g "$USER" -m 755 /var/lib/glass-shell/greeter
+
 # 5. Services
 systemctl --user enable pipewire.socket pipewire-pulse.socket wireplumber.service
 for unit in bluetooth power-profiles-daemon; do
@@ -79,9 +83,14 @@ done
 # The notification center's local khal calendar (home/khal).
 mkdir -p "$HOME/.local/share/khal/calendars/personal"
 
-# 8. First colour theme (matugen -> ~/.local/state/glass-shell/colors.json, read by Quickshell).
-if [[ ! -f $HOME/.local/state/glass-shell/colors.json ]]; then
-  matugen image "$HOME/.local/share/wallpapers/dusk.png" -m dark --prefer darkness -q
+# GTK: dark libadwaita everywhere, adw-gtk3 for GTK3 apps; the colours are matugen's gtk.css.
+gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark
+
+# 8. First colour theme: matugen writes Quickshell's colors.json, Hyprland's border, kitty, GTK, Qt and the
+#    greeter's copy (config.toml). Later the wallpaper switcher (Super+W) re-runs it.
+if [[ ! -f $HOME/.local/state/glass-shell/colors.json || ! -f $HOME/.config/kitty/colors.conf ]]; then
+  matugen image "$HOME/.local/share/wallpapers/dusk.png" -m dark --prefer darkness --continue-on-error -q
 fi
 
 echo; echo "Done. Start the desktop with: Hyprland"

@@ -12,26 +12,49 @@ Singleton {
     readonly property real scale: (Quickshell.screens[0]?.width ?? 1600) / 1600
     function px(v: real): real { return Math.round(v * scale * 2) / 2 }
 
-    // Raw matugen roles, keyed by matugen name.
+    // Raw matugen roles, keyed by matugen name: the applied theme (colors.json).
     property var roles: ({})
+    // The wallpaper switcher's palette while browsing (services/Wallpapers.qml), null otherwise.
+    property var preview: null
+    // What the colours are heading to.
+    readonly property var target: preview ?? roles
+
+    // Every change of target cross-fades all colours together (§5.3 "browsing cross-fades accents",
+    // Esc fades back): `from` is what was on screen when the target changed, t runs 0 → 1.
+    property var from: ({})
+    property real t: 1
+    onTargetChanged: {
+        const shown = {}
+        for (const k in target) if (k !== "wallpaper") shown[k] = role(k)
+        from = shown
+        t = 0
+        fadeAnim.restart()
+    }
+    NumberAnimation { id: fadeAnim; target: root; property: "t"; to: 1; duration: Motion.themeFade; easing.type: Easing.InOutCubic }
+    function role(name: string): color {
+        const b = target[name]
+        if (!b) return "transparent"
+        const a = from[name]
+        return a && t < 1 ? Qt.tint(a, alpha(b, t)) : b
+    }
 
     // Spec names → matugen roles (§1.1)
-    readonly property color accent: roles.primary ?? "transparent"
-    readonly property color textOnAccent: roles.on_primary ?? "transparent"
-    readonly property color accentContainer: roles.primary_container ?? "transparent"
-    readonly property color textOnContainer: roles.on_primary_container ?? "transparent"
-    readonly property color text: roles.on_surface ?? "transparent"
-    readonly property color textMuted: roles.on_surface_variant ?? "transparent"
-    readonly property color textFaint: roles.outline ?? "transparent"
-    readonly property color secondary: roles.tertiary ?? "transparent"
+    readonly property color accent: role("primary")
+    readonly property color textOnAccent: role("on_primary")
+    readonly property color accentContainer: role("primary_container")
+    readonly property color textOnContainer: role("on_primary_container")
+    readonly property color text: role("on_surface")
+    readonly property color textMuted: role("on_surface_variant")
+    readonly property color textFaint: role("outline")
+    readonly property color secondary: role("tertiary")
     // Tints for launcher icon tiles (one per app, picked by name)
-    readonly property color secondaryContainer: roles.secondary_container ?? "transparent"
-    readonly property color tertiaryContainer: roles.tertiary_container ?? "transparent"
-    readonly property color scrim: roles.scrim ?? "transparent"   // dims the desktop behind sheets
-    readonly property color glassTint: roles.surface_dim ?? "transparent"
-    readonly property color error: roles.error ?? "transparent"
-    readonly property color errorContainer: roles.error_container ?? "transparent"
-    readonly property color textOnError: roles.on_error_container ?? "transparent"
+    readonly property color secondaryContainer: role("secondary_container")
+    readonly property color tertiaryContainer: role("tertiary_container")
+    readonly property color scrim: role("scrim")   // dims the desktop behind sheets
+    readonly property color glassTint: role("surface_dim")
+    readonly property color error: role("error")
+    readonly property color errorContainer: role("error_container")
+    readonly property color textOnError: role("on_error_container")
     readonly property string wallpaper: roles.wallpaper ?? ""
 
     // Fixed status colours (not from matugen)
