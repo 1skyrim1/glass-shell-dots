@@ -3,9 +3,9 @@ import QtQuick
 import Quickshell
 import Quickshell.Hyprland
 
-// Modes the bar shows (DESIGN.md §2): do not disturb, game mode, keep awake, the active Hyprland submap
-// and the screen recording. For now these are only state + indicators; what they do comes with their own
-// phases (the real recorder in 8, the idle inhibitor in 9). Notifs holds toasts back during DND / game mode.
+// Modes the bar shows (DESIGN.md §2): do not disturb, game mode, keep awake and the active Hyprland submap
+// (the screen recording lives in Recorder). For now these are only state + indicators; keep awake gets its
+// idle inhibitor in Phase 9. Notifs holds toasts back during DND / game mode.
 Singleton {
     id: root
 
@@ -48,30 +48,5 @@ Singleton {
         function onRawEvent(event: HyprlandEvent) {
             if (event.name === "submap") root.submap = event.data === "reset" ? "" : event.data
         }
-    }
-
-    // Screen recording placeholder (Phase 8 starts a real recorder): just the red pill and its timer.
-    property bool recording: false
-    property real recordingSince: 0
-    property int recordingSeconds: 0
-    readonly property string recordingTime: {
-        const s = recordingSeconds
-        const mm = Math.floor(s / 60) % 60, ss = s % 60, hh = Math.floor(s / 3600)
-        return (hh > 0 ? hh + ":" : "") + String(mm).padStart(2, "0") + ":" + String(ss).padStart(2, "0")
-    }
-
-    function toggleRecording() {
-        recording = !recording
-        if (recording) {
-            recordingSince = Date.now()
-            recordingSeconds = 0
-        }
-    }
-
-    Timer {
-        running: root.recording
-        repeat: true
-        interval: 1000
-        onTriggered: root.recordingSeconds = Math.round((Date.now() - root.recordingSince) / 1000)
     }
 }

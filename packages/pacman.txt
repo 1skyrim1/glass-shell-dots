@@ -51,7 +51,9 @@ slurp
 wl-clipboard
 cliphist
 hyprpicker
+# capture tool (Phase 8): recordings, then ffmpeg/ffprobe crop shots, make thumbnails and trim clips
 gpu-screen-recorder
+ffmpeg
 # types text into the focused window (launcher: paste clipboard entries, type emoji)
 wtype
 libqalculate

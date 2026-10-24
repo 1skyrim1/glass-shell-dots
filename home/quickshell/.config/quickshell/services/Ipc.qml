@@ -103,11 +103,50 @@ Item {
 
     IpcHandler {
         target: "capture"
-        function region(): void { console.log("TODO capture region") }
-        // Placeholder until Phase 8: only the red pill and its timer.
-        function record(): void { Modes.toggleRecording() }
-        function colorpicker(): void { console.log("TODO colour picker") }
-        function screen(): void { console.log("TODO full screen to clipboard") }
+        // Super+Shift+S: the tool in its last mode. `region` / `window` / `screen` open (or switch) straight to one.
+        function open(): void { Capture.open("", "") }
+        function region(): void { Capture.open("region", "") }
+        function window(): void { Capture.open("window", "") }
+        function screen(): void { Capture.open("screen", "") }
+        // Print: the whole focused screen to the clipboard (+ saved), no tool. ("print" is reserved in QML.)
+        function shot(): void { Capture.screenNow() }
+        // Super+Shift+R: stops a recording, otherwise opens the tool in Record mode.
+        function record(): void { Recorder.toggle() }
+        function colorpicker(): void { Capture.openPicker() }
+        // Opens Annotate on an image (the last screenshot if the path is empty).
+        function annotate(path: string): void { Capture.annotate(path) }
+        function close(): void { Capture.close() }
+        // Testing Annotate without a pointer: a mark in image px (kind: arrow rect pen text highlight blur crop).
+        function mark(kind: string, x1: int, y1: int, x2: int, y2: int, text: string): void {
+            Capture.testMark({ kind: kind, x1: x1, y1: y1, x2: x2, y2: y2, text: text,
+                               points: kind === "pen" ? [[x1, y1], [(x1 + x2) / 2, y1 - 20], [x2, y2]] : undefined })
+        }
+        // Enter: capture / start recording.
+        function take(): void { Capture.capture() }
+        // Testing without a pointer: set the region selection (physical px) or the cursor.
+        function select(x: int, y: int, w: int, h: int): void { Capture.selection = { x: x, y: y, w: w, h: h } }
+        function cursor(x: int, y: int): void { Capture.cursorPos = Qt.point(x, y) }
+        function state(): string {
+            return JSON.stringify({ phase: Capture.phase, tool: Capture.tool, mode: Capture.mode, kind: Capture.kind,
+                cursor: [Capture.cursorPos.x, Capture.cursorPos.y], selection: Capture.selection, pick: Capture.hex(Capture.pickColor),
+                target: Capture.target, windows: Capture.windows.length, lastShot: Capture.lastShot, card: Capture.cardShown })
+        }
+    }
+
+    IpcHandler {
+        target: "share"
+        // Called by scripts/share-picker.sh (xdg-desktop-portal-hyprland's custom picker); the answer goes
+        // into `fifo`. token = "1" if the app may be remembered; app = the portal's app id (may be empty).
+        function pick(fifo: string, list: string, token: string, app: string): void { Share.pick(fifo, list, token, app) }
+        function stop(): void { Share.stop() }
+        // Show the green pill as if sharing <label> ("" ends it), to try it without a portal session.
+        function simulate(label: string): void { Share.label = label || Share.label; Share.sharing = label !== "" }
+    }
+
+    IpcHandler {
+        target: "recorder"
+        function stop(): void { Recorder.stop() }
+        function trim(): void { Recorder.openTrim() }
     }
 
     IpcHandler {

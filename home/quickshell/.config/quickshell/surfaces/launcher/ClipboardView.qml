@@ -132,7 +132,7 @@ Column {
                     height: width
                     radius: Theme.px(9)
                     // A colour entry shows the colour itself.
-                    color: row.modelData.kind === "colour" ? row.modelData.title : Theme.white(0.07)
+                    color: row.modelData.kind === "colour" ? row.modelData.swatch : Theme.white(0.07)
                     Icon {
                         anchors.centerIn: parent
                         visible: row.modelData.kind !== "colour"

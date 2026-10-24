@@ -80,6 +80,12 @@ for pkg in home/*/; do
   stow -d home -t "$HOME" --no-folding --restow "$(basename "$pkg")"
 done
 
+# Where the capture tool saves screenshots and recordings (Phase 8).
+mkdir -p "$HOME/Pictures/Screenshots" "$HOME/Videos/Captures"
+
+# Screen sharing asks the shell's picker (home/hypr/.config/hypr/xdph.conf); the portal reads it at start.
+systemctl --user try-restart xdg-desktop-portal-hyprland
+
 # The notification center's local khal calendar (home/khal).
 mkdir -p "$HOME/.local/share/khal/calendars/personal"
 

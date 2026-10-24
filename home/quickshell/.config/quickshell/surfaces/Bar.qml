@@ -85,6 +85,7 @@ Scope {
             Region { item: clock }
             Region { item: recording.visible ? recording.pill : null }
             Region { item: keyMode.visible ? keyMode.pill : null }
+            Region { item: sharing.visible ? sharing.pill : null }
             Region { item: status }
             Region { item: bell }
         }
@@ -120,16 +121,18 @@ Scope {
         // --- Centre: the clock, with the OSD and the temporary pills underneath it.
         OsdDrop { clock: clock }
 
-        // Recording (placeholder until Phase 8): red dot with a halo + timer; click or Super+Shift+R stops.
+        // Recording (22-CaptureWindow): red dot with a halo, "REC" + timer and a Stop chip; click or
+        // Super+Shift+R stops. When it merges back, the "Recording saved" card drops out of it.
         SplitPill {
             id: recording
             clock: clock
             side: "right"
             tone: "error"
-            shown: Modes.recording
+            shown: Recorder.recording
             padLeft: Theme.px(13)
+            padRight: Theme.px(8)
             spacing: Theme.px(10)
-            onClicked: Modes.toggleRecording()
+            onClicked: Recorder.stop()
 
             Item {
                 anchors.verticalCenter: parent.verticalCenter
@@ -151,14 +154,80 @@ Scope {
             }
             BarText {
                 anchors.verticalCenter: parent.verticalCenter
-                text: Modes.recordingTime
+                text: "REC " + Recorder.recordingTime
                 color: Theme.textOnError
                 font.family: Theme.fontMono
                 font.weight: Font.Medium
             }
-            KeyHint {
+            // Stop chip: 28 px, error 22 %.
+            Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
-                key: "Super Shift R"
+                width: stopRow.implicitWidth + Theme.px(20)
+                height: Theme.px(28)
+                radius: height / 2
+                color: Theme.alpha(Theme.error, 0.22)
+                Row {
+                    id: stopRow
+                    anchors.centerIn: parent
+                    spacing: Theme.px(6)
+                    BarText {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "Stop"
+                        color: Theme.textOnError
+                        font.pixelSize: Theme.px(12)
+                    }
+                    KeyHint {
+                        anchors.verticalCenter: parent.verticalCenter
+                        key: "Super Shift R"
+                    }
+                }
+            }
+        }
+
+        // Sharing (25-SharePicker "While sharing"): green, "Sharing <what>" + Stop. Same motion as recording;
+        // buds off the red pill when both are up.
+        SplitPill {
+            id: sharing
+            clock: recording.visible ? recording.pill : clock
+            side: "right"
+            tone: "success"
+            shown: Share.sharing
+            padLeft: Theme.px(12)
+            padRight: Theme.px(6)
+            spacing: Theme.px(9)
+            onClicked: Share.stop()
+
+            // Keep the last label while the pill merges back.
+            property string label: ""
+            Connections {
+                target: Share
+                function onLabelChanged() { if (Share.label !== "") sharing.label = Share.label }
+            }
+
+            Icon {
+                anchors.verticalCenter: parent.verticalCenter
+                name: "monitor"
+                size: Theme.px(15)
+                color: Theme.textOnSuccess
+            }
+            BarText {
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Sharing " + sharing.label
+                color: Theme.textOnSuccess
+            }
+            Rectangle {
+                anchors.verticalCenter: parent.verticalCenter
+                width: shareStop.implicitWidth + Theme.px(20)
+                height: Theme.px(26)
+                radius: height / 2
+                color: Theme.white(0.14)
+                BarText {
+                    id: shareStop
+                    anchors.centerIn: parent
+                    text: "Stop"
+                    color: Theme.textOnSuccess
+                    font.pixelSize: Theme.px(12)
+                }
             }
         }
 

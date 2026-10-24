@@ -16,6 +16,7 @@ Item {
     property real p: 0
     property real fade: 1   // reduced motion fades instead of dropping
     visible: p > 0 && fade > 0
+    opacity: Capture.hiding ? 0 : 1   // never in a capture (§4)
 
     readonly property real shapeWidth: Motion.frames(p, [[0, clock.width], [0.5, Theme.px(100)], [1, Theme.px(290)]])
     readonly property real shapeHeight: Theme.px(Motion.frames(p, [[0, 38], [0.5, 40], [1, 46]]))

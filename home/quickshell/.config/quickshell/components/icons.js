@@ -87,6 +87,25 @@ const icons = {
     "keyboard-plain": { d: box(2, 4, 20, 16, 2) + "M7 16h10" },
     "refresh": { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8M21 3v5h-5M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16M3 21v-5h5" },
     "mic-off": { d: "M2 2l20 20M18.89 13.23A7 7 0 0 0 19 12v-2M5 10v2a7 7 0 0 0 12 5M15 9.34V5a3 3 0 0 0-5.68-1.33M9 9v3a3 3 0 0 0 5.12 2.12M12 19v3" },
+
+    // Capture (21–25)
+    "crop": { d: "M6 2v14a2 2 0 0 0 2 2h14M18 22V8a2 2 0 0 0-2-2H2" },
+    "window": { d: box(2, 4, 20, 16, 2) + "M2 9h20" },
+    "monitor": { d: box(2, 3, 20, 14, 2) + "M8 21h8M12 17v4" },
+    "camera": { d: "M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" + circle(12, 13, 3) },
+    "video": { d: "m22 8-6 4 6 4V8z" + box(2, 6, 14, 12, 2) },
+    "x": { d: "M18 6 6 18M6 6l12 12" },
+    "pointer": { d: "m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z" },
+    "volume": { d: speaker + "M15.54 8.46a5 5 0 0 1 0 7.07" },
+    // Annotate tools
+    "arrow": { d: "M5 19 19 5M9 5h10v10" },
+    "rectangle": { d: box(3, 5, 18, 14, 3) },
+    "pen": { d: "M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" },
+    "type": { d: "M4 7V4h16v3M9 20h6M12 4v16" },
+    "highlighter": { d: "m9 11-6 6v3h9l3-3M22 12l-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4" },
+    "pixelate": { d: "M3 3h6v6H3zM15 3h6v6h-6zM9 9h6v6H9zM3 15h6v6H3zM15 15h6v6h-6z" },
+    "undo": { d: "M9 14 4 9l5-5M4 9h11a5 5 0 0 1 0 10h-3" },
+    "redo": { d: "m15 14 5-5-5-5M20 9H9a5 5 0 0 0 0 10h3" },
 }
 
 function get(name) { return icons[name] ?? icons["app-window"] }

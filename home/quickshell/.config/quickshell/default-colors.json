@@ -17,6 +17,7 @@
   "surface_dim": "#161217",
   "error": "#ffb4ab",
   "error_container": "#93000a",
+  "on_error": "#690005",
   "on_error_container": "#ffdad6",
   "scrim": "#000000"
 }

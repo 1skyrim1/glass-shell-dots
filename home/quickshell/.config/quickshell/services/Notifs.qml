@@ -41,8 +41,9 @@ Singleton {
     // --- Quiet time
     readonly property bool centerOpen: Shell.panel === "notifications"
     readonly property bool fullscreen: Hyprland.focusedWorkspace?.hasFullscreen ?? false
+    // A recording holds them back too, so they never end up in the clip (§4).
     readonly property string quietReason: Shell.locked ? "away" : Modes.gameMode ? "gaming"
-        : Modes.dnd ? "dnd" : fullscreen ? "fullscreen" : ""
+        : Recorder.recording ? "recording" : Modes.dnd ? "dnd" : fullscreen ? "fullscreen" : ""
     readonly property bool quiet: quietReason !== ""
     property real quietSince: 0
     property string quietKind: ""   // the reason the summary names (game mode wins over the others)
@@ -56,6 +57,7 @@ Singleton {
         gaming: "While you were gaming",
         dnd: "While do not disturb was on",
         fullscreen: "While you were in fullscreen",
+        recording: "While you were recording",
         away: "While you were away"
     })
 

@@ -22,6 +22,8 @@ Item {
 
     x: edge - width
     y: Theme.px(58)
+    // Never in a capture (§4): gone at once while the capture tool is up.
+    opacity: Capture.hiding ? 0 : 1
     width: Theme.px(340)
     // Fanned: down to the last toast; tucked: the front toast plus the lips of the ones behind.
     height: {

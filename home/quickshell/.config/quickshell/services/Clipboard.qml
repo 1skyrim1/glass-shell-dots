@@ -42,7 +42,12 @@ Singleton {
         if (img) return { kind: "image", title: "Image", sub: `image · ${img[3]}×${img[4]}`, ext: img[2] }
         if (/^\[\[ binary data/.test(preview)) return { kind: "file", title: "Binary data", sub: "data" }
         const t = preview.trim()
-        if (/^#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(t)) return { kind: "colour", title: t.toUpperCase(), sub: "colour" }
+        if (/^#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(t)) return { kind: "colour", title: t.toUpperCase(), sub: "colour", swatch: t }
+        // The colour picker's other formats (Capture: rgb(230 182 255), hsl(279 100% 86%)).
+        const rgb = t.match(/^rgba?\(\s*(\d+)[\s,]+(\d+)[\s,]+(\d+)\s*\)$/)
+        if (rgb) return { kind: "colour", title: t, sub: "colour", swatch: Qt.rgba(rgb[1] / 255, rgb[2] / 255, rgb[3] / 255, 1) }
+        const hsl = t.match(/^hsla?\(\s*(\d+)[\s,]+(\d+)%[\s,]+(\d+)%\s*\)$/)
+        if (hsl) return { kind: "colour", title: t, sub: "colour", swatch: Qt.hsla(hsl[1] / 360, hsl[2] / 100, hsl[3] / 100, 1) }
         if (/^(https?:\/\/|www\.)\S+$/.test(t)) return { kind: "link", title: t.replace(/^https?:\/\/(www\.)?/, ""), sub: "link" }
         const codey = (t.match(/[{}()\[\];=<>"'`]/g) ?? []).length
         if (codey >= 4 || /^(import|local|function|def|const|let|var|class|#include|fn|pub)\b/.test(t))

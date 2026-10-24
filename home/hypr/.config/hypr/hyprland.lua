@@ -135,10 +135,10 @@ bind(mainMod .. " + L",         ipc("lock lock"),                "Shell: Lock") 
 -- Keyboard layout: no bind; click the layout badge in the status pill.
 
 -- Capture
-bind(mainMod .. " + SHIFT + S",     ipc("capture region"),           "Capture: Capture tool")        -- TODO Phase 8
-bind(mainMod .. " + SHIFT + R",     ipc("capture record"),           "Capture: Start / stop recording") -- pill only until Phase 8
-bind(mainMod .. " + SHIFT + C",     ipc("capture colorpicker"),      "Capture: Colour picker")       -- TODO Phase 8
-bind("Print",                       ipc("capture screen"),           "Capture: Full screen to clipboard") -- TODO Phase 8
+bind(mainMod .. " + SHIFT + S",     ipc("capture open"),             "Capture: Capture tool")
+bind(mainMod .. " + SHIFT + R",     ipc("capture record"),           "Capture: Start / stop recording")
+bind(mainMod .. " + SHIFT + C",     ipc("capture colorpicker"),      "Capture: Colour picker")
+bind("Print",                       ipc("capture shot"),             "Capture: Full screen to clipboard")
 
 -- Windows: focus / move with H J K L (and arrows). Super+L is lock, so focusing right is Super+Right only.
 -- A list, not a table: pairs() has no order, and the cheatsheet lists binds in the order they're made.

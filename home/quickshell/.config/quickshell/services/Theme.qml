@@ -55,6 +55,8 @@ Singleton {
     readonly property color error: role("error")
     readonly property color errorContainer: role("error_container")
     readonly property color textOnError: role("on_error_container")
+    // On a solid error fill (record Start); colors.json from before Phase 8 has no on_error yet.
+    readonly property color textOnErrorStrong: target.on_error ? role("on_error") : errorContainer
     readonly property string wallpaper: roles.wallpaper ?? ""
 
     // Fixed status colours (not from matugen)
@@ -70,6 +72,11 @@ Singleton {
     readonly property color nightWarm: "#FF9E57"
     readonly property color nightCool: "#FFE7C2"
     readonly property color textOnNight: "#FFD6B3"
+    // Annotate's pen colours (23-Annotate) besides the accent: fixed, so marks look the same on every theme.
+    readonly property color markRed: "#FF6B6B"
+    readonly property color markYellow: "#FFD866"
+    readonly property color markWhite: "#FFFFFF"
+    readonly property color markBlack: "#1D1424"
 
     readonly property string font: "Geist"
     readonly property string fontMono: "Geist Mono"

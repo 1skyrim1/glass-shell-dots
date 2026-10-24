@@ -76,6 +76,14 @@ Singleton {
     readonly property int ripple: 700        // Enter: the new wallpaper spreads out from the thumbnail (InOutCubic)
     readonly property int kittyPreview: 150  // browsing pauses this long before kitty is recoloured
 
+    // Capture (§3.7, §5.3; 04-MotionOverlays "Capture", 24-CaptureExtras)
+    readonly property int captureFlash: 80     // soft white flash on freeze and on capture
+    readonly property int captureDim: 200      // the frozen screen dims
+    readonly property int toolbarRise: 320     // toolbar rises from below (OutBack), after the dim
+    readonly property int captureFly: 300      // the selection flies into the corner thumbnail
+    readonly property int shotCardHold: 6000   // the thumbnail card waits this long
+    readonly property int countdownTick: 1000  // one number of the countdown; its red ring drains meanwhile
+
     // Popovers (§3.1)
     readonly property int peekDelay: 400     // hover a workspace dot this long to peek
     readonly property int peekGrace: 250     // the mouse may leave dot + peek this long (to cross the gap)

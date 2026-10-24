@@ -8,7 +8,7 @@ import Quickshell.Hyprland
 // Layers, top to bottom, and their WlrLayer:
 //   lock screen          WlSessionLock
 //   password prompts     Overlay
-//   capture tool         Overlay
+//   capture tool         Overlay  (Capture, Annotate, SharePicker; capture closes every panel)
 //   power menu           Overlay
 //   panels & popovers    Top
 //   toasts & OSDs        Top
