@@ -46,6 +46,12 @@ Singleton {
     readonly property int warnHold: 5000     // low-battery tint on the status pill
     readonly property int eqPeriod: 1400     // media pill equalizer bars (up and down)
 
+    // Launcher and cheatsheet (§5.3)
+    readonly property int launcherIn: 400    // drips out of the clock and springs into the centre
+    readonly property int launcherOut: 240   // … and is sucked back into it
+    readonly property int sheetMorph: 300    // launcher ↔ cheatsheet, panel height following its content
+    readonly property int stagger: 35        // rows arrive this far apart
+
     // Popovers (§3.1)
     readonly property int peekDelay: 400     // hover a workspace dot this long to peek
     readonly property int peekGrace: 250     // the mouse may leave dot + peek this long (to cross the gap)

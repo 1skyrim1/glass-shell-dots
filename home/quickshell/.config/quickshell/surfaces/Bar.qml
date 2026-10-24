@@ -4,14 +4,15 @@ import Quickshell.Wayland
 import qs.services
 import qs.components
 import qs.surfaces.bar
+import qs.surfaces.launcher
 
 // The bar on one screen (DESIGN.md §2, 08-Main / 09-Bar): five separate glass islands that hug their
 // content, the temporary pills that bud off the clock and the OSDs that drop out of it. It all lives on one
 // transparent full-screen layer so shapes can morph between pills (§7), with the pill popovers and the
-// tooltip (§3.1) growing out of them; later phases add the panels here.
+// tooltip (§3.1) growing out of them, and the panels growing out of theirs (launcher: §3.3).
 // The input mask covers only the pills and whatever is open, so the rest of the screen clicks through to
-// the windows. The media, layout and bell popovers take the keyboard while open and close on Esc or a
-// click outside (the catcher below); the workspace peek and tooltips are hover-only.
+// the windows. Panels and the media, layout and bell popovers take the keyboard while open and close on
+// Esc or a click outside (the catcher below); the workspace peek and tooltips are hover-only.
 Scope {
     id: root
 
@@ -29,6 +30,25 @@ Scope {
         mask: Region {}
     }
 
+    // The launcher dims the desktop 34 % (§3.3) without blurring it: a layer of its own whose namespace
+    // isn't "glass-shell-…" (the bar's layer blurs everything above its alpha threshold). Created before
+    // the bar's layer and always mapped, so it stays under the pills and the sheet.
+    PanelWindow {
+        screen: root.screen
+        WlrLayershell.layer: WlrLayer.Top
+        WlrLayershell.namespace: "glass-dim"
+        exclusionMode: ExclusionMode.Ignore
+        anchors { top: true; bottom: true; left: true; right: true }
+        color: "transparent"
+        mask: Region {}
+        Rectangle {
+            anchors.fill: parent
+            color: Theme.alpha(Theme.scrim, 0.34)
+            opacity: launcher.dimLevel
+            visible: opacity > 0
+        }
+    }
+
     PanelWindow {
         id: win
 
@@ -39,11 +59,12 @@ Scope {
         anchors { top: true; bottom: true; left: true; right: true }
         color: "transparent"
 
-        readonly property bool modalHere: Shell.popoverModal
+        readonly property bool modalHere: launcher.shown || Shell.popoverModal
             && (Shell.popoverScreen === "" || Shell.popoverScreen === root.screen.name)
         WlrLayershell.keyboardFocus: modalHere ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
         mask: Region {
             Region { item: win.modalHere ? catcher : null }
+            Region { item: launcher.active ? launcher.body : null }
             Region { item: peek.visible ? peek.body : null }
             Region { item: mediaPopover.visible ? mediaPopover.body : null }
             Region { item: layoutMenu.visible ? layoutMenu.body : null }
@@ -61,15 +82,15 @@ Scope {
         readonly property real top: Theme.px(10)
         readonly property real gap: Theme.px(8)
 
-        // Click outside: while a menu popover is open the input mask covers the whole screen and a press
-        // anywhere but a pill or the popover lands here and closes it (that click doesn't reach the window
-        // below). Hyprland's focus grab doesn't fire while this layer holds the keyboard exclusively.
+        // Click outside: while a panel or menu popover is open the input mask covers the whole screen and a
+        // press anywhere but a pill, panel or popover lands here and closes it (that click doesn't reach the
+        // window below). Hyprland's focus grab doesn't fire while this layer holds the keyboard exclusively.
         MouseArea {
             id: catcher
             anchors.fill: parent
             enabled: win.modalHere
             acceptedButtons: Qt.AllButtons
-            onPressed: Shell.closePopover()
+            onPressed: Shell.closeTop()
         }
 
         // --- Left: workspaces, and the media pill sliding out from behind them.
@@ -207,6 +228,13 @@ Scope {
         BellMenu {
             id: bellMenu
             pill: bell
+            screenName: root.screen.name
+        }
+
+        // --- Panels, above the pills they grow out of.
+        Launcher {
+            id: launcher
+            clock: clock
             screenName: root.screen.name
         }
         BarTooltip {}

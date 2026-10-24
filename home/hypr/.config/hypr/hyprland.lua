@@ -72,6 +72,9 @@ glass_apply("balanced")
 
 hl.on("hyprland.start", function()
     hl.exec_cmd("qs")
+    -- Clipboard history (launcher ; mode): cliphist stores every copy, then tells the shell when and
+    -- where from it was copied.
+    hl.exec_cmd("wl-paste --watch sh -c 'cliphist store; qs ipc call clipboard stored'")
 end)
 
 -- Window geometry (DESIGN.md §1.4), design px × 0.8 for this 1280 × 720 logical screen: gaps_out 12,
@@ -84,61 +87,63 @@ hl.config({
 
 -- Keybinds (DESIGN.md §6). Shell surfaces are driven through `qs ipc call <target> <function>`
 -- (`qs ipc show` lists them). TODO = the surface arrives in a later phase; the IPC call already exists.
+-- A bind with a description ("Category: Label") shows in the shell's cheatsheet (Super+Shift+Space),
+-- which reads them live with `hyprctl binds -j` and runs one through run_bind() on Enter. Binds that
+-- share a description form one row ("Super 1 – 9"). "… | [ ]" names keys bound by keycode.
 local mainMod  = "SUPER"
 local ipc      = function(args) return hl.dsp.exec_cmd("qs ipc call " .. args) end
 local terminal = "kitty"
 local browser     = "librewolf"
 local fileManager = "nautilus"
 
+local described = {}
+local function bind(keys, action, desc, opts)
+    opts = opts or {}
+    if desc then
+        opts.description = desc
+        described[desc] = described[desc] or action
+    end
+    return hl.bind(keys, action, opts)
+end
+-- Global so `hyprctl eval` can reach it.
+function run_bind(desc)
+    if described[desc] then hl.dispatch(described[desc]) end
+end
+
 -- Shell surfaces
-hl.bind(mainMod .. " + space",           ipc("launcher toggle"))          -- TODO Phase 4
-hl.bind(mainMod .. " + SHIFT + space",   ipc("cheatsheet toggle"))        -- TODO Phase 4
-hl.bind(mainMod .. " + V",               ipc("launcher mode clipboard"))  -- TODO Phase 4
-hl.bind(mainMod .. " + period",          ipc("launcher mode emoji"))      -- TODO Phase 4
-hl.bind(mainMod .. " + A",               ipc("control toggle"))           -- TODO Phase 5
-hl.bind(mainMod .. " + N",               ipc("notifications toggle"))     -- TODO Phase 6
-hl.bind(mainMod .. " + SHIFT + N",       ipc("notifications dnd"))
-hl.bind(mainMod .. " + W",               ipc("wallpaper toggle"))         -- TODO Phase 7
-hl.bind(mainMod .. " + Tab",             ipc("overview toggle"))          -- TODO Phase 10
-hl.bind("ALT + Tab",                     ipc("switcher next"))            -- TODO Phase 10
-hl.bind("ALT + SHIFT + Tab",             ipc("switcher prev"))            -- TODO Phase 10
-hl.bind(mainMod .. " + Escape",          ipc("power toggle"))             -- TODO Phase 9
-hl.bind(mainMod .. " + L",               ipc("lock lock"))                -- TODO Phase 9
-hl.bind(mainMod .. " + G",               ipc("gamemode toggle"))
+bind(mainMod .. " + space",	ipc("launcher toggle"),          "Shell: App launcher")
+bind(mainMod .. " + K",		ipc("cheatsheet toggle"),        "Shell: This cheatsheet")
+bind(mainMod .. " + A",         ipc("control toggle"),           "Shell: Control Center")        -- TODO Phase 5
+bind(mainMod .. " + N",         ipc("notifications toggle"),     "Shell: Notifications & calendar") -- TODO Phase 6
+bind(mainMod .. " + W",         ipc("wallpaper toggle"),         "Shell: Wallpaper & theme")     -- TODO Phase 7
+bind(mainMod .. " + V",         ipc("launcher mode clipboard"),  "Shell: Clipboard history")
+bind(mainMod .. " + period",    ipc("launcher mode emoji"),      "Shell: Emoji picker")
+bind(mainMod .. " + Escape",    ipc("power toggle"),             "Shell: Power menu")            -- TODO Phase 9
+bind(mainMod .. " + L",         ipc("lock lock"),                "Shell: Lock")                  -- TODO Phase 9
 -- Keyboard layout: no bind; click the layout badge in the status pill.
 
 -- Capture
-hl.bind(mainMod .. " + SHIFT + S",       ipc("capture region"))           -- TODO Phase 8
-hl.bind(mainMod .. " + SHIFT + R",       ipc("capture record"))           -- recording pill only, recorder in Phase 8
-hl.bind(mainMod .. " + SHIFT + C",       ipc("capture colorpicker"))      -- TODO Phase 8
-hl.bind("Print",                         ipc("capture screen"))           -- TODO Phase 8
-
--- Workspaces. [ and ] are bound by key position (the keys right of P on a US layout; Ü and + on this
--- German one), since the German layout has no plain [ ].
-for i = 1, 9 do
-    hl.bind(mainMod .. " + " .. i,           hl.dsp.focus({ workspace = i }))
-    hl.bind(mainMod .. " + SHIFT + " .. i,   hl.dsp.window.move({ workspace = i }))
-end
-hl.bind(mainMod .. " + code:34",         hl.dsp.focus({ workspace = "r-1" }))
-hl.bind(mainMod .. " + code:35",         hl.dsp.focus({ workspace = "r+1" }))
-hl.bind(mainMod .. " + mouse_down",      hl.dsp.focus({ workspace = "e+1" }))
-hl.bind(mainMod .. " + mouse_up",        hl.dsp.focus({ workspace = "e-1" }))
+bind(mainMod .. " + SHIFT + S",     ipc("capture region"),           "Capture: Capture tool")        -- TODO Phase 8
+bind(mainMod .. " + SHIFT + R",     ipc("capture record"),           "Capture: Start / stop recording") -- pill only until Phase 8
+bind(mainMod .. " + SHIFT + C",     ipc("capture colorpicker"),      "Capture: Colour picker")       -- TODO Phase 8
+bind("Print",                       ipc("capture screen"),           "Capture: Full screen to clipboard") -- TODO Phase 8
 
 -- Windows: focus / move with H J K L (and arrows). Super+L is lock, so focusing right is Super+Right only.
-local dirs = { H = "left", J = "down", K = "up", L = "right", left = "left", down = "down", up = "up", right = "right" }
-for key, dir in pairs(dirs) do
-    if key ~= "L" then hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ direction = dir })) end
-    hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ direction = dir }))
+-- A list, not a table: pairs() has no order, and the cheatsheet lists binds in the order they're made.
+local dirs = { { "H", "left" }, { "J", "down" }, { "K", "up" }, { "L", "right" },
+               { "left", "left" }, { "down", "down" }, { "up", "up" }, { "right", "right" } }
+for _, d in ipairs(dirs) do
+    local key, dir = d[1], d[2]
+    local letter = #key == 1
+    if key ~= "L" then
+        bind(mainMod .. " + " .. key, hl.dsp.focus({ direction = dir }), (letter or key == "right") and "Windows: Move focus" or nil)
+    end
+    bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ direction = dir }), letter and "Windows: Move window" or nil)
 end
-hl.bind(mainMod .. " + Q",               hl.dsp.window.close())
-hl.bind(mainMod .. " + F",               hl.dsp.window.fullscreen())
-hl.bind(mainMod .. " + T",               hl.dsp.window.float({ action = "toggle" }))
-hl.bind(mainMod .. " + mouse:272",       hl.dsp.window.drag(),   { mouse = true })
-hl.bind(mainMod .. " + mouse:273",       hl.dsp.window.resize(), { mouse = true })
 
 -- Resize mode: Super+R, then H J K L (or arrows) resize the focused window until Esc / Enter.
 -- The shell shows a "RESIZE" pill next to the clock while it's active (it lists these keys).
-hl.bind(mainMod .. " + R",               hl.dsp.submap("resize"))
+bind(mainMod .. " + R",             hl.dsp.submap("resize"),         "Windows: Resize mode")
 hl.define_submap("resize", function()
     local step = 40
     local resize = {
@@ -151,15 +156,37 @@ hl.define_submap("resize", function()
     hl.bind("Escape", hl.dsp.submap("reset"))
     hl.bind("Return", hl.dsp.submap("reset"))
 end)
-
--- Apps; Super+S toggles a scratchpad kitty that's started the first time it's shown.
--- (Browser is Super+Shift+Return, not §6's Super+B.)
+bind(mainMod .. " + Q",             hl.dsp.window.close(),           "Windows: Close window")
+bind(mainMod .. " + F",             hl.dsp.window.fullscreen(),      "Windows: Fullscreen")
+bind(mainMod .. " + T",             hl.dsp.window.float({ action = "toggle" }), "Windows: Toggle floating")
+-- Super+S toggles a scratchpad kitty that's started the first time it's shown.
 hl.workspace_rule({ workspace = "special:scratchpad", on_created_empty = terminal })
-hl.bind(mainMod .. " + Return",          hl.dsp.exec_cmd(terminal))
-hl.bind(mainMod .. " + SHIFT + Return",  hl.dsp.exec_cmd(browser))
-hl.bind(mainMod .. " + E",               hl.dsp.exec_cmd(fileManager))
-hl.bind(mainMod .. " + S",               hl.dsp.workspace.toggle_special("scratchpad"))
-hl.bind(mainMod .. " + M",               hl.dsp.exit())
+bind(mainMod .. " + S",             hl.dsp.workspace.toggle_special("scratchpad"), "Windows: Scratchpad terminal")
+hl.bind(mainMod .. " + mouse:272",  hl.dsp.window.drag(),   { mouse = true })
+hl.bind(mainMod .. " + mouse:273",  hl.dsp.window.resize(), { mouse = true })
+
+-- Workspaces. [ and ] are bound by key position (the keys right of P on a US layout; Ü and + on this
+-- German one), since the German layout has no plain [ ].
+for i = 1, 9 do
+    bind(mainMod .. " + " .. i,           hl.dsp.focus({ workspace = i }),       "Workspaces: Go to workspace")
+    bind(mainMod .. " + SHIFT + " .. i,   hl.dsp.window.move({ workspace = i }), "Workspaces: Send window to workspace")
+end
+bind(mainMod .. " + code:34",       hl.dsp.focus({ workspace = "r-1" }), "Workspaces: Previous / next workspace | [ ]")
+bind(mainMod .. " + code:35",       hl.dsp.focus({ workspace = "r+1" }), "Workspaces: Previous / next workspace | [ ]")
+hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
+hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
+bind(mainMod .. " + Tab",           ipc("overview toggle"),          "Workspaces: Overview")          -- TODO Phase 10
+bind("ALT + Tab",                   ipc("switcher next"),            "Workspaces: Window switcher")   -- TODO Phase 10
+hl.bind("ALT + SHIFT + Tab",        ipc("switcher prev"))                                            -- TODO Phase 10
+
+-- Apps & system (browser is Super+Shift+Return, not §6's Super+B)
+bind(mainMod .. " + Return",        hl.dsp.exec_cmd(terminal),       "Apps & system: Terminal (kitty)")
+bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd(browser),       "Apps & system: Browser")
+bind(mainMod .. " + E",             hl.dsp.exec_cmd(fileManager),    "Apps & system: Files")
+bind(mainMod .. " + G",             ipc("gamemode toggle"),          "Apps & system: Game mode")
+bind(mainMod .. " + SHIFT + N",     ipc("notifications dnd"),        "Apps & system: Do not disturb")
+-- Not in the cheatsheet: Enter there runs the bind, and this one ends the session.
+hl.bind(mainMod .. " + M",          hl.dsp.exit())
 
 -- Media keys (locked: they work on the lock screen too). Volume and brightness show the OSD.
 hl.bind("XF86AudioRaiseVolume",  ipc("volume up"),       { locked = true, repeating = true })

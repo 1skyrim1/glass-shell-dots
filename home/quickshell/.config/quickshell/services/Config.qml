@@ -10,6 +10,7 @@ Singleton {
     property alias glass: adapter.glass                  // "subtle" | "balanced" | "heavy" (§1.2)
     property alias reducedMotion: adapter.reducedMotion  // §5.2
     property alias idle: adapter.idle                    // seconds (§4 idle chain)
+    property alias searchUrl: adapter.searchUrl          // launcher web search; the query is appended
 
     FileView {
         path: Quickshell.shellDir + "/config.json"
@@ -23,6 +24,7 @@ Singleton {
             id: adapter
             property string glass: "balanced"
             property bool reducedMotion: false
+            property string searchUrl: "https://duckduckgo.com/?q="
             property JsonObject idle: JsonObject {
                 property int dimCountdown: 10
                 property int lock: 300

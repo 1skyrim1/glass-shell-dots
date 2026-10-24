@@ -22,6 +22,11 @@ Singleton {
 
     property string panel: ""    // open panel, "" = none
     property string panelFrom: "" // the pill that opened it ("" = keyboard / IPC); only that pill lights
+    property string panelScreen: "" // the screen it's open on (the focused one when it opened)
+    // Launcher mode: apps | calc | clipboard | emoji | command | files | web | shortcuts. The cheatsheet is
+    // the launcher sheet in "shortcuts" mode, so panel "cheatsheet" and that mode go together.
+    property string launcherMode: "apps"
+    readonly property bool launcherOpen: panel === "launcher" || panel === "cheatsheet"
     property string popover: ""  // open popover, "" = none
     property string popoverScreen: ""  // the screen it's open on (its pill's)
     // Popovers that take the keyboard and close on a click outside (the workspace peek is hover-only).
@@ -36,8 +41,21 @@ Singleton {
         if (locked) return
         popover = ""  // popovers close when a panel opens
         tip = null
+        if (panel === "") panelScreen = Hyprland.focusedMonitor?.name ?? ""
         panelFrom = from || ""
+        if (name === "cheatsheet") launcherMode = "shortcuts"
+        else if (name === "launcher" && (!launcherOpen || launcherMode === "shortcuts")) launcherMode = "apps"
         panel = name
+    }
+    // Opens the launcher straight into a mode (Super+V, Super+.), or switches mode while it's open.
+    function openLauncher(mode: string) {
+        if (!launcherOpen) open(mode === "shortcuts" ? "cheatsheet" : "launcher")
+        setLauncherMode(mode || "apps")
+    }
+    // Switching mode in the open sheet doesn't reopen it; the sheet morphs between launcher and cheatsheet.
+    function setLauncherMode(mode: string) {
+        launcherMode = mode
+        if (launcherOpen) panel = mode === "shortcuts" ? "cheatsheet" : "launcher"
     }
     function close(name: string) { if (panel === name) panel = "" }
     function toggle(name: string, from: string) { panel === name ? close(name) : open(name, from) }

@@ -8,7 +8,10 @@ import qs.components
 Pill {
     id: root
 
-    lit: Shell.isOpen("notifications") && Shell.panelFrom !== "bell"   // opened from the bell → the bell lights
+    // Lit while its panels are open: the notification center (unless the bell opened it, then the bell
+    // lights) and the launcher / cheatsheet that drip out of it.
+    lit: (Shell.isOpen("notifications") && Shell.panelFrom !== "bell")
+         || (Shell.launcherOpen && (Shell.panelScreen === "" || Shell.panelScreen === screenName))
     implicitWidth: row.implicitWidth + Theme.px(28)
     onClicked: Shell.toggle("notifications")
 

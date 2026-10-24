@@ -49,6 +49,8 @@ wl-clipboard
 cliphist
 hyprpicker
 gpu-screen-recorder
+# types text into the focused window (launcher: paste clipboard entries, type emoji)
+wtype
 libqalculate
 fd
 lazygit

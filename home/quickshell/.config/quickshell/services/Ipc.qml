@@ -8,8 +8,19 @@ Item {
     IpcHandler {
         target: "launcher"
         function toggle(): void { Shell.toggle("launcher") }
-        // Open straight into a mode: "clipboard" (Super+V), "emoji" (Super+.), …
-        function mode(name: string): void { Shell.open("launcher"); console.log("TODO launcher mode", name) }
+        // Open straight into a mode: "clipboard" (Super+V), "emoji" (Super+.), calc, command, files, web,
+        // shortcuts. Calling it again for the mode that's showing closes the sheet.
+        function mode(name: string): void {
+            if (Shell.launcherOpen && Shell.launcherMode === name) Shell.closeAll()
+            else Shell.openLauncher(name)
+        }
+    }
+
+    IpcHandler {
+        target: "clipboard"
+        // Called by the wl-paste watcher in hyprland.lua after `cliphist store`: notes when and where
+        // from the new entry was copied.
+        function stored(): void { Clipboard.stored() }
     }
 
     IpcHandler {

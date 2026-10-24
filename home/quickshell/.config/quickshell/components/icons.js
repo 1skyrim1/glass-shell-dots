@@ -53,6 +53,23 @@ const icons = {
     "skip-forward": { fill: true, d: "m5 4 10 8-10 8V4zM17 5h2v14h-2V5z" },
     "pause": { fill: true, d: "M6 4h4v16H6zM14 4h4v16h-4z" },
     "play": { fill: true, d: "M7 4v16l13-8z" },
+
+    // Launcher (12–15)
+    "search": { d: circle(11, 11, 8) + "M21 21l-4.3-4.3" },
+    "eye-off": { d: "M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7ZM3 3l18 18" },
+    "shield": { d: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" },
+    "cpu": { d: box(4, 4, 16, 16, 2) + "M9 9h6v6H9zM9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3" },
+    "download": { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" },
+    "globe-line": { d: circle(12, 12, 10) + "M2 12h20" },
+    "clipboard": { d: box(9, 2, 6, 4, 1) + "M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" },
+    "calendar": { d: box(3, 4, 18, 18, 2) + "M16 2v4M8 2v4M3 10h18" },
+    "file": { d: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6" },
+    "image": { d: box(3, 3, 18, 18, 2) + circle(9, 9, 2) + "M21 15l-3.1-3.1a2 2 0 0 0-2.8 0L6 21" },
+    "link": { d: "M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" },
+    "text": { d: "M4 7h16M4 12h16M4 17h10" },
+    "star": { fill: true, d: "M12 2 15 9l7 .5-5.5 4.7L18 21l-6-3.8L6 21l1.5-6.8L2 9.5 9 9z" },
+    "calculator": { d: box(4, 2, 16, 20, 2) + "M8 6h8M16 14v4M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01" },
+    "smile": { d: circle(12, 12, 10) + "M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01" },
 }
 
 function get(name) { return icons[name] ?? icons["app-window"] }

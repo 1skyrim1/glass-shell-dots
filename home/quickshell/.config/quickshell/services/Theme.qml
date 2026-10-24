@@ -24,6 +24,10 @@ Singleton {
     readonly property color textMuted: roles.on_surface_variant ?? "transparent"
     readonly property color textFaint: roles.outline ?? "transparent"
     readonly property color secondary: roles.tertiary ?? "transparent"
+    // Tints for launcher icon tiles (one per app, picked by name)
+    readonly property color secondaryContainer: roles.secondary_container ?? "transparent"
+    readonly property color tertiaryContainer: roles.tertiary_container ?? "transparent"
+    readonly property color scrim: roles.scrim ?? "transparent"   // dims the desktop behind sheets
     readonly property color glassTint: roles.surface_dim ?? "transparent"
     readonly property color error: roles.error ?? "transparent"
     readonly property color errorContainer: roles.error_container ?? "transparent"

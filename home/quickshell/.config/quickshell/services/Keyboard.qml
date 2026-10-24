@@ -86,9 +86,9 @@ Singleton {
     Connections {
         target: Hyprland
         // "activelayout>>keyboard name,layout name"; it fires once per keyboard device, so only a real
-        // change counts.
+        // change counts. Virtual keyboards (wtype typing for the launcher) bring their own keymap: ignored.
         function onRawEvent(event: HyprlandEvent) {
-            if (event.name !== "activelayout") return
+            if (event.name !== "activelayout" || event.data.startsWith("hl-virtual-keyboard")) return
             const layout = event.data.slice(event.data.indexOf(",") + 1)
             if (layout === root.name) return
             root.name = layout
