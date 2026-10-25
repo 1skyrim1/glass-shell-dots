@@ -4,7 +4,7 @@ import QtQuick.Shapes
 import qs.services
 
 // The one glass material (DESIGN.md §1.2). Fill, border, highlights and shadow are drawn here; the blur
-// behind comes from Hyprland's layer rules (hyprland.lua), so the window's namespace must start with
+// behind comes from Hyprland's layer rules (Hyprland's conf/look.lua), so the window's namespace must start with
 // "glass-shell-".
 //
 // Children go inside. The interaction flags follow the pill states in 10-Popovers (bottom row):
@@ -34,7 +34,7 @@ Item {
     default property alias content: inner.data
 
     // Recipe per strength, for a pill. fill = surface alpha; border / highlight / bottom = white alpha.
-    // shadow scales the variant's shadow: heavy's blur threshold (ignore_alpha in hyprland.lua) has to sit
+    // shadow scales the variant's shadow: heavy's blur threshold (ignore_alpha in conf/look.lua) has to sit
     // under its 6 % fill, so a normal shadow would get blurred and brightened into a halo.
     readonly property var recipes: ({
         subtle:   { fill: 0.82, border: 0.08, highlight: 0.00, bottom: 0.04, shadow: 1.0 },
@@ -93,8 +93,8 @@ Item {
     Behavior on scale {
         NumberAnimation {
             duration: Motion.micro * (root.pressed ? 1 : 2)
-            easing.type: root.pressed || Motion.reduced ? Motion.easeMicro : Easing.OutBack
-            easing.overshoot: 2.2
+            easing.type: root.pressed ? Motion.easeMicro : Motion.easeSpring
+            easing.overshoot: Motion.pressSpring
         }
     }
 
@@ -113,7 +113,7 @@ Item {
             offset.y: Theme.px(root.v.shadowY * (root.hovered && !root.pressed ? 1.4 : 1))
             blur: Theme.px(root.v.shadowBlur)
             color: Qt.rgba(0, 0, 0, (root.v.shadow + (root.hovered && !root.pressed ? 0.04 : 0)) * root.r.shadow)
-            Behavior on offset.y { NumberAnimation { duration: Motion.micro } }
+            Behavior on offset.y { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
         }
     }
     Item {
@@ -191,7 +191,7 @@ Item {
     EdgeLight {
         shift: 1
         opacity: root.highlightAlpha
-        Behavior on opacity { NumberAnimation { duration: Motion.micro } }
+        Behavior on opacity { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
     }
     // Hover: a brighter spot on the top edge that follows the cursor.
     RadialGradient {
@@ -206,7 +206,7 @@ Item {
         spot: true
         visible: root.r.highlight > 0 && !root.tinted
         opacity: root.hovered && !root.pressed ? 0.5 : 0
-        Behavior on opacity { NumberAnimation { duration: Motion.micro } }
+        Behavior on opacity { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
     }
     EdgeLight {
         shift: -1

@@ -5,7 +5,7 @@ import Quickshell.Io
 import Quickshell.Hyprland
 import "../components/apps.js" as AppIcons
 
-// Clipboard history (; mode, 14-Modes) on top of cliphist. hyprland.lua runs
+// Clipboard history (; mode, 14-Modes) on top of cliphist. Hyprland's conf/session.lua runs
 // `wl-paste --watch sh -c 'cliphist store; qs ipc call clipboard stored'`, so stored() sees every copy
 // and notes when and where from it came (cliphist keeps neither).
 // Pins live outside cliphist (its ids change when something is copied again): each pinned entry is a

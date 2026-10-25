@@ -91,7 +91,7 @@ Pill {
             height: 6 * unit
             radius: unit
             color: battery.fill
-            Behavior on width { NumberAnimation { duration: Motion.small } }
+            Behavior on width { NumberAnimation { duration: Motion.small; easing.type: Motion.easeSmall } }
         }
     }
 
@@ -108,7 +108,7 @@ Pill {
             spacing: Theme.px(10)
             opacity: root.warn ? 0 : 1
             visible: opacity > 0
-            Behavior on opacity { NumberAnimation { duration: Motion.small } }
+            Behavior on opacity { NumberAnimation { duration: Motion.small; easing.type: Motion.easeSmall } }
 
             Row {
                 visible: root.modes
@@ -145,7 +145,7 @@ Pill {
                 height: badgeText.implicitHeight + Theme.px(6)
                 radius: Theme.px(8)
                 color: lit ? Theme.alpha(Theme.accent, 0.3) : Theme.white(badgeMouse.containsMouse ? 0.14 : 0.08)
-                Behavior on color { ColorAnimation { duration: Motion.micro } }
+                Behavior on color { ColorAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
                 Behavior on width { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
                 Text {
                     id: badgeText
@@ -196,7 +196,7 @@ Pill {
             spacing: Theme.px(10)
             opacity: root.warn ? 1 : 0
             visible: opacity > 0
-            Behavior on opacity { NumberAnimation { duration: Motion.small } }
+            Behavior on opacity { NumberAnimation { duration: Motion.small; easing.type: Motion.easeSmall } }
 
             BatteryIcon { fill: Theme.warning }
             BarText {

@@ -105,7 +105,7 @@ Column {
                          : mouse.containsMouse ? Theme.white(0.07) : "transparent"
                     border.width: cell.isSelected ? 1 : 0
                     border.color: Theme.alpha(Theme.accent, 0.5)
-                    Behavior on color { ColorAnimation { duration: Motion.micro } }
+                    Behavior on color { ColorAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
                     FocusRing {
                         shown: root.focusedCol && cell.inMonth && root.same(cell.date, root.nc.cursor)
                         shapeRadius: parent.radius

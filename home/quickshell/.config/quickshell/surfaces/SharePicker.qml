@@ -39,7 +39,7 @@ Scope {
             function onShownChanged() {
                 anim.stop()
                 anim.to = root.shown ? 1 : 0
-                anim.duration = root.shown ? Motion.open(Motion.captureDim + 260) : Motion.close(Motion.medium)
+                anim.duration = root.shown ? Motion.open(Motion.captureDim + Motion.dialogIn) : Motion.close(Motion.medium)
                 anim.easing.type = root.shown ? Easing.Linear : Motion.easeClose
                 anim.start()
                 if (root.shown) keys.forceActiveFocus()
@@ -390,7 +390,7 @@ Scope {
                     border.color: Theme.white(0.25)
                     visible: thumb.number <= 9
                     opacity: KeyHints.held ? 1 : 0
-                    Behavior on opacity { NumberAnimation { duration: Motion.micro } }
+                    Behavior on opacity { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
                     Text {
                         anchors.centerIn: parent
                         text: thumb.number

@@ -2,6 +2,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import Quickshell.Hyprland
 import Quickshell.Services.Polkit
 
 // The polkit agent (DESIGN.md §3.8 "Polkit", 31-Polkit, 30 "Polkit: wrong password"); surfaces/AuthDialog.qml
@@ -30,6 +31,9 @@ Singleton {
     function cancel() { if (flow) flow.cancelAuthenticationRequest() }
 
     PolkitAgent { id: agent }
+
+    // Super shortcuts are ignored while the prompt is up (§4): conf/binds.lua's bind-less "prompt" submap.
+    onActiveChanged: Hyprland.dispatch(active ? `hl.dsp.submap("prompt")` : `hl.dsp.submap("reset")`)
 
     onFlowChanged: {
         failures = 0

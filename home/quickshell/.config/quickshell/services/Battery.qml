@@ -31,7 +31,9 @@ Singleton {
             warning = true
             hold.restart()
         } else if (percent > lowAt) {
+            // Charged back up (or plugged in and the charge rose): the amber stretch goes at once.
             warned = false
+            warning = false
         }
     }
     // Warn once per drop below the threshold.

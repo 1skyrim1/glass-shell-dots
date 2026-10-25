@@ -3,7 +3,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Services.SystemTray
 
-// One IpcHandler per surface; hyprland.lua binds call `qs ipc call <target> <function>` (DESIGN.md §6).
+// One IpcHandler per surface; Hyprland's binds (conf/binds.lua) call `qs ipc call <target> <function>` (DESIGN.md §6).
 // List everything with `qs ipc show`. Surfaces that don't exist yet only track state in Shell.
 Item {
     IpcHandler {
@@ -19,7 +19,7 @@ Item {
 
     IpcHandler {
         target: "clipboard"
-        // Called by the wl-paste watcher in hyprland.lua after `cliphist store`: notes when and where
+        // Called by the wl-paste watcher in Hyprland's conf/session.lua after `cliphist store`: notes when and where
         // from the new entry was copied.
         function stored(): void { Clipboard.stored() }
     }
@@ -68,9 +68,15 @@ Item {
         target: "wallpaper"
         function toggle(): void { Shell.toggle("wallpaper") }
         // Browse like ←/→ and R (opening the switcher first), apply like Enter.
-        function next(): void { if (!Wallpapers.open) Shell.open("wallpaper"); Wallpapers.browse(1) }
-        function prev(): void { if (!Wallpapers.open) Shell.open("wallpaper"); Wallpapers.browse(-1) }
-        function random(): void { if (!Wallpapers.open) Shell.open("wallpaper"); Wallpapers.random() }
+        // Nothing while locked or while a password prompt is up (the switcher can't open then, and a preview
+        // without it would never be reverted).
+        function next(): void { if (browsable()) Wallpapers.browse(1) }
+        function prev(): void { if (browsable()) Wallpapers.browse(-1) }
+        function random(): void { if (browsable()) Wallpapers.random() }
+        function browsable(): bool {
+            if (!Wallpapers.open) Shell.open("wallpaper")
+            return Shell.isOpen("wallpaper")
+        }
         function apply(): void { if (Wallpapers.open) Wallpapers.applyRequested() }
         // Apply one by name ("fjord"), without the switcher; `list` names them, the applied one marked *.
         function set(name: string): string { return Wallpapers.applyNamed(name) ? "ok" : "no wallpaper " + name }
@@ -82,12 +88,7 @@ Item {
     IpcHandler {
         target: "overview"
         function toggle(): void { Shell.toggle("overview") }
-    }
-
-    IpcHandler {
-        target: "switcher"
-        function next(): void { console.log("TODO window switcher next") }
-        function prev(): void { console.log("TODO window switcher prev") }
+        function state(): string { return JSON.stringify({ open: Shell.isOpen("overview") }) }
     }
 
     IpcHandler {
@@ -176,7 +177,7 @@ Item {
 
     IpcHandler {
         target: "share"
-        // Called by scripts/share-picker.sh (xdg-desktop-portal-hyprland's custom picker); the answer goes
+        // Called by glass-share-picker (system/usr/local/bin/) (xdg-desktop-portal-hyprland's custom picker); the answer goes
         // into `fifo`. token = "1" if the app may be remembered; app = the portal's app id (may be empty).
         function pick(fifo: string, list: string, token: string, app: string): void { Share.pick(fifo, list, token, app) }
         function stop(): void { Share.stop() }

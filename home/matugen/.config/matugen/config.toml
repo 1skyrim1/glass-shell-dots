@@ -21,7 +21,7 @@ input_path = "~/.config/matugen/templates/quickshell.json"
 output_path = "~/.local/state/glass-shell/colors.json"
 post_hook = "g=/var/lib/glass-shell/greeter; [ -w $g ] && cp -f ~/.local/state/glass-shell/colors.json $g/colors.json && cp -f '{{image}}' $g/wallpaper || true"
 
-# Window borders: hyprland.lua loads this at start; while running, Quickshell sets the border itself
+# Window borders: Hyprland's conf/look.lua loads this at start; while running, Quickshell sets the border itself
 # (services/GlassSync.qml), so it can follow the live preview.
 [templates.hyprland]
 input_path = "~/.config/matugen/templates/hypr-colors.lua"
@@ -44,7 +44,7 @@ post_hook = "gsettings set org.gnome.desktop.interface gtk-theme '' && gsettings
 input_path = "~/.config/matugen/templates/gtk.css"
 output_path = "~/.config/gtk-4.0/gtk.css"
 
-# Qt: qt6ct's colour scheme (QT_QPA_PLATFORMTHEME=qt6ct in hyprland.lua; qt6ct.conf points here).
+# Qt: qt6ct's colour scheme (QT_QPA_PLATFORMTHEME=qt6ct in Hyprland's conf/session.lua; qt6ct.conf points here).
 [templates.qt6ct]
 input_path = "~/.config/matugen/templates/qt6ct-colors.conf"
 output_path = "~/.config/qt6ct/colors/matugen.conf"

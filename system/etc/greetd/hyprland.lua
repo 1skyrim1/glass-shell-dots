@@ -1,5 +1,5 @@
 -- Hyprland for the greeter only (greetd → glass-greeter.sh). It shows the Quickshell greeter and nothing else.
--- Monitor and keyboard match the session's hyprland.lua; the glass blur rule is the balanced one.
+-- Monitor and keyboard match the session's hypr/conf/devices.lua; the glass blur rule is the balanced one.
 
 hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })
 

@@ -185,7 +185,7 @@ FocusScope {
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: Theme.px(8)
                 opacity: KeyHints.held ? 1 : 0
-                Behavior on opacity { NumberAnimation { duration: Motion.micro } }
+                Behavior on opacity { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
                 Repeater {
                     model: [["← →", "browse"], ["Enter", "apply"], ["R", "random"], ["Esc", "revert"]]
                     Row {

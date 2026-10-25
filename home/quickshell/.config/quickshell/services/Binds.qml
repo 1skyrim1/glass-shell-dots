@@ -4,16 +4,16 @@ import Quickshell
 import Quickshell.Io
 
 // The cheatsheet's binds (15-Cheatsheet), read live from Hyprland (`hyprctl binds -j`), so they always
-// match hyprland.lua. Only binds with a description show; it reads "Category: Label", optionally
+// match Hyprland's conf/binds.lua. Only binds with a description show; it reads "Category: Label", optionally
 // "… | caps" to name keys Hyprland can't (binds by keycode, e.g. "| [ ]"). Binds sharing a description
 // and modifiers become one row ("Super 1 – 9", "Super H J K L").
 Singleton {
     id: root
 
     readonly property var categories: ["Shell", "Capture", "Windows", "Workspaces", "Apps & system", "Inside surfaces"]
-    // [{ category, label, mods: [..], keys: [..], desc, runnable }], in category order then hyprland.lua order.
+    // [{ category, label, mods: [..], keys: [..], desc, runnable }], in category order then conf/binds.lua order.
     property var rows: []
-    property int count: 0   // described binds in hyprland.lua
+    property int count: 0   // described binds in conf/binds.lua
 
     // Keys every surface understands (DESIGN.md §4 "Keyboard"); not Hyprland binds.
     readonly property var surfaceRows: [
@@ -26,7 +26,7 @@ Singleton {
 
     function reload() { proc.running = true }
 
-    // Runs a bind's action through hyprland.lua's run_bind() (after the sheet has closed, so it acts on
+    // Runs a bind's action through conf/binds.lua's run_bind() (after the sheet has closed, so it acts on
     // the window that had focus).
     function run(row: var) {
         if (!row.runnable) return

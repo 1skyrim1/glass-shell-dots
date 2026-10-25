@@ -30,7 +30,7 @@ Button {
         color: "transparent"
         border.width: 1
         border.color: Theme.alpha(Theme.accent, root.selected ? 0.35 : 0)
-        Behavior on border.color { ColorAnimation { duration: Motion.micro } }
+        Behavior on border.color { ColorAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
     }
 
     Icon {

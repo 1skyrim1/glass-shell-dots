@@ -194,7 +194,7 @@ Scope {
                 fade.stop()
                 fade.to = root.shown ? 1 : 0
                 fade.duration = root.shown ? Motion.open(Motion.medium) : Motion.close(Motion.medium)
-                fade.easing.type = root.shown ? Easing.OutCubic : Motion.easeClose
+                fade.easing.type = root.shown ? Motion.easeSmall : Motion.easeClose
                 fade.start()
                 if (root.shown) keys.forceActiveFocus()
             }
@@ -245,7 +245,7 @@ Scope {
                 height: imgH * k
                 x: Math.round((parent.width - width) / 2)
                 y: Math.round(Theme.px(96) + (availH - height) / 2)
-                scale: 0.92 + 0.08 * win.p
+                scale: Motion.reduced ? 1 : 0.92 + 0.08 * win.p
                 opacity: Math.max(0, win.p * 2 - 1)
 
                 RectangularShadow {
@@ -549,7 +549,7 @@ Scope {
                 y: toolbar.y + toolbar.height + Theme.px(12)
                 spacing: Theme.px(8)
                 opacity: KeyHints.held ? win.p : 0
-                Behavior on opacity { NumberAnimation { duration: Motion.micro } }
+                Behavior on opacity { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
                 Repeater {
                     model: [["1–5", "colour"], ["[ ]", "stroke"], ["Ctrl Z", "undo"], ["Del", "delete selected"], ["Esc", "discard"]]
                     Row {

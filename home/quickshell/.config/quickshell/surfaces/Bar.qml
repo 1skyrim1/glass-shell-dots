@@ -40,9 +40,14 @@ Scope {
     // also covers the bar's strip between the pills. Not blurred: a layer of its own whose namespace isn't
     // "glass-shell-…" (the bar's layer blurs everything above its alpha threshold). Created before the bar's
     // layer and always mapped, so it stays under the pills and the panels.
+    // Fullscreen windows are drawn above the Top layer, so while one is up the dim and the bar move to Overlay:
+    // panels, the overview's neighbours, OSDs and critical toasts still show over a fullscreen game (§4).
+    readonly property bool fullscreen: Shell.fullscreenOn(screen.name)
+    readonly property int layer: fullscreen ? WlrLayer.Overlay : WlrLayer.Top
+
     PanelWindow {
         screen: root.screen
-        WlrLayershell.layer: WlrLayer.Top
+        WlrLayershell.layer: root.layer
         WlrLayershell.namespace: "glass-dim"
         exclusionMode: ExclusionMode.Ignore
         anchors { top: true; bottom: true; left: true; right: true }
@@ -74,7 +79,7 @@ Scope {
         id: win
 
         screen: root.screen
-        WlrLayershell.layer: WlrLayer.Top
+        WlrLayershell.layer: root.layer
         WlrLayershell.namespace: "glass-shell-bar"
         exclusionMode: ExclusionMode.Ignore
         anchors { top: true; bottom: true; left: true; right: true }
@@ -94,14 +99,14 @@ Scope {
             Region { item: mediaPopover.visible ? mediaPopover.body : null }
             Region { item: layoutMenu.visible ? layoutMenu.body : null }
             Region { item: bellMenu.visible ? bellMenu.body : null }
-            Region { item: workspaces }
-            Region { item: media.visible ? media : null }
-            Region { item: clock }
+            Region { item: win.pillsIn ? workspaces : null }
+            Region { item: win.pillsIn && media.visible ? media : null }
+            Region { item: win.pillsIn ? clock : null }
             Region { item: recording.visible ? recording.pill : null }
             Region { item: keyMode.visible ? keyMode.pill : null }
             Region { item: sharing.visible ? sharing.pill : null }
-            Region { item: status }
-            Region { item: bell }
+            Region { item: win.pillsIn ? status : null }
+            Region { item: win.pillsIn ? bell : null }
         }
 
         // Lock / unlock / log in (06-MotionSession): the pills float up and fade, and drop back in from the top:
@@ -113,6 +118,12 @@ Scope {
         readonly property real clockIn: bar(0, 0.35)
         readonly property real leftIn: bar(0, 0.8)
         readonly property real rightIn: bar(0.15, 1)
+
+        // Fullscreen (§5.3, 05-MotionWindows "Fullscreen"): every pill floats up and fades while the window
+        // grows to the edges (260 ms), and comes back when another window or workspace takes focus.
+        property real fsIn: root.fullscreen ? 0 : 1
+        Behavior on fsIn { NumberAnimation { duration: Motion.fixed(Motion.fullscreen); easing.type: Motion.easeLarge } }
+        readonly property bool pillsIn: fsIn > 0.5
 
         readonly property real inset: Theme.px(12)
         readonly property real top: Theme.px(10)
@@ -130,7 +141,7 @@ Scope {
         }
 
         PillGroup {
-            shown: win.leftIn
+            shown: win.leftIn * win.fsIn
             // --- Left: workspaces, and the media pill sliding out from behind them.
             MediaPill {
                 id: media
@@ -145,10 +156,16 @@ Scope {
             }
         }
 
+        // The OSD drops out of the clock even while the pills are away for a fullscreen window (volume keys in a
+        // game still show it), so it isn't part of the clock's group. Under the clock pill.
         PillGroup {
             shown: win.clockIn
-            // --- Centre: the clock, with the OSD and the temporary pills underneath it.
             OsdDrop { clock: clock }
+        }
+
+        PillGroup {
+            shown: win.clockIn * win.fsIn
+            // --- Centre: the clock, with the temporary pills underneath it.
 
             // Recording (22-CaptureWindow): red dot with a halo, "REC" + timer and a Stop chip; click or
             // Super+Shift+R stops. When it merges back, the "Recording saved" card drops out of it.
@@ -304,7 +321,7 @@ Scope {
         }
 
         PillGroup {
-            shown: win.rightIn
+            shown: win.rightIn * win.fsIn
             // --- Right: status and bell; the row is right-aligned so the status pill stretches leftwards.
             Row {
                 anchors { right: parent.right; rightMargin: win.inset; top: parent.top; topMargin: win.top }

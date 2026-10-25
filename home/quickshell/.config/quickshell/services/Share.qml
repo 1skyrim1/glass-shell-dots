@@ -4,7 +4,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
 
-// Screen sharing (DESIGN.md §3.7, 25-SharePicker). xdg-desktop-portal-hyprland runs scripts/share-picker.sh
+// Screen sharing (DESIGN.md §3.7, 25-SharePicker). xdg-desktop-portal-hyprland runs glass-share-picker (system/usr/local/bin/)
 // when an app asks to share the screen; the script calls `share pick` and waits on a FIFO for the answer.
 // The picker (surfaces/SharePicker.qml) offers Screen / Window / Region; Region hands over to the capture tool's
 // region selection and comes back with the rectangle. While a share runs (Hyprland's `screencast` event) a

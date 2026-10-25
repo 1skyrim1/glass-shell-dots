@@ -29,7 +29,7 @@ Item {
     visible: p > 0 && fade > 0
 
     property real full: padLeft + row.implicitWidth + padRight
-    Behavior on full { NumberAnimation { duration: Motion.pillWidth; easing.type: Motion.easeSmall } }
+    Behavior on full { enabled: !Motion.reduced; NumberAnimation { duration: Motion.pillWidth; easing.type: Motion.easeSmall } }
     readonly property real dropOut: Theme.px(Motion.frames(p, [[0, -42], [0.18, -38], [0.64, 14], [1, 8]]))
     readonly property real dropWidth: Motion.frames(p, [[0, Theme.px(38)], [0.64, Theme.px(38)], [1, full]])
     readonly property real neckOut: Theme.px(Motion.frames(p, [[0.23, -22], [0.45, -22], [0.73, -8], [0.91, -2]]))

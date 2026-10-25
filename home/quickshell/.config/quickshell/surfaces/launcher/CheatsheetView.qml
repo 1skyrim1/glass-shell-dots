@@ -3,7 +3,7 @@ import qs.services
 import qs.components
 import "../../components/fuzzy.js" as Fuzzy
 
-// Shortcut cheatsheet (Super+Shift+Space or ?, 15-Cheatsheet): every described bind from hyprland.lua
+// Shortcut cheatsheet (Super+Shift+Space or ?, 15-Cheatsheet): every described bind from Hyprland's conf/binds.lua
 // (read live, Binds.qml) in three columns of groups, category tabs (Tab = next), filter as you type.
 // Here the key caps are the content, so they always show; only the footer hints wait for Alt.
 // Enter runs the selected bind's action after the sheet closes.

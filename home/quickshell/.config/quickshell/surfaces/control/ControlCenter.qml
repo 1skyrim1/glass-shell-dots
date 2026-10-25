@@ -31,7 +31,7 @@ Item {
     property real push: page === "" ? 0 : 1
     Behavior on push {
         enabled: panel.opened
-        NumberAnimation { duration: Motion.fixed(Motion.push); easing.type: Easing.OutCubic }
+        NumberAnimation { duration: Motion.fixed(Motion.push); easing.type: Motion.easeSmall }
     }
     property string subPage: ""
     onPageChanged: {

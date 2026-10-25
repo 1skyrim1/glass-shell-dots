@@ -17,7 +17,7 @@ Rectangle {
     border.color: Theme.alpha(Theme.accent, 0.2)
     visible: opacity > 0
     opacity: shown ? 1 : 0
-    Behavior on opacity { NumberAnimation { duration: Motion.micro } }
+    Behavior on opacity { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
 
     Rectangle {
         anchors.fill: parent

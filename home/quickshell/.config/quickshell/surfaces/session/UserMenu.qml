@@ -105,7 +105,7 @@ SessionPopover {
         bottomPadding: Theme.px(6)
         spacing: Theme.px(7)
         opacity: KeyHints.held ? 1 : 0
-        Behavior on opacity { NumberAnimation { duration: Motion.micro } }
+        Behavior on opacity { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
         Repeater {
             model: [["↑↓", "choose"], ["Enter", "pick"], ["Esc", "close"]]
             Row {

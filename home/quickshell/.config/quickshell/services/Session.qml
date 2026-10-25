@@ -19,7 +19,7 @@ import Quickshell.Services.Pam
 //
 // If qs dies while locked, Hyprland keeps the session locked (it shows a "lockdead" screen). Recover from a TTY
 // (Ctrl+Alt+F2): `HYPRLAND_INSTANCE_SIGNATURE=$(ls /run/user/$UID/hypr) hyprctl dispatch 'hl.dsp.exec_cmd("qs")'`;
-// misc.allow_session_lock_restore (hyprland.lua) lets the new qs take the lock over, then unlock normally.
+// misc.allow_session_lock_restore (Hyprland's conf/session.lua) lets the new qs take the lock over, then unlock normally.
 Singleton {
     id: root
 
@@ -46,6 +46,7 @@ Singleton {
         Shell.lock()
         Polkit.cancel()
         if (Capture.phase !== "") Capture.close()
+        Capture.annotating = ""   // the Annotate editor doesn't survive a lock either
         phase = "locking"
         status = ""
         lockT = 0
@@ -140,7 +141,7 @@ Singleton {
         property: "barT"
         onFinished: if (root.phase === "locking" && root.barT === 0) root.shoot()
     }
-    // The pills drop back in (after unlock, and after log in: GLASS_SHELL_LOGIN, set by hyprland.lua).
+    // The pills drop back in (after unlock, and after log in: GLASS_SHELL_LOGIN, set by Hyprland's conf/session.lua).
     function arrive(ms: int) {
         barAnim.stop()
         barAnim.to = 1

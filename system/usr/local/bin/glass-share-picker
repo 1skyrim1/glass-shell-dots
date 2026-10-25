@@ -1,5 +1,6 @@
 #!/bin/sh
 # Screen-share picker for xdg-desktop-portal-hyprland (custom_picker_binary in ~/.config/hypr/xdph.conf).
+# Lives in /usr/local/bin (installed by install.sh from system/) so xdph.conf's absolute path works for any user.
 # xdph runs this when an app asks to share the screen and reads one line from stdout:
 #   [SELECTION]<flags>/screen:<output> | window:<id> | region:<output>@<x>,<y>,<w>,<h>   (flag r = may restore)
 # Exiting without output cancels. The shell shows its picker (surfaces/SharePicker.qml) and writes the answer

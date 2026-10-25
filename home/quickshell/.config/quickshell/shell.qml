@@ -24,6 +24,15 @@ ShellRoot {
         }
     }
 
+    // Overview (Super+Tab), above the pills and panels' layer.
+    Variants {
+        model: Quickshell.screens
+        Overview {
+            required property var modelData
+            screen: modelData
+        }
+    }
+
     // Capture tool (above the power menu and panels, §4): Super+Shift+S, Super+Shift+C.
     Variants {
         model: Quickshell.screens

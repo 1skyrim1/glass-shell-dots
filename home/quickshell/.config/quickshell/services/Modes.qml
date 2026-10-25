@@ -40,13 +40,14 @@ Singleton {
 
     // Active Hyprland submap ("" = none), from the `submap` event.
     property string submap: ""
-    // Keys each submap's pill lists (they match the binds in hyprland.lua).
+    // Keys each submap's pill lists (they match the binds in Hyprland's conf/binds.lua).
     readonly property var submapKeys: ({ resize: ["H", "J", "K", "L", "Esc"] })
 
     Connections {
         target: Hyprland
         function onRawEvent(event: HyprlandEvent) {
-            if (event.name === "submap") root.submap = event.data === "reset" ? "" : event.data
+            // "prompt" (Super binds off while a password prompt is up) isn't a key mode the user chose.
+            if (event.name === "submap") root.submap = event.data === "reset" || event.data === "prompt" ? "" : event.data
         }
     }
 }

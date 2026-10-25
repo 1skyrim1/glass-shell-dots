@@ -42,7 +42,7 @@ Item {
             anchors.margins: -Theme.px(5)
             radius: height / 2
             color: root.red ? Theme.alpha(Theme.error, 0.2) : Theme.alpha(Theme.accent, 0.16)
-            Behavior on color { ColorAnimation { duration: Motion.micro } }
+            Behavior on color { ColorAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
         }
         GlassRect {
             anchors.fill: parent

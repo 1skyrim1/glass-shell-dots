@@ -30,6 +30,12 @@ Singleton {
 
     readonly property bool shake: !reduced
 
+    // Springs that land past their target: a released pill / button (~102 % on the way to 100 %) and the
+    // workspace capsule letting go. OutBack with these overshoots, plain OutCubic under reduced motion.
+    readonly property int easeSpring: reduced ? Easing.OutCubic : Easing.OutBack
+    readonly property real pressSpring: reduced ? 0 : 2.2
+    readonly property real capsuleSpring: reduced ? 0 : 2
+
     // Bar (§5.3)
     readonly property int pillWidth: 220     // a pill's width follows its content
     readonly property int wsCapsule: 260     // active capsule stretches to the new dot, then lets go
@@ -104,6 +110,12 @@ Singleton {
     readonly property int caretBlink: 530     // a password field's caret: on, off
     readonly property int dotStep: 360        // "Powering off" dots: the light moves on
     readonly property int dotFade: 300
+
+    // Windows, overview, fullscreen (§5.3). Hyprland's own window and workspace motion (windowsIn 280,
+    // windowsOut 200, workspaces 300, fade 200 ms, the soft-spring curve) is in Hyprland's conf/motion.lua (motion_apply()).
+    readonly property int overviewZoom: 380   // the current workspace zooms out into its card
+    readonly property int overviewFade: 200   // the other cards and the blurred background fade in
+    readonly property int fullscreen: 260     // the pills float up and fade while a window goes fullscreen
 
     // Popovers (§3.1)
     readonly property int peekDelay: 400     // hover a workspace dot this long to peek

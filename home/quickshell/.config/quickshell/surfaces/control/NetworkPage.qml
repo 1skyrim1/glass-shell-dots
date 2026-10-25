@@ -279,7 +279,7 @@ Column {
             height: Theme.px(4) + row.height + column.implicitHeight + Theme.px(12)
             opacity: net.expanded ? 1 : 0
             visible: opacity > 0
-            Behavior on opacity { NumberAnimation { duration: Motion.small } }
+            Behavior on opacity { NumberAnimation { duration: Motion.small; easing.type: Motion.easeSmall } }
         }
 
         ListRow {
@@ -303,7 +303,7 @@ Column {
                 size: Theme.px(13)
                 color: Theme.textFaint
             }
-            Behavior on y { NumberAnimation { duration: Motion.small } }
+            Behavior on y { enabled: !Motion.reduced; NumberAnimation { duration: Motion.small; easing.type: Motion.easeSmall } }
         }
 
         Column {
@@ -313,7 +313,7 @@ Column {
             width: parent.width - Theme.px(24)
             spacing: Theme.px(10)
             opacity: net.expanded ? 1 : 0
-            Behavior on opacity { NumberAnimation { duration: Motion.small } }
+            Behavior on opacity { NumberAnimation { duration: Motion.small; easing.type: Motion.easeSmall } }
 
             Rectangle {
                 width: parent.width
@@ -393,7 +393,7 @@ Column {
 
         // New devices slide in from the top.
         Component.onCompleted: if (!modelData.paired) slide.start()
-        NumberAnimation { id: slide; target: dev; property: "opacity"; from: 0; to: 1; duration: Motion.small }
+        NumberAnimation { id: slide; target: dev; property: "opacity"; from: 0; to: 1; duration: Motion.small; easing.type: Motion.easeSmall }
 
         Grown {
             id: box
@@ -401,7 +401,7 @@ Column {
             height: Theme.px(4) + row.height + column.implicitHeight + Theme.px(12)
             opacity: dev.pairing ? 1 : 0
             visible: opacity > 0
-            Behavior on opacity { NumberAnimation { duration: Motion.small } }
+            Behavior on opacity { NumberAnimation { duration: Motion.small; easing.type: Motion.easeSmall } }
         }
 
         ListRow {

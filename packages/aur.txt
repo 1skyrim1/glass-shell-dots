@@ -2,3 +2,5 @@
 ttf-geist
 ttf-geist-mono
 ttf-outfit
+# zsh prompt (home/zsh/.p10k.zsh; sourced by .zshrc)
+zsh-theme-powerlevel10k

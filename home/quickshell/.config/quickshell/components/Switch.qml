@@ -32,7 +32,7 @@ Item {
             x: root.checked ? parent.width - width - pad : pad
             color: root.checked ? root.knobColor : Theme.text
             Behavior on x { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
-            Behavior on color { ColorAnimation { duration: Motion.micro } }
+            Behavior on color { ColorAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
         }
     }
 

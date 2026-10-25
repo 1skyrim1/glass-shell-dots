@@ -137,9 +137,11 @@ Scope {
 
                             // This tile's rise: starts after the dim, 40 ms after the previous tile; OutBack bounce.
                             readonly property real total: Motion.powerTiles + 4 * Motion.tileStagger + Motion.powerDim * 0.6
-                            readonly property real t: Math.max(0, Math.min(1, (root.rise * total - Motion.powerDim * 0.6 - index * Motion.tileStagger) / Motion.powerTiles))
-                            readonly property real e: Motion.reduced ? t : 1 + 2.4 * Math.pow(t - 1, 3) + 1.4 * Math.pow(t - 1, 2)
-                            opacity: Math.min(1, t * 2)
+                            // Reduced motion: all tiles fade in together, in place.
+                            readonly property real t: Motion.reduced ? root.rise
+                                : Math.max(0, Math.min(1, (root.rise * total - Motion.powerDim * 0.6 - index * Motion.tileStagger) / Motion.powerTiles))
+                            readonly property real e: Motion.reduced ? 1 : 1 + 2.4 * Math.pow(t - 1, 3) + 1.4 * Math.pow(t - 1, 2)
+                            opacity: Motion.reduced ? t : Math.min(1, t * 2)
                             transform: Translate { y: Theme.px(40) * (1 - tile.e) }
 
                             // Selected: 3 px accent 55 % ring (Power.dc.html); armed: red with a 3 px error 20 % halo.

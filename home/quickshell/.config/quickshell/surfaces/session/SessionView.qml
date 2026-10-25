@@ -81,7 +81,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         y: Theme.px(486)
         opacity: root.inCentre * (1 - root.outCentre) * (powerMenu.shown ? 0.55 : 1)
-        Behavior on opacity { enabled: root.leaveT === 0 && root.enterT === 1; NumberAnimation { duration: Motion.small } }
+        Behavior on opacity { enabled: root.leaveT === 0 && root.enterT === 1; NumberAnimation { duration: Motion.small; easing.type: Motion.easeSmall } }
         transform: [
             Scale {
                 origin.x: centre.width / 2
@@ -144,7 +144,7 @@ Item {
                 property bool on: Keyboard.capsLock && root.note === "" && !root.passwordless
                 opacity: on ? 1 : 0
                 visible: opacity > 0
-                Behavior on opacity { NumberAnimation { duration: Motion.small } }
+                Behavior on opacity { NumberAnimation { duration: Motion.small; easing.type: Motion.easeSmall } }
                 transform: Translate { y: capsChip.on ? 0 : -Theme.px(6); Behavior on y { NumberAnimation { duration: Motion.small; easing.type: Motion.easeSmall } } }
                 width: capsRow.implicitWidth + Theme.px(24)
                 height: Theme.px(28)

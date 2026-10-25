@@ -129,7 +129,7 @@ Column {
                         border.width: 2
                         border.color: Theme.accent
                         opacity: tile.selected ? 1 : 0
-                        Behavior on opacity { NumberAnimation { duration: Motion.micro } }
+                        Behavior on opacity { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
                     }
                 }
                 Text {

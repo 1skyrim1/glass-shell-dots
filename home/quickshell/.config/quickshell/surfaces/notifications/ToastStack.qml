@@ -52,7 +52,7 @@ Item {
     }
     Timer { id: grace; interval: 150 }
     property real fan: hovered && repeater.count > 1 ? 1 : 0
-    Behavior on fan { NumberAnimation { duration: Motion.fixed(Motion.toastFan); easing.type: Easing.OutCubic } }
+    Behavior on fan { NumberAnimation { duration: Motion.fixed(Motion.toastFan); easing.type: Motion.easeSmall } }
 
     // The bell, in this item's coordinates (taken when a toast starts to drip).
     function bellRect(): rect {
@@ -93,7 +93,7 @@ Item {
 
             // Place in the stack: 0 = front. Animates when a toast in front of it arrives or leaves.
             property real depth: index
-            Behavior on depth { NumberAnimation { duration: Motion.fixed(Motion.toastFan); easing.type: Easing.OutCubic } }
+            Behavior on depth { NumberAnimation { duration: Motion.fixed(Motion.toastFan); easing.type: Motion.easeSmall } }
             readonly property real tuck: Math.min(depth, 2)
 
             readonly property real ownH: content.implicitHeight + 2 * pad

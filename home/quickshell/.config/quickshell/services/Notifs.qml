@@ -40,7 +40,7 @@ Singleton {
 
     // --- Quiet time
     readonly property bool centerOpen: Shell.panel === "notifications"
-    readonly property bool fullscreen: Hyprland.focusedWorkspace?.hasFullscreen ?? false
+    readonly property bool fullscreen: Shell.fullscreenOn(Hyprland.focusedMonitor?.name ?? "")
     // A recording holds them back too, so they never end up in the clip (§4).
     readonly property string quietReason: Shell.locked ? "away" : Modes.gameMode ? "gaming"
         : Recorder.recording ? "recording" : Modes.dnd ? "dnd" : fullscreen ? "fullscreen" : ""

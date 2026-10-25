@@ -49,7 +49,7 @@ GlassRect {
                     font.pixelSize: Theme.px(9)
                     color: tool.on ? Theme.textOnAccent : Theme.textMuted
                     opacity: KeyHints.held ? 0.75 : 0
-                    Behavior on opacity { NumberAnimation { duration: Motion.micro } }
+                    Behavior on opacity { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
                 }
             }
         }

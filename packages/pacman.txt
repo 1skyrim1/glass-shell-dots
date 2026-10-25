@@ -24,6 +24,8 @@ wireplumber
 
 # Network, Bluetooth, power, display
 networkmanager
+# NetworkManager's Wi-Fi backend (system/etc/NetworkManager/conf.d/wifi-backend.conf)
+iwd
 bluez
 bluez-utils
 upower
@@ -39,7 +41,11 @@ matugen
 qt6ct
 adw-gtk-theme
 
+# Building AUR packages (paru)
+base-devel
+
 # Apps and tools
+openssh
 kitty
 zsh
 neovim
@@ -66,6 +72,7 @@ nautilus
 librewolf
 fastfetch
 btop
+shader-slang
 
 # Login: greetd runs the Quickshell greeter (system/etc/greetd/); agreety is its text fallback
 greetd

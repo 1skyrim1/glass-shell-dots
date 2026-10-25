@@ -1,25 +1,37 @@
 #!/usr/bin/env bash
 # Reproduces the Glass Shell setup on a fresh Arch install. Safe to re-run.
-# Every sudo step is printed and needs a "y" first.
+# Every sudo step is printed and needs a "y" first. Run it as your user from a TTY login (not with sudo):
+# the user services, gsettings and chsh steps need your login session.
 set -euo pipefail
 
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$repo"
 
+if [[ $EUID -eq 0 ]]; then echo "Run install.sh as your user, not as root (it asks for sudo itself)."; exit 1; fi
+if [[ -z ${XDG_RUNTIME_DIR:-} || ! -S ${XDG_RUNTIME_DIR}/bus ]]; then
+  echo "No user session bus: log in on a TTY (or in the desktop) and run install.sh from there."; exit 1
+fi
+
 # Print a sudo command, ask, then run it. Answering no skips just that step.
 sudo_ask() {
   printf '\n\e[1msudo %s\e[0m\n' "$*"
-  read -rp "Run this? [y/N] " answer
+  # From the terminal, not stdin: inside the system/ loop below stdin is find's file list.
+  read -rp "Run this? [y/N] " answer </dev/tty
   if [[ $answer == [yY] ]]; then sudo "$@"; else echo "skipped"; fi
 }
 
 # Package list without comments and blank lines.
 pkgs() { sed -e 's/#.*//' -e '/^\s*$/d' "$1"; }
 
-# 0. Mirror: Omarchy's stable mirror (a tested snapshot of Arch). First, so every install below comes
-#    from it; mixing it with packages from a newer regular mirror makes installs fail with 404s.
+# 0. Mirror (optional, default no): Omarchy's stable mirror, a tested snapshot of Arch. This machine was
+#    built from it because the regular mirrors gave 404s at the time. On a fresh install from the regular
+#    mirrors, switching to an older snapshot first can mean a partial upgrade, so the default keeps them.
+#    If you do switch, it happens first so every install below comes from the same snapshot.
 mirrorlist=system/etc/pacman.d/mirrorlist
-cmp -s "$mirrorlist" /etc/pacman.d/mirrorlist || sudo_ask install -Dm644 "$mirrorlist" /etc/pacman.d/mirrorlist
+if ! cmp -s "$mirrorlist" /etc/pacman.d/mirrorlist; then
+  echo; read -rp "Use Omarchy's snapshot mirror instead of your current mirrors? [y/N] " answer
+  [[ $answer == [yY] ]] && sudo_ask install -Dm644 "$mirrorlist" /etc/pacman.d/mirrorlist
+fi
 
 # 1. Official packages
 mapfile -t pacman_pkgs < <(pkgs packages/pacman.txt)
@@ -43,12 +55,13 @@ if command -v paru >/dev/null; then
 fi
 
 # 4. System files: system/<path> -> /<path> (scripts keep their exec bit): greetd + its Hyprland, the lock
-#    screen's PAM file, faillock, NetworkManager, the mirror.
-while IFS= read -r -d '' file; do
+#    screen's PAM file, faillock, NetworkManager's iwd backend, the screen-share picker. The mirror is step 0.
+while IFS= read -r -d '' file <&3; do
+  [[ $file == "$mirrorlist" ]] && continue
   target="/${file#system/}"
   mode=644; [[ -x $file ]] && mode=755
   cmp -s "$file" "$target" 2>/dev/null && [[ $(stat -c %a "$target") == "$mode" ]] || sudo_ask install -Dm$mode "$file" "$target"
-done < <(find system -type f -print0)
+done 3< <(find system -type f -print0)
 
 # The greeter (Phase 9) can't read $HOME; matugen's hook copies the theme and wallpaper here on every
 # wallpaper change (home/matugen/.config/matugen/config.toml).
@@ -59,20 +72,26 @@ done < <(find system -type f -print0)
 if [[ -w /var/lib/glass-shell/greeter ]]; then
   rm -rf /var/lib/glass-shell/greeter/shell
   cp -r home/quickshell/.config/quickshell /var/lib/glass-shell/greeter/shell
-  # The user's picture for the greeter (the lock screen reads ~/.face itself).
-  mkdir -p /var/lib/glass-shell/greeter/faces
-  if [[ -f $HOME/.face ]]; then cp -f "$HOME/.face" "/var/lib/glass-shell/greeter/faces/$USER"; fi
 fi
 
 # 5. Services
 systemctl --user enable pipewire.socket pipewire-pulse.socket wireplumber.service
-for unit in bluetooth power-profiles-daemon; do
+for unit in bluetooth power-profiles-daemon sshd; do
   systemctl is-enabled -q "$unit" || sudo_ask systemctl enable --now "$unit"
 done
 
-# 6. Network: NetworkManager (iwd backend) replaces systemd-networkd. Last, so a drop
-#    can't break the installs above. iwd and systemd-resolved stay as they are.
-if ! systemctl is-active -q NetworkManager; then
+# 6. Network: NetworkManager with iwd as its Wi-Fi backend (system/etc/NetworkManager/conf.d). Last, so a drop
+#    can't break the installs above. Works from either archinstall choice: systemd-networkd (+ iwd) is
+#    replaced; an already running NetworkManager is restarted once iwd runs, to pick up the backend.
+systemctl is-enabled -q iwd || sudo_ask systemctl enable --now iwd
+if systemctl is-active -q NetworkManager; then
+  # The backend file is newer than the running NetworkManager (/proc/<pid> dates from its start): restart it.
+  nm_pid=$(systemctl show -p MainPID --value NetworkManager)
+  if [[ /etc/NetworkManager/conf.d/wifi-backend.conf -nt /proc/$nm_pid ]]; then
+    echo; echo "Restarting NetworkManager to switch Wi-Fi to iwd (the connection drops for a moment)."
+    sudo_ask systemctl restart NetworkManager
+  fi
+else
   # networkd has several sockets (netlink, varlink, ...) that restart it; stop all of them.
   mapfile -t networkd_units < <(systemctl list-unit-files --no-legend 'systemd-networkd*.socket' | awk '{print $1}')
   sudo_ask systemctl disable --now systemd-networkd.service "${networkd_units[@]}"
@@ -86,17 +105,31 @@ if ! systemctl is-active -q NetworkManager; then
   fi
 fi
 
-# 7. Dotfiles: every folder in home/ is a stow package.
+# 7. Dotfiles: every folder in home/ is a stow package (zsh's .zshrc and face's ~/.face land in ~).
 #    --no-folding links files, not whole dirs, so ~/.config never becomes a link into the repo.
+command -v stow >/dev/null || { echo "stow is missing (step 1 skipped?); stopping here."; exit 1; }
 for pkg in home/*/; do
   stow -d home -t "$HOME" --no-folding --restow "$(basename "$pkg")"
 done
 
+# The user's picture for the greeter (the lock screen reads ~/.face itself; home/face has a generated one).
+if [[ -w /var/lib/glass-shell/greeter && -f $HOME/.face ]]; then
+  mkdir -p /var/lib/glass-shell/greeter/faces
+  cp -fL "$HOME/.face" "/var/lib/glass-shell/greeter/faces/$USER"
+fi
+
 # Where the capture tool saves screenshots and recordings (Phase 8).
 mkdir -p "$HOME/Pictures/Screenshots" "$HOME/Videos/Captures"
 
-# Screen sharing asks the shell's picker (home/hypr/.config/hypr/xdph.conf); the portal reads it at start.
-systemctl --user try-restart xdg-desktop-portal-hyprland
+# Screen sharing asks the shell's picker (home/hypr/.config/hypr/xdph.conf → /usr/local/bin/glass-share-picker);
+# the portal reads its config at start.
+systemctl --user try-restart xdg-desktop-portal-hyprland || true
+
+# zsh as the login shell (asks for your password).
+if [[ $(getent passwd "$USER" | cut -d: -f7) != /usr/bin/zsh ]] && command -v zsh >/dev/null; then
+  echo; read -rp "Make zsh your login shell (chsh)? [y/N] " answer
+  [[ $answer == [yY] ]] && chsh -s /usr/bin/zsh
+fi
 
 # The notification center's local khal calendar (home/khal).
 mkdir -p "$HOME/.local/share/khal/calendars/personal"
@@ -107,7 +140,7 @@ gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark
 
 # 8. First colour theme: matugen writes Quickshell's colors.json, Hyprland's border, kitty, GTK, Qt and the
 #    greeter's copy (config.toml). Later the wallpaper switcher (Super+W) re-runs it.
-if [[ ! -f $HOME/.local/state/glass-shell/colors.json || ! -f $HOME/.config/kitty/colors.conf ]]; then
+if command -v matugen >/dev/null && [[ ! -f $HOME/.local/state/glass-shell/colors.json || ! -f $HOME/.config/kitty/colors.conf ]]; then
   matugen image "$HOME/.local/share/wallpapers/dusk.png" -m dark --prefer darkness --continue-on-error -q
 fi
 

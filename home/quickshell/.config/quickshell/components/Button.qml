@@ -26,8 +26,8 @@ Item {
     Behavior on scale {
         NumberAnimation {
             duration: Motion.micro * (root.pressed ? 1 : 2)
-            easing.type: root.pressed || Motion.reduced ? Motion.easeMicro : Easing.OutBack
-            easing.overshoot: 2.2
+            easing.type: root.pressed ? Motion.easeMicro : Motion.easeSpring
+            easing.overshoot: Motion.pressSpring
         }
     }
     Behavior on opacity { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }

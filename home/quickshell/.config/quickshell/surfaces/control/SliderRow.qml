@@ -59,7 +59,7 @@ Item {
         font.pixelSize: Theme.px(11.5)
         elide: Text.ElideRight
         horizontalAlignment: Text.AlignRight
-        Behavior on color { ColorAnimation { duration: Motion.micro } }
+        Behavior on color { ColorAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
         MouseArea {
             id: noteMouse
             anchors.fill: parent

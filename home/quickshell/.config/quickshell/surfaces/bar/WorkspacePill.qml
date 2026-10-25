@@ -139,7 +139,7 @@ Pill {
                         radius: width / 2
                         color: Theme.alpha(Theme.secondary, 0.25)
                         opacity: slot.urgent ? 1 : 0
-                        Behavior on opacity { NumberAnimation { duration: Motion.micro } }
+                        Behavior on opacity { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
                     }
                     Rectangle {
                         id: dot
@@ -209,8 +209,8 @@ Pill {
         }
         SequentialAnimation {
             id: capsuleMove
-            NumberAnimation { id: lead; duration: Motion.wsCapsule / 2; easing.type: Easing.OutCubic }
-            NumberAnimation { id: trail; duration: Motion.wsCapsule / 2; easing.type: Easing.OutBack; easing.overshoot: 2 }
+            NumberAnimation { id: lead; duration: Motion.wsCapsule / 2; easing.type: Motion.easeSmall }
+            NumberAnimation { id: trail; duration: Motion.wsCapsule / 2; easing.type: Motion.easeSpring; easing.overshoot: Motion.capsuleSpring }
         }
     }
 
@@ -222,7 +222,7 @@ Pill {
         height: Theme.px(16)
         color: Theme.white(0.16)
         opacity: root.hasTitle ? 1 : 0
-        Behavior on opacity { NumberAnimation { duration: Motion.wsTitle } }
+        Behavior on opacity { NumberAnimation { duration: Motion.wsTitle; easing.type: Motion.easeSmall } }
     }
 
     // --- Focused window: app icon in accent + title (500, max 220 px with …). Focus changes cross-fade:
@@ -314,14 +314,15 @@ Pill {
         ParallelAnimation {
             id: enterAnim
             NumberAnimation { target: line; property: "opacity"; from: 0; to: 1; duration: Motion.wsTitle; easing.type: Motion.easeSmall }
-            NumberAnimation { target: line; property: "y"; from: Theme.px(8); to: 0; duration: Motion.wsTitle; easing.type: Motion.easeSmall }
-            NumberAnimation { target: line; property: "blur"; from: 1; to: 0; duration: Motion.wsTitle; easing.type: Motion.easeSmall }
+            // Reduced motion: only the cross-fade, no rise and no blur.
+            NumberAnimation { target: line; property: "y"; from: Motion.reduced ? 0 : Theme.px(8); to: 0; duration: Motion.wsTitle; easing.type: Motion.easeSmall }
+            NumberAnimation { target: line; property: "blur"; from: Motion.reduced ? 0 : 1; to: 0; duration: Motion.wsTitle; easing.type: Motion.easeSmall }
         }
         ParallelAnimation {
             id: leaveAnim
             NumberAnimation { target: line; property: "opacity"; to: 0; duration: Motion.wsTitle; easing.type: Motion.easeSmall }
-            NumberAnimation { target: line; property: "y"; to: -Theme.px(8); duration: Motion.wsTitle; easing.type: Motion.easeSmall }
-            NumberAnimation { target: line; property: "blur"; to: 1; duration: Motion.wsTitle; easing.type: Motion.easeSmall }
+            NumberAnimation { target: line; property: "y"; to: Motion.reduced ? 0 : -Theme.px(8); duration: Motion.wsTitle; easing.type: Motion.easeSmall }
+            NumberAnimation { target: line; property: "blur"; to: Motion.reduced ? 0 : 1; duration: Motion.wsTitle; easing.type: Motion.easeSmall }
         }
     }
 }

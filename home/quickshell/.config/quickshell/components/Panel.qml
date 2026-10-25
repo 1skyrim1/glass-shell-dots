@@ -47,11 +47,11 @@ FocusScope {
     property real targetW: finalWidth
     property real targetR: finalRadius
     property real targetH: column.implicitHeight + 2 * padding
-    Behavior on targetX { enabled: root.opened && !Motion.reduced; NumberAnimation { duration: Motion.sheetMorph; easing.type: Easing.OutCubic } }
-    Behavior on targetY { enabled: root.opened && !Motion.reduced; NumberAnimation { duration: Motion.sheetMorph; easing.type: Easing.OutCubic } }
-    Behavior on targetW { enabled: root.opened && !Motion.reduced; NumberAnimation { duration: Motion.sheetMorph; easing.type: Easing.OutCubic } }
-    Behavior on targetR { enabled: root.opened && !Motion.reduced; NumberAnimation { duration: Motion.sheetMorph; easing.type: Easing.OutCubic } }
-    Behavior on targetH { enabled: root.opened && !Motion.reduced; NumberAnimation { duration: Motion.sheetMorph; easing.type: Easing.OutCubic } }
+    Behavior on targetX { enabled: root.opened && !Motion.reduced; NumberAnimation { duration: Motion.sheetMorph; easing.type: Motion.easeSmall } }
+    Behavior on targetY { enabled: root.opened && !Motion.reduced; NumberAnimation { duration: Motion.sheetMorph; easing.type: Motion.easeSmall } }
+    Behavior on targetW { enabled: root.opened && !Motion.reduced; NumberAnimation { duration: Motion.sheetMorph; easing.type: Motion.easeSmall } }
+    Behavior on targetR { enabled: root.opened && !Motion.reduced; NumberAnimation { duration: Motion.sheetMorph; easing.type: Motion.easeSmall } }
+    Behavior on targetH { enabled: root.opened && !Motion.reduced; NumberAnimation { duration: Motion.sheetMorph; easing.type: Motion.easeSmall } }
 
     // Keyframes: pill → droplet (at dropT) → a bit past the sheet (at overT) → sheet. The defaults are
     // MotionLauncher.dc.html .la (5 % pill → 9 % droplet → 15 % overshoot → 18 % sheet), relative to the pill:
@@ -98,7 +98,7 @@ FocusScope {
             fade = 1
             anim.to = shown ? 1 : 0
             anim.duration = shown ? openMs : closeMs
-            anim.easing.type = shown ? Easing.OutCubic : Motion.easeClose
+            anim.easing.type = shown ? Motion.easeSmall : Motion.easeClose
             anim.restart()
         }
     }

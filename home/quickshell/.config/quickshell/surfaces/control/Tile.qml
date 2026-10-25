@@ -55,7 +55,7 @@ Item {
             anchors.fill: parent
             opacity: root.expanded ? 0 : 1
             visible: opacity > 0
-            Behavior on opacity { NumberAnimation { duration: Motion.micro } }
+            Behavior on opacity { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
 
             // Wide: icon, title / subtitle, ›
             Row {
@@ -119,7 +119,7 @@ Item {
                 font.family: Theme.fontMono
                 font.pixelSize: Theme.px(10)
                 opacity: KeyHints.held ? 0.7 : 0
-                Behavior on opacity { NumberAnimation { duration: Motion.micro } }
+                Behavior on opacity { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
             }
         }
 

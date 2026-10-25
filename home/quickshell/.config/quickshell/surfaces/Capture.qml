@@ -335,7 +335,7 @@ Scope {
                 property real t: 0
                 readonly property var a: Capture.flyFrom ?? { x: 0, y: 0, w: 1, h: 1 }
                 readonly property var b: ({ x: Theme.px(52), y: stage.height - Theme.px(188), w: Theme.px(112), h: Theme.px(70) })
-                visible: root.flying
+                visible: root.flying && !Motion.reduced   // reduced motion: the card just fades in
                 x: a.x + (b.x - a.x) * t
                 y: a.y + (b.y - a.y) * t
                 width: a.w + (b.w - a.w) * t
@@ -375,7 +375,7 @@ Scope {
                 from: 0
                 to: 1
                 duration: Motion.fixed(Motion.captureFly)
-                easing.type: Easing.InOutCubic
+                easing.type: Motion.easeLarge
                 onFinished: Capture.flown()
             }
             Connections {
@@ -502,8 +502,8 @@ Scope {
                 }
                 property real placeX: place.x
                 property real placeY: place.y
-                Behavior on placeX { enabled: toolbar.rise >= 1; NumberAnimation { duration: Motion.push; easing.type: Motion.easeOpen; easing.overshoot: Motion.overshoot } }
-                Behavior on placeY { enabled: toolbar.rise >= 1; NumberAnimation { duration: Motion.push; easing.type: Motion.easeOpen; easing.overshoot: Motion.overshoot } }
+                Behavior on placeX { enabled: toolbar.rise >= 1; NumberAnimation { duration: Motion.fixed(Motion.push); easing.type: Motion.easeOpen; easing.overshoot: Motion.overshoot } }
+                Behavior on placeY { enabled: toolbar.rise >= 1; NumberAnimation { duration: Motion.fixed(Motion.push); easing.type: Motion.easeOpen; easing.overshoot: Motion.overshoot } }
                 x: placeX
                 y: placeY + (1 - rise) * Theme.px(60)
                 opacity: Math.min(1, rise * 1.5)

@@ -40,7 +40,7 @@ Rectangle {
     color: critical ? Theme.alpha(Theme.errorContainer, 0.55) : selected ? Theme.alpha(Theme.accent, 0.12) : Theme.white(0.07)
     border.width: selected ? Theme.px(1.5) : critical ? 1 : 0
     border.color: selected ? Theme.accent : Theme.alpha(Theme.error, 0.6)
-    Behavior on color { ColorAnimation { duration: Motion.micro } }
+    Behavior on color { ColorAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
 
     MouseArea {
         anchors.fill: parent

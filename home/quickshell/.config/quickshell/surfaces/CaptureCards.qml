@@ -209,11 +209,13 @@ Scope {
                 // Where the red pill sat: right of the centred clock.
                 readonly property real pillX: parent.width / 2 + Theme.px(80)
                 x: Math.min(parent.width - width - Theme.px(12), pillX)
-                y: Theme.px(10) + (Theme.px(58) - Theme.px(10)) * Math.min(1, p)
+                // Reduced motion: it fades in where it ends up.
+                readonly property real shape: Motion.reduced ? 1 : p
+                y: Theme.px(10) + (Theme.px(58) - Theme.px(10)) * Math.min(1, shape)
                 width: Theme.px(330)
                 height: recCol.implicitHeight + Theme.px(24)
                 transformOrigin: Item.TopLeft
-                scale: 0.85 + 0.15 * p
+                scale: 0.85 + 0.15 * shape
                 opacity: Capture.hiding ? 0 : Math.min(1, p * 2)
 
                 property real p: 0

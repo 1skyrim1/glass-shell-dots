@@ -134,7 +134,7 @@ Item {
                 radius: parent.radius
                 color: meter.fill
                 Behavior on width { NumberAnimation { duration: Motion.osdStep; easing.type: Motion.easeSmall } }
-                Behavior on color { ColorAnimation { duration: Motion.micro } }
+                Behavior on color { ColorAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
             }
         }
         Text {

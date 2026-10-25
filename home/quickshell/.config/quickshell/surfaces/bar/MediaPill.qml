@@ -16,9 +16,11 @@ Pill {
     property real slide: 0
     readonly property real fullWidth: Theme.px(6) + content.implicitWidth + Theme.px(13)
 
-    x: anchor.x + anchor.width + gap - Theme.px(30) * (1 - slide)
-    implicitWidth: Math.max(height, fullWidth * slide)
-    opacity: Math.min(1, slide * 2.5)
+    // Reduced motion: it only fades, at its full size and place.
+    readonly property real shape: Motion.reduced ? (slide > 0 ? 1 : 0) : slide
+    x: anchor.x + anchor.width + gap - Theme.px(30) * (1 - shape)
+    implicitWidth: Math.max(height, fullWidth * shape)
+    opacity: Motion.reduced ? slide : Math.min(1, slide * 2.5)
     visible: slide > 0
     animateWidth: false   // the slide drives the width
 

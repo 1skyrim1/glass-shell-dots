@@ -46,10 +46,39 @@ Singleton {
     property var controlTray: null
     onPanelChanged: if (panel !== "control") controlTray = null
 
+    // Fullscreen (§4, §5.3): the pills float away while the focused window on a screen is in real fullscreen
+    // (Hyprland mode 2; maximized doesn't count); switching window or workspace brings them back. The mode is
+    // in lastIpcObject, which only refreshes on refreshToplevels(), so that runs on every event that can
+    // change it. `fsTick` makes fullscreenOn() bindings re-evaluate after a refresh.
+    property int fsTick: 0
+    function fullscreenOn(screenName: string): bool {
+        fsTick
+        const m = Hyprland.monitors.values.find(m => m.name === screenName)
+        const ws = m?.activeWorkspace
+        if (!ws?.hasFullscreen) return false
+        const t = Hyprland.activeToplevel
+        if (t && t.monitor === m) return (t.lastIpcObject?.fullscreen ?? 0) === 2
+        return ws.toplevels.values.some(w => (w.lastIpcObject?.fullscreen ?? 0) === 2)
+    }
+    Connections {
+        target: Hyprland
+        function onRawEvent(event: HyprlandEvent) {
+            if (["fullscreen", "activewindowv2", "workspacev2", "closewindow", "movewindowv2",
+                 "activespecial", "focusedmonv2"].includes(event.name)) fsRefresh.restart()
+        }
+    }
+    // Batches the burst of events one switch sends into one refresh.
+    Timer {
+        id: fsRefresh
+        interval: 30
+        onTriggered: { Hyprland.refreshToplevels(); Qt.callLater(() => root.fsTick++) }
+    }
+
     function isOpen(name: string): bool { return panel === name }
 
     function open(name: string, from: string) {
-        if (locked || promptOpen) return
+        // The capture tool sits above panels and the power menu (§4) and holds the keyboard: nothing opens under it.
+        if (locked || promptOpen || Capture.active) return
         popover = ""  // popovers close when a panel opens
         tip = null
         if (panel === "") panelScreen = Hyprland.focusedMonitor?.name ?? ""

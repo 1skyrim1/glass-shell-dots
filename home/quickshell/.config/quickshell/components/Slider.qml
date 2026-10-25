@@ -46,7 +46,7 @@ Item {
             width: Math.max(height, parent.width * Math.max(0, Math.min(1, root.value)))
             color: root.fill
             Behavior on width { enabled: !root.dragging; NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
-            Behavior on color { ColorAnimation { duration: Motion.micro } }
+            Behavior on color { ColorAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
         }
     }
 

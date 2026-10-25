@@ -47,7 +47,7 @@ Item {
         width: root.width - Theme.px(8)
         implicitHeight: Math.max(left.implicitHeight, right.implicitHeight)
         opacity: KeyHints.held ? 1 : 0
-        Behavior on opacity { NumberAnimation { duration: Motion.micro } }
+        Behavior on opacity { NumberAnimation { duration: Motion.micro; easing.type: Motion.easeMicro } }
         Pairs { id: left; items: root.hints }
         Pairs { id: right; items: root.trailing; anchors.right: parent.right }
     }

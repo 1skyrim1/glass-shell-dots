@@ -2,7 +2,6 @@ import QtQuick
 import Quickshell
 import Quickshell.Widgets
 import Quickshell.Hyprland
-import Quickshell.Wayland
 import qs.services
 import qs.components
 import "../../components/apps.js" as Apps
@@ -81,24 +80,17 @@ Popover {
 
         Repeater {
             model: root.windows
-            ClippingRectangle {
-                id: win
+            WindowPreview {
                 required property HyprlandToplevel modelData
-                readonly property var at: modelData.lastIpcObject?.at ?? [0, 0]
-                readonly property var size: modelData.lastIpcObject?.size ?? [0, 0]
-                x: preview.ox + (at[0] - preview.monX) * preview.k
-                y: preview.oy + (at[1] - preview.monY - preview.reserved) * preview.k
-                width: size[0] * preview.k
-                height: size[1] * preview.k
-                radius: Theme.px(6)
-                color: Qt.lighter(Theme.glassTint, 1.6)
-                ScreencopyView {
-                    anchors.fill: parent
-                    captureSource: root.shown ? win.modelData.wayland : null
-                    live: root.shown
-                    opacity: hasContent ? 1 : 0
-                    Behavior on opacity { NumberAnimation { duration: Motion.small } }
-                }
+                toplevel: modelData
+                k: preview.k
+                ox: preview.ox
+                oy: preview.oy
+                monX: preview.monX
+                monY: preview.monY
+                reserved: preview.reserved
+                live: root.shown
+                showLabel: false
             }
         }
     }
